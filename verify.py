@@ -65,9 +65,9 @@ def percBetter(predict1, predict2, observed):
     p_ref.
     '''
     #set up inputs
-    methA = np.asarray(predict1)
-    methB = np.asarray(predict2)
-    data = np.asarray(observed)
+    methA = _maskSeries(predict1)
+    methB = _maskSeries(predict2)
+    data = _maskSeries(observed)
     #get forecast errors
     errA = forecastError(methA, data, full=False)
     errB = forecastError(methB, data, full=False)
@@ -84,8 +84,8 @@ def bias(predicted, observed):
     '''
     Scale-dependent bias as measured by the mean error
     '''
-    pred =  np.asanyarray(predicted).astype(float)
-    obse =  np.asanyarray(observed).astype(float)
+    pred =  _maskSeries(predicted)
+    obse =  _maskSeries(observed)
     
     return pred.mean()-obse.mean()
 
@@ -93,7 +93,9 @@ def meanPercentageError(predicted, observed):
     '''
     Order-dependent bias as measured by the mean percentage error
     '''
-    pe = percError(predicted, observed)
+    pred =  _maskSeries(predicted)
+    obse =  _maskSeries(observed)
+    pe = percError(pred, obse)
     mpe = pe.mean()
     return mpe
 
@@ -101,7 +103,9 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
     '''
     Order-dependent bias as measured by the median of the log accuracy ratio
     '''
-    la = logAccuracy(predicted, observed, base=base)
+    pred =  _maskSeries(predicted)
+    obse =  _maskSeries(observed)
+    la = logAccuracy(pred, obse, base=base)
     mla = mfunc(la)
 
     return mla
@@ -109,8 +113,11 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
 def symmetricSignedBias(predicted, observed):
     '''
     Symmetric signed bias, expressed as a percentage
+
     '''
-    mla = medianLogAccuracy(predicted, observed, base='e')
+    pred =  _maskSeries(predicted)
+    obse =  _maskSeries(observed)
+    mla = medianLogAccuracy(pred, obse, base='e')
     sign = np.sign(mla)
     biasmag = np.exp(np.abs(mla))-1
     ssb = np.copysign(biasmag, mla) #apply sign of mla to symmetric bias magnitude
@@ -122,9 +129,9 @@ def symmetricSignedBias(predicted, observed):
 def accuracy(data, climate=None):
     '''
     '''
-    data =  np.asarray(data).astype(float)
+    data = _maskSeries(data)
     if climate is not None:
-        clim =  np.asanyarray(climate).astype(float)
+        clim = _maskSeries(climate)
     metrics = {'MSE': meanSquaredError, 'RMSE': RMSE,
                'MAE':meanAbsError, 'MdAE': medAbsError}
     out = dict()
@@ -158,9 +165,9 @@ def meanSquaredError(data, climate=None):
     ========
     RMSE, meanAbsError
     '''
-    data =  np.asanyarray(data).astype(float)
-    n_pts = len(data.ravel())
-    dif = _diff(data, climate=climate)
+    dat = _maskSeries(data)
+    n_pts = len(dat)
+    dif = _diff(dat, climate=climate)
 
     dif2 = dif**2.0
 
@@ -192,6 +199,7 @@ def RMSE(data, climate=None):
     ========
     meanSquaredError, meanAbsError
     '''
+    dat = _maskSeries(data)
     msqerr = meanSquaredError(data, climate=climate)
 
     return np.sqrt(msqerr)
@@ -222,8 +230,8 @@ def meanAbsError(data, climate=None):
     ========
     medAbsError, meanSquaredError, RMSE
     '''
-    data =  np.asanyarray(data).astype(float)
-    n_pts = len(data.ravel())
+    data =  _maskSeries(data)
+    n_pts = len(data)
     adif = np.abs(_diff(data, climate=climate))
 
     return adif.mean()
@@ -254,9 +262,9 @@ def medAbsError(data, climate=None):
     ========
     meanAbsError, meanSquaredError, RMSE
     '''
-    data =  np.asanyarray(data).astype(float)
-    n_pts = len(data.ravel())
-    dif = _diff(data, climate=climate)
+    dat = _maskSeries(data)
+    n_pts = len(dat)
+    dif = _diff(dat, climate=climate)
     MdAE = np.median(np.abs(dif))
 
     return MdAE
@@ -266,14 +274,12 @@ def medAbsError(data, climate=None):
 def scaledAccuracy(predicted, observed):
     '''
     '''
-    pred =  np.asanyarray(predicted).astype(float)
-    obse =  np.asanyarray(observed).astype(float)
     metrics = {'nRMSE': nRMSE, 'MASE': MASE,
                'MAPE': meanAPE, 'MdAPE': functools.partial(meanAPE, mfunc=np.median),
                'MdSymAcc': medSymAccuracy}
     out = dict()
     for met in metrics:
-        out[met] = metrics[met](pred, obse)
+        out[met] = metrics[met](predcted, observed)
 
     return out
 
@@ -305,21 +311,18 @@ def nRMSE(predicted, observed):
     ========
     RMSE
     '''
-    n_pts = len(predicted.ravel())
-    dif = _diff(predicted, climate=observed)
+    pred =  _maskSeries(predicted)
+    obse =  _maskSeries(observed)
+    n_pts = len(pred)
+    dif = _diff(pred, climate=obse)
 
     dif2 = dif**2.0
     sig_dif2 = dif2.sum()
 
-    try:
-        dum = len(observed)
-    except TypeError:
-        observed = np.array([observed])
+    if len(obse)==1:
+        obse = np.asanyarray(obse).repeat(n_pts)
 
-    if len(observed)==1:
-        observed = np.asanyarray(observed).repeat(n_pts)
-
-    norm = np.sum(observed**2.0)
+    norm = np.sum(obse**2.0)
 
     return sig_dif2/norm
 
@@ -328,7 +331,7 @@ def scaledError(predicted, observed):
     '''Scaled errors, see Hyndman and Koehler (2006)
 
     References:
-    R.J. Hyndman and A.B. Koehler, Antoher look at measures of forecast 
+    R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
     '''
     n_pts = len(predicted.ravel())
@@ -390,8 +393,8 @@ def logAccuracy(predicted, observed, base=10):
     Using base 2 is computationally much faster, so unless the base is important to interpretation
     we recommend using that.
     '''
-    pred = np.asarray(predicted).astype(float)
-    obse = np.asarray(observed).astype(float)
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
     #check for positivity
     if (pred<=0).any() and (obse<=0).any():
         raise ValueError('logAccuracy: input data are required to be positive')
@@ -401,7 +404,7 @@ def logAccuracy(predicted, observed, base=10):
     return logfuncs[base](pred/obse)
 
 
-def medSymAccuracy(predicted, observed, perc=True, mfunc=np.median):
+def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
     '''Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.
 
     The accuracy ratio is given by (prediction/observation), to avoid the bias inherent in mean/median percentage error
@@ -417,21 +420,40 @@ def medSymAccuracy(predicted, observed, perc=True, mfunc=np.median):
     (y' - x')/x'
     where y' is always the larger of the (observation, prediction) pair, and x' is always the smaller.
 
-    We use base 2 for computational efficiency.
+    Reference:
+    Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on percentage errors for radiation belt
+    modeling applications, Los Alamos National Laboratory Report, LA-UR-15-24592.
     '''
-    absLogAcc = np.abs(logAccuracy(predicted, observed, base=2))
-    tmp = mfunc(absLogAcc)
-    symAcc = np.exp2(tmp)
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
+    if method=='UPE':
+        ##unsigned percentage error method
+        PleO = pred >= obse
+        OltP = np.logical_not(PleO)
+        unsRelErr = pred.copy()
+        unsRelErr[PleO] = (pred[PleO]-obse[PleO])/obse[PleO]
+        unsRelErr[OltP] = (obse[OltP]-pred[OltP])/pred[OltP]
+        unsPercErr = unsRelErr*100
+        msa = mfunc(unsPercErr.compressed())
+    elif method=='log':
+        ##median(log(Q)) method
+        absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
+        symAcc = mfunc(np.exp2(absLogAcc))
+        msa = 100*(symAcc-1)
+    else:
+        absLogAcc = np.abs(logAccuracy(pred, obse, base=2)) #is this different from the method above for large series??
+        symAcc = np.exp2(mfunc(absLogAcc))
+        msa = 100*(symAcc-1)
 
-    if perc:
-        symAcc = 100*(symAcc-1)
-
-    return symAcc
+        #raise ValueError('method kwarg should take the value "log" or "UPE".')
+    return msa
 
 
 def meanAPE(predicted, observed, mfunc=np.mean):
-    e_perc = np.abs(percError(predicted, observed))
-    return mfunc(np.asarray(e_perc))
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
+    e_perc = np.abs(percError(pred, obse))
+    return mfunc(e_perc.compressed())
 
 
 # def S1Score():
