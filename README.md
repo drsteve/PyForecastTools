@@ -1,10 +1,15 @@
 # PyForecastTools
+
+[![Build Status](https://travis-ci.org/drsteve/PyForecastTools.svg?branch=master)](jttps://travis-ci.org/drsteve/PyForecastTools)
+
 A Python module to provide model validation and forecast verification tools.
 The module builds on the scientific Python stack (Python, Numpy) and uses
-the SpacePy datamodel.
+the dmarray class from SpacePy's datamodel.
 
 SpacePy is available through the Python Package Index, MacPorts, and is under
 version control at sourceforge.net/p/spacepy/
+If SpacePy is not available a reduced functionality implementation of the class
+is provided with this package.
 
 To install (local user), run
 

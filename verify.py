@@ -13,7 +13,10 @@ from __future__ import division
 import functools
 import numpy as np
 
-import datamodel as dm
+try:
+    from spacepy import datamodel as dm
+except ImportError:
+    import datamodel as dm
 
 
 #======= Performance metrics =======#
