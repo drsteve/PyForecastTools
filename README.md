@@ -1,6 +1,6 @@
 # PyForecastTools
 
-[![Build Status](https://travis-ci.org/drsteve/PyForecastTools.svg?branch=master)](jttps://travis-ci.org/drsteve/PyForecastTools)
+[![Build Status](https://travis-ci.org/drsteve/PyForecastTools.svg?branch=master)](https://travis-ci.org/drsteve/PyForecastTools)
 
 A Python module to provide model validation and forecast verification tools.
 The module builds on the scientific Python stack (Python, Numpy) and uses
