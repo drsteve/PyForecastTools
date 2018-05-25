@@ -906,7 +906,7 @@ class Contingency2x2(ContingencyNxN):
         self.attrs['MatthewsCC'] = numer/denom
         return self.attrs['MatthewsCC']
 
-    def summary(self, verbose=False, ci=False):
+    def summary(self, verbose=False, ci=None):
         dum = self.POFD(ci=ci)
         dum = self.POD(ci=ci)
         dum = self.PC(ci=ci)
