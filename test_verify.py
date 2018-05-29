@@ -78,6 +78,16 @@ class contingency2x2_calc(unittest.TestCase):
         ctab = verify.Contingency2x2([[0, 24], [327, 0]])
         self.assertEqual(ctab.MatthewsCC(), -1)
 
+    def test_oddsRatio_known(self):
+        '''Test Odds ratio calculation with example given by Thornes and Stephenson'''
+        ctab = verify.Contingency2x2([[29, 6], [4, 38]])
+        self.assertAlmostEqual(ctab.oddsRatio(), 45.9, places=1)
+
+    def test_YuleQ_known(self):
+        '''Test Yule's Q (ORSS) calculation with example given by Thornes and Stephenson'''
+        ctab = verify.Contingency2x2([[29, 6], [4, 38]])
+        self.assertAlmostEqual(ctab.yuleQ(), 0.96, places=2)
+
     def test_Finley_n(self):
         ctab = verify.Contingency2x2(self.Finley)
         self.assertEqual(ctab.sum(), 2803)

@@ -1175,7 +1175,9 @@ class Contingency2x2(ContingencyNxN):
              This is also added to the attrs attribute of the table object
         '''
         a,b,c,d = self._abcd()
-        odds = a*d/b*c
+        numer = a*d
+        denom = b*c
+        odds = numer/denom
 
         self.attrs['OddsRatio'] = odds
         return self.attrs['OddsRatio']
