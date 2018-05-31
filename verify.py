@@ -924,8 +924,8 @@ class Contingency2x2(ContingencyNxN):
         if verbose:
             print('Contingency2x2([\n  [{:6g},{:6g}],\n  [{:6g},{:6g}])\n'.format(a,b,c,d))
             qual = ['MajorityClassFraction', 'MatthewsCC']
-            stats = ['Bias', 'FAR', 'PC', 'POFD', 'POD', 'OddsRatio']
-            skill = ['HeidkeScore','PeirceScore','ThreatScore','EquitableThreatScore','YuleQ']
+            stats = ['Bias', 'FAR', 'PC', 'POFD', 'POD', 'ThreatScore', 'OddsRatio']
+            skill = ['HeidkeScore','PeirceScore','EquitableThreatScore','YuleQ']
             print("Summary Statistics")
             print("==================")
             for key in stats:
