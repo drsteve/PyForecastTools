@@ -802,14 +802,18 @@ class Contingency2x2(ContingencyNxN):
 
     The table is defined following the standard presentation in works such 
     as Wilks [2006], where the columns are observations and the rows are 
-    predictions. For a binary forecast, this gives a table:
-                               Observed
-                          Y               N
-                     ------------------------------
-               Y     True Positive | False Positive
-    Predicted        ------------------------------
-               N     False Negative| True Negative
-                     ------------------------------
+    predictions. For a binary forecast, this gives a table
+
+    +-------------+-------------------------------+
+    |             |           Observed            |
+    |             +---------------+---------------+
+    |             |      Y        |      N        |
+    +---------+---+---------------+---------------+
+    |         | Y | True Positive | False Positive|
+    |Predicted+---+---------------+---------------+
+    |         | N | False Negative| True Negative |
+    +---------+---+---------------+---------------+
+    
 
     Note that in many machine learning applications this table is called a
     ``confusion matrix'' and the columns and rows are often transposed.
