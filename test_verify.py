@@ -5,7 +5,7 @@ import unittest
 import copy
 import numpy as np
 import numpy.testing as npt
-import verify
+from verify import verify
 
 
 class contingency2x2_construction(unittest.TestCase):
