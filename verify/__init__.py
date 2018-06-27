@@ -15,8 +15,8 @@ import numpy as np
 
 try:
     from spacepy import datamodel as dm
-except ImportError:
-    import datamodel as dm
+except:
+    from . import datamodel as dm
 
 
 #======= Performance metrics =======#

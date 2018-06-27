@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='PyForecastTools',
       version='1.0',
@@ -10,6 +10,7 @@ setup(name='PyForecastTools',
       license='BSD License',
       url='https://drsteve.github.io/PyForecastTools',
       install_requires=['numpy'],
+      packages=find_packages(exclude=['tests']),
       classifiers=['Development Status :: 4 - Beta',
                    'License :: OSI Approved :: BSD License',
                    'Intended Audience :: Science/Research',
@@ -22,4 +23,5 @@ setup(name='PyForecastTools',
                    'Programming Language :: Python :: 3',
                    'Programming Language :: Python :: 3.6',
                    ],
+     test_suite='test_verify.py'
      )
