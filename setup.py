@@ -2,14 +2,20 @@
 
 from setuptools import setup, find_packages
 
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+
 setup(name='PyForecastTools',
       version='1.0',
       description='Model validation and forecast verification tools',
       author='Steve Morley',
       author_email='smorley@lanl.gov',
       license='BSD License',
-      url='https://drsteve.github.io/PyForecastTools',
+      url='https://github.com/drsteve/PyForecastTools',
       install_requires=['numpy'],
+      long_description=long_description,
+      long_description_content_type="text/markdown",
       packages=find_packages(exclude=['tests']),
       classifiers=['Development Status :: 4 - Beta',
                    'License :: OSI Approved :: BSD License',
