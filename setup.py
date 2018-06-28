@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 
 setup(name='PyForecastTools',
-      version='1.0',
+      version='1.0.1',
       description='Model validation and forecast verification tools',
       author='Steve Morley',
       author_email='smorley@lanl.gov',
