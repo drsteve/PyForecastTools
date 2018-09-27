@@ -73,7 +73,7 @@
 <td>Symmetric signed bias, expressed as a percentage</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#verify.accuracy" title="verify.accuracy"><code class="xref py py-obj docutils literal"><span class="pre">accuracy</span></code></a>(data[,&nbsp;climate])</td>
-<td></td>
+<td>Convenience function to calculate a selection of unscaled accuracy measures</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#verify.medSymAccuracy" title="verify.medSymAccuracy"><code class="xref py py-obj docutils literal"><span class="pre">medSymAccuracy</span></code></a>(predicted,&nbsp;observed[,&nbsp;mfunc,&nbsp;...])</td>
 <td>Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.</td>
@@ -94,7 +94,7 @@
 <td>Calculate the median absolute error of a data set relative to some reference value</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="#verify.scaledAccuracy" title="verify.scaledAccuracy"><code class="xref py py-obj docutils literal"><span class="pre">scaledAccuracy</span></code></a>(predicted,&nbsp;observed)</td>
-<td></td>
+<td>Convenience function to calculate a selection of relative, or scaled, accuracy measures</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="#verify.nRMSE" title="verify.nRMSE"><code class="xref py py-obj docutils literal"><span class="pre">nRMSE</span></code></a>(predicted,&nbsp;observed)</td>
 <td>Calculate the normalized root mean squared error of a data set relative to some reference value</td>
@@ -123,6 +123,10 @@
 <div class="section" id="module-verify">
 <span id="function-class-documentation"></span><h3>Function/Class Documentation<a class="headerlink" href="#module-verify" title="Permalink to this headline">¶</a></h3>
 <p>Module containing verification and performance metrics</p>
+<p>With the exception of the ContingencyNxN and Contingency2x2 classes,
+the inputs for all metrics are assumed to be array-like and 1D. Bad
+values are assumed to be stored as NaN and these are excluded in 
+metric calculations.</p>
 <p>Author: Steve Morley
 Institution: Los Alamos National Laboratory
 Contact: <a class="reference external" href="mailto:smorley&#37;&#52;&#48;lanl&#46;gov">smorley<span>&#64;</span>lanl<span>&#46;</span>gov</a>
@@ -422,21 +426,34 @@ and rain (cat 2). [see Wilks, 1995, p273-274]</p>
 <dt id="verify.MASE">
 <code class="descclassname">verify.</code><code class="descname">MASE</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.MASE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mean Absolute Scaled Error</p>
+<p>References:
+R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
+accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.</p>
+<dl class="docutils">
+<dt>predicted: array-like</dt>
+<dd>predicted data for which to calculate MASE</dd>
+<dt>observed: float</dt>
+<dd>observation vector (or climatological value (scalar) to use as reference value)</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>the mean absolute scaled error of the data set</dd>
+</dl>
+<p>scaledError</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="verify.RMSE">
 <code class="descclassname">verify.</code><code class="descname">RMSE</code><span class="sig-paren">(</span><em>data</em>, <em>climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.RMSE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the root mean squared error of a data set relative to some reference value</p>
-<p>The chosen reference can be persistence, a provided climatological mean (scalar)
-or a provided climatology (observation vector).</p>
+<p>The chosen reference can be persistence (climate=None), a provided climatological 
+mean (scalar) or a provided climatology (observation vector).</p>
 <dl class="docutils">
 <dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
 <dd>data to calculate mean squared error, default reference is persistence</dd>
-</dl>
-<dl class="docutils">
-<dt>climate: float</dt>
-<dd>climatological mean to use as reference value</dd>
+<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
+<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
 </dl>
 <dl class="docutils">
 <dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
@@ -474,31 +491,103 @@ speedup.</p>
 <dt id="verify.absPercError">
 <code class="descclassname">verify.</code><code class="descname">absPercError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.absPercError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Absolute percentage error</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>perc <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Array of absolute percentage errors, a measure of accuracy</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="verify.accuracy">
 <code class="descclassname">verify.</code><code class="descname">accuracy</code><span class="sig-paren">(</span><em>data</em>, <em>climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.accuracy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Convenience function to calculate a selection of unscaled accuracy measures</p>
+<dl class="docutils">
+<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
+<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>Dictionary containing unscaled accuracy measures</dd>
+</dl>
+<p>meanSquaredError, RMSE, meanAbsError, medAbsError</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="verify.bias">
 <code class="descclassname">verify.</code><code class="descname">bias</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.bias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scale-dependent bias as measured by the mean error</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>bias <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Mean error of prediction</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="verify.forecastError">
 <code class="descclassname">verify.</code><code class="descname">forecastError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>full=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.forecastError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Error, defined using the sign convention of Jolliffe and Stephenson (Ch. 5)</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>full <span class="classifier-delimiter">:</span> <span class="classifier">boolean, optional</span></dt>
+<dd>Switch determining nature of return value. When it is True (the
+default) the function returns the errors as well as the predicted
+and observed values as numpy arrays of floats, when False only the
+array of forecast errors is returned.</dd>
+</dl>
+<dl class="docutils">
+<dt>err <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Array of forecast errors</dd>
+<dt>pred <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Present only if <cite>full</cite> = True. Array of predicted values as floats</dd>
+<dt>obse <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Present only if <cite>full</cite> = True. Array of observed values as floats</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="verify.logAccuracy">
-<code class="descclassname">verify.</code><code class="descname">logAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>base=10</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.logAccuracy" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">verify.</code><code class="descname">logAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>base=10</em>, <em>mask=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.logAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log Accuracy Ratio, defined as log(predicted/observed) or log(predicted)-log(observed)</p>
 <p>Using base 2 is computationally much faster, so unless the base is important to interpretation
 we recommend using that.</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>base <span class="classifier-delimiter">:</span> <span class="classifier">number, optional</span></dt>
+<dd>Base to use for logarithmic transform (default: 10)</dd>
+<dt>mask <span class="classifier-delimiter">:</span> <span class="classifier">boolean, optional</span></dt>
+<dd>Switch to set masking behaviour. If True (default) the function will mask out NaN and negative values,
+and will return a masked array. If False, the presence of negative numbers will raise a ValueError and
+NaN will propagate through the calculation.</dd>
+</dl>
+<dl class="docutils">
+<dt>logacc <span class="classifier-delimiter">:</span> <span class="classifier">array or masked array</span></dt>
+<dd>Array of absolute percentage errors, a measure of accuracy.</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -510,10 +599,9 @@ or a provided climatology (observation vector).</p>
 <dl class="docutils">
 <dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
 <dd>data to calculate mean squared error, default reference is persistence</dd>
-</dl>
-<dl class="docutils">
-<dt>climate: float</dt>
-<dd>climatology to use as reference</dd>
+<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
+<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
 </dl>
 <dl class="docutils">
 <dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
@@ -526,6 +614,16 @@ or a provided climatology (observation vector).</p>
 <dt id="verify.meanPercentageError">
 <code class="descclassname">verify.</code><code class="descname">meanPercentageError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.meanPercentageError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Order-dependent bias as measured by the mean percentage error</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>mpe <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Mean percentage error of prediction</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -537,10 +635,9 @@ or a provided climatology (observation vector).</p>
 <dl class="docutils">
 <dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
 <dd>data to calculate mean squared error, default reference is persistence</dd>
-</dl>
-<dl class="docutils">
-<dt>climate: float</dt>
-<dd>climatological mean to use as reference value</dd>
+<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
+<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
 </dl>
 <dl class="docutils">
 <dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
@@ -564,10 +661,9 @@ or a provided climatology (observation vector).</p>
 <dl class="docutils">
 <dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
 <dd>data to calculate median absolute error, default reference is persistence</dd>
-</dl>
-<dl class="docutils">
-<dt>climate: float</dt>
-<dd>climatology to use as reference</dd>
+<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
+<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
 </dl>
 <dl class="docutils">
 <dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
@@ -578,7 +674,7 @@ or a provided climatology (observation vector).</p>
 
 <dl class="function">
 <dt id="verify.medSymAccuracy">
-<code class="descclassname">verify.</code><code class="descname">medSymAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>mfunc=&lt;function median&gt;</em>, <em>method='log'</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.medSymAccuracy" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">verify.</code><code class="descname">medSymAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>mfunc=&lt;function median&gt;</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.medSymAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.</p>
 <p>The accuracy ratio is given by (prediction/observation), to avoid the bias inherent in mean/median percentage error
 metrics we use the log of the accuracy ratio (which is symmetric about 0 for changes of the same factor). Specifically,
@@ -593,12 +689,45 @@ where y&#8217; is always the larger of the (observation, prediction) pair, and x
 <p>Reference:
 Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on percentage errors for radiation belt
 modeling applications, Los Alamos National Laboratory Report, LA-UR-15-24592.</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string, optional</span></dt>
+<dd>Method to use for calculating the median symmetric accuracy (MSA). Options are &#8216;log&#8217; which uses the median of
+the re-exponentiated absolute log accuracy, &#8216;UPE&#8217; which calculates MSA using the unsigned percentage error, and
+None (default), in which case the method is implemented as described above. The UPE method has reduced accuracy
+compared to the other methods and is included primarily for testing purposes.</dd>
+</dl>
+<dl class="docutils">
+<dt>msa <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Array of median symmetric accuracy</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="verify.medianLogAccuracy">
 <code class="descclassname">verify.</code><code class="descname">medianLogAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>mfunc=&lt;function median&gt;</em>, <em>base=10</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.medianLogAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Order-dependent bias as measured by the median of the log accuracy ratio</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>mfunc <span class="classifier-delimiter">:</span> <span class="classifier">function, optional</span></dt>
+<dd>Function to use for central tendency (default: numpy.median)</dd>
+<dt>base <span class="classifier-delimiter">:</span> <span class="classifier">number, optional</span></dt>
+<dd>Base to use for logarithmic transform (default: 10)</dd>
+</dl>
+<dl class="docutils">
+<dt>mla <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Median log accuracy of prediction</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -615,7 +744,7 @@ doi:10.1029/2007SW000345.</p>
 <dt>predicted: array-like</dt>
 <dd>predicted data for which to calculate mean squared error</dd>
 <dt>observed: float</dt>
-<dd>observation vector (or climatological value (scalar)) to use as reference value</dd>
+<dd>observation vector (or climatological value (scalar) to use as reference value)</dd>
 </dl>
 <dl class="docutils">
 <dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
@@ -647,6 +776,18 @@ to the robust coefficient of variation (rCV).</p>
 <dd><p>The percentage of cases when method A was closer to actual than method B</p>
 <p>For example, if we want to know whether a new forecast performs better than a reference
 forecast...</p>
+<dl class="docutils">
+<dt>predict1 <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions from model A</dd>
+<dt>predict2 <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions from model B</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>percBetter <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>The percentage of observations where method A was closer to observation than method B</dd>
+</dl>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p_ref</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.5</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span> <span class="c1">#mean prediction</span>
@@ -663,6 +804,16 @@ p_ref.</p>
 <dt id="verify.percError">
 <code class="descclassname">verify.</code><code class="descname">percError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.percError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Percentage Error</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>perc <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Array of forecast errors expressed as a percentage</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -686,7 +837,19 @@ point and is therefore considered a robust estimator.</p>
 <dl class="function">
 <dt id="verify.scaledAccuracy">
 <code class="descclassname">verify.</code><code class="descname">scaledAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.scaledAccuracy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Convenience function to calculate a selection of relative, or scaled, accuracy measures</p>
+<dl class="docutils">
+<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of predictions</dd>
+<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
+<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
+<dd>Dictionary containing scaled or relative accuracy measures</dd>
+</dl>
+<p>medSymAccuracy, meanAPE, MASE, nRMSE</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="verify.scaledError">
@@ -695,6 +858,17 @@ point and is therefore considered a robust estimator.</p>
 <p>References:
 R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
 accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.</p>
+<dl class="docutils">
+<dt>predicted: array-like</dt>
+<dd>predicted data for which to calculate scaled error</dd>
+<dt>observed: float</dt>
+<dd>observation vector (or climatological value (scalar) to use as reference value)</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>the scaled error of the data set</dd>
+</dl>
+<p>MASE</p>
 </dd></dl>
 
 <dl class="function">
@@ -708,11 +882,11 @@ details.</p>
 <dd>Accuracy measure of data set</dd>
 <dt>A_ref <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>Accuracy measure for reference forecast</dd>
-<dt>A_perf <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dt>A_perf <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
 <dd>Accuracy measure for &#8220;perfect forecast&#8221; (Default = 0)</dd>
 </dl>
 <dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dt>ss_ref <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
 <dd>Forecast skill for the given forecast, relative to the reference, using the chosen accuracy measure</dd>
 </dl>
 </dd></dl>
