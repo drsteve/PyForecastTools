@@ -373,7 +373,7 @@ def scaledAccuracy(predicted, observed):
                'MdSymAcc': medSymAccuracy}
     out = dict()
     for met in metrics:
-        out[met] = metrics[met](predcted, observed)
+        out[met] = metrics[met](predicted, observed)
 
     return out
 
