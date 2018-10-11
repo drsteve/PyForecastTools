@@ -155,7 +155,7 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
         List of predicted values
     observed : array-like
         List of observed values
-    mfunc : def
+    mfunc : function
         Function used to calculate median (default=np.median)
     base : int
         Base for the logarithm (default=10)
@@ -367,10 +367,29 @@ def medAbsError(data, climate=None):
 
 #======= Scaled/Relative Accuracy measures =======#
 def scaledAccuracy(predicted, observed):
+    """ Calculate scaled and relative accuracy measures
+
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+
+    Returns
+    =======
+    out : dict
+        Dictionary containing the different scaled/relative accuracy measures
+        nRMSE : normalized root mean squared error
+        MASE : mean absolute scaled error
+        MAPE : mean absolute percentage error
+        MdAPE : median absolute percentage error
+        MdSymAcc : median symmetric accuracy
+
     """
-    """
-    metrics = {'nRMSE': nRMSE, 'MASE': MASE,
-               'MAPE': meanAPE, 'MdAPE': functools.partial(meanAPE, mfunc=np.median),
+    metrics = {'nRMSE': nRMSE, 'MASE': MASE, 'MAPE': meanAPE,
+               'MdAPE': functools.partial(meanAPE, mfunc=np.median),
                'MdSymAcc': medSymAccuracy}
     out = dict()
     for met in metrics:
@@ -380,31 +399,37 @@ def scaledAccuracy(predicted, observed):
 
 
 def nRMSE(predicted, observed):
-    """Calculate the normalized root mean squared error of a data set relative to some reference value
-
-    The chosen reference can be an observation vector or, a provided climatological mean (scalar). This 
-    definition is due to Yu and Ridley (2002).
-
-    References:
-    Yu, Y., and A. J. Ridley (2008), Validation of the space weather modeling 
-    framework using ground-based magnetometers, Space Weather, 6, S05002, 
-    doi:10.1029/2007SW000345.
+    """normalized root mean squared error of a data set relative to a reference
+    value
 
     Parameters
     ==========
     predicted: array-like
         predicted data for which to calculate mean squared error
     observed: float
-        observation vector (or climatological value (scalar)) to use as reference value
+        observation vector (or climatological value (scalar)) to use as
+        reference value
 
     Returns
     =======
     out : float
-        the normalized root-mean-squared-error of the data set relative to the observations
+        the normalized root-mean-squared-error of the data set relative to the
+        observations
 
     See Also
     ========
     RMSE
+
+    Notes
+    =====
+    The chosen reference can be an observation vector or, a provided
+    climatological mean (scalar). This definition is due to Yu and Ridley (2002)
+
+    References:
+    Yu, Y., and A. J. Ridley (2008), Validation of the space weather modeling 
+    framework using ground-based magnetometers, Space Weather, 6, S05002, 
+    doi:10.1029/2007SW000345.
+
     """
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
@@ -425,9 +450,25 @@ def nRMSE(predicted, observed):
 def scaledError(predicted, observed):
     """Scaled errors, see Hyndman and Koehler (2006)
 
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+
+    Returns
+    =======
+    q : float
+        the scaled error
+
+    Notes
+    =====
     References:
     R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
+
     """
     n_pts = len(predicted.ravel())
     try:
@@ -447,14 +488,53 @@ def scaledError(predicted, observed):
 
 
 def MASE(predicted, observed):
-    """Mean Absolute Scaled Error"""
+    """Mean Absolute Scaled Error
+
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+
+    Returns
+    =======
+    mase : float
+        the mean absolute scaled error
+
+    """
     q = scaledError(predicted, observed)
     n_pts = len(predicted.ravel())
     return np.abs(q).sum()/n_pts
 
 
 def forecastError(predicted, observed, full=True):
-    """Error, defined using the sign convention of Jolliffe and Stephenson (Ch. 5)
+    """forecast error, defined using the sign convention of J&S ch. 5
+
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+    full : boolian
+        return precition and observations or just error (default=True)
+
+    Returns
+    =======
+    err : float
+        the mean absolute scaled error
+    pred : array-like
+        Optional return of predicted input, included if full is True
+    obse : array-like
+        Optional return of observed input, included if full is True
+
+    Notes
+    =====
+    J&S: Jolliffe and Stephenson (Ch. 5)
+
     """
     pred = np.asanyarray(predicted).astype(float)
     obse = np.asanyarray(observed).astype(float)
@@ -468,6 +548,19 @@ def forecastError(predicted, observed, full=True):
 def percError(predicted, observed):
     """Percentage Error
 
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+
+    Returns
+    =======
+    mase : float
+        the mean absolute scaled error
+
     """
     err, pred, obse = forecastError(predicted, observed, full=True)
     res = err/obse
@@ -476,6 +569,20 @@ def percError(predicted, observed):
 
 def absPercError(predicted, observed):
     """Absolute percentage error
+
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+
+    Returns
+    =======
+    mase : float
+        the mean absolute scaled error
+
     """
     err, pred, obse = forecastError(predicted, observed, full=True)
     res = np.abs(err/obse)
@@ -483,14 +590,33 @@ def absPercError(predicted, observed):
 
 
 def logAccuracy(predicted, observed, base=10):
-    """Log Accuracy Ratio, defined as log(predicted/observed) or log(predicted)-log(observed)
+    """defined as log(predicted/observed) or log(predicted)-log(observed)
 
-    Using base 2 is computationally much faster, so unless the base is important to interpretation
-    we recommend using that.
+
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+    base : int or str
+        Base for logarithm (allows 10, 2, and 'e') (default=10)
+
+    Returns
+    =======
+    log_ratio : float
+        log accuracy ratio
+
+    Notes
+    =====
+    Using base 2 is computationally much faster, so unless the base is
+    important to interpretation we recommend using that.
+
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
-    #check for positivity
+    # check for positivity
     if (pred<=0).any() and (obse<=0).any():
         raise ValueError('logAccuracy: input data are required to be positive')
     logfuncs = {10: np.log10, 2: np.log2, 'e': np.log}
@@ -500,24 +626,53 @@ def logAccuracy(predicted, observed, base=10):
 
 
 def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
-    """Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.
+    """Scaled measure of accuracy that is not biased to over- or
+    under-predictions.
 
-    The accuracy ratio is given by (prediction/observation), to avoid the bias inherent in mean/median percentage error
-    metrics we use the log of the accuracy ratio (which is symmetric about 0 for changes of the same factor). Specifically,
-    the Median Symmetric Accuracy is found by calculating the median of the absolute log accuracy, and re-exponentiating
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+    mfunc : function
+        function for calculating the median (default=np.median)
+    method : str
+        Method for scaling the accuracy ratios, including UPE (unsigned
+        percentage error), log, and another implementation of log that is
+        used if any other input is specified.  (default='log')
+
+    Returns
+    =======
+    msa : float
+        the median symmetric accuracy
+
+    Notes
+    =====
+    The accuracy ratio is given by (prediction/observation), to avoid the bias
+    inherent in mean/median percentage error metrics we use the log of the
+    accuracy ratio (which is symmetric about 0 for changes of the same factor).
+    Specifically, the Median Symmetric Accuracy is found by calculating the
+    median of the absolute log accuracy, and re-exponentiating:
     g = exp( median( |ln(pred) - ln(obs)| ) )
 
-    This can be expressed as a symmetric percentage error by shifting by one unit and multiplying by 100
+    This can be expressed as a symmetric percentage error by shifting by one
+    unit and multiplying by 100:
     MSA = 100*(g-1)
 
-    It can also be shown that this is identically equivalent to the median unsigned percentage error, where
-    the unsigned relative error is given by
+    It can also be shown that this is identically equivalent to the median
+    unsigned percentage error, where the unsigned relative error is given by:
     (y' - x')/x'
-    where y' is always the larger of the (observation, prediction) pair, and x' is always the smaller.
+
+    where y' is always the larger of the (observation, prediction) pair, and x'
+    is always the smaller.
 
     Reference:
-    Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on percentage errors for radiation belt
-    modeling applications, Los Alamos National Laboratory Report, LA-UR-15-24592.
+    Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on
+    percentage errors for radiation belt modeling applications, Los Alamos
+    National Laboratory Report, LA-UR-15-24592.
+
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
@@ -536,7 +691,8 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
         symAcc = mfunc(np.exp2(absLogAcc))
         msa = 100*(symAcc-1)
     else:
-        absLogAcc = np.abs(logAccuracy(pred, obse, base=2)) #is this different from the method above for large series??
+        # Is this different from the method above for large series??
+        absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
         symAcc = np.exp2(mfunc(absLogAcc))
         msa = 100*(symAcc-1)
 
@@ -545,6 +701,25 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
 
 
 def meanAPE(predicted, observed, mfunc=np.mean):
+    """ mean absolute percentage error
+
+    Parameters
+    ==========
+    predicted: array-like
+        predicted data for which to calculate mean squared error
+    observed: float
+        observation vector (or climatological value (scalar)) to use as
+        reference value
+    mfunc : function
+        function to calculate mean (default=np.mean)
+        
+
+    Returns
+    =======
+    mape : float
+        the mean absolute percentage error
+
+    """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
     e_perc = np.abs(percError(pred, obse))
