@@ -1498,6 +1498,22 @@ class Contingency2x2(ContingencyNxN):
 #======= Other useful functions =======#
 
 def _diff(data, climate=None):
+    """ difference utility function
+
+    Parameters
+    ==========
+    data : np.array
+        Array of data values
+    climate : NoneType
+        Array or scalar of climatology values, or None  to calcuate difference
+        of data using np.diff (default=None)
+
+    Returns
+    =======
+    dif : float
+        Difference between data and climate or between data if climate is None
+
+    """
     fc = np.asarray(data)
     clim = np.asarray(climate)
 
@@ -1518,15 +1534,29 @@ def _diff(data, climate=None):
             try:
                 assert clim.shape==fc.shape
             except:
-                AssertionError('If climate is not scalar, it must have the same shape as data')
+                AssertionError('If climate is not scalar, it must have the ' +
+                               'same shape as data')
                
-        dif = fc-clim#climate - data
+        dif = fc - clim #climate - data
     else:
         dif = np.diff(fc)
 
     return dif
 
 def _maskSeries(series):
+    """ Mask the NaN in array-like input
+
+    Parameters
+    ==========
+    series : array-like
+        Array-like input
+
+    Returns
+    =======
+    ser : numpy array
+        Numpy array with NaN values masked
+
+    """
     #ensure input is numpy array (and make 1-D)
     ser = np.asarray(series, dtype=float).ravel()
     #mask for NaNs
