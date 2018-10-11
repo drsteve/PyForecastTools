@@ -1,4 +1,4 @@
-'''Module containing verification and performance metrics
+"""Module containing verification and performance metrics
 
 Author: Steve Morley
 Institution: Los Alamos National Laboratory
@@ -7,7 +7,7 @@ Los Alamos National Laboratory
 
 Copyright (c) 2017, Los Alamos National Security, LLC
 All rights reserved.
-'''
+"""
 
 from __future__ import division
 import functools
@@ -22,10 +22,8 @@ except:
 #======= Performance metrics =======#
 
 def skill(A_data, A_ref, A_perf=0):
-    '''Generic forecast skill score formulation for quantification of forecast improvement
+    """Generic forecast skill score for quantifying forecast improvement
 
-    See section 7.1.4 of Wilks [2006] (Statistical methods in the atmospheric sciences) for
-    details.
 
     Parameters
     ==========
@@ -39,9 +37,15 @@ def skill(A_data, A_ref, A_perf=0):
     Returns
     =======
     out : float
-        Forecast skill for the given forecast, relative to the reference, using the chosen accuracy measure
+        Forecast skill for the given forecast, relative to the reference, using
+        the chosen accuracy measure
 
-    '''
+    Notes
+    =====
+    See section 7.1.4 of Wilks [2006] (Statistical methods in the atmospheric
+    sciences) for details.
+
+    """
     dif1 = A_data - A_ref
     dif2 = A_perf - A_ref
     ss_ref = dif1/dif2 * 100
@@ -50,10 +54,26 @@ def skill(A_data, A_ref, A_perf=0):
 
 
 def percBetter(predict1, predict2, observed):
-    '''The percentage of cases when method A was closer to actual than method B
+    """The percentage of cases when method A was closer to actual than method B
 
-    For example, if we want to know whether a new forecast performs better than a reference
-    forecast...
+    Parameters
+    ==========
+    predict1 : float or list
+        Method A model prediction
+    predict2 : float or list
+        Method B model prediction
+    observed : float or list
+        List of observations
+
+    Returns
+    =======
+    prec_better : float
+        Percentage denoting how much better A is than B
+
+    Notes
+    =====
+    For example, if we want to know whether a new forecast performs better than
+    a reference forecast...
 
     Examples
     ========
@@ -64,9 +84,10 @@ def percBetter(predict1, predict2, observed):
     >>> verify.percBetter(p_good, p_ref, data)
     66.66666666666666
 
-    That is, two-thirds (66.67%) of the predictions have a lower absolute error in p_good than in
-    p_ref.
-    '''
+    That is, two-thirds (66.67%) of the predictions have a lower absolute error
+    in p_good than in p_ref.
+
+    """
     #set up inputs
     methA = _maskSeries(predict1)
     methB = _maskSeries(predict2)
@@ -84,18 +105,41 @@ def percBetter(predict1, predict2, observed):
 
 #======= Bias measures =======#
 def bias(predicted, observed):
-    '''
-    Scale-dependent bias as measured by the mean error
-    '''
+    """ Scale-dependent bias as measured by the mean error
+
+    Parameters
+    ==========
+    predicted : list
+        List of predicted values
+    observed : list
+        List of observed values
+
+    Returns
+    =======
+    bias : float
+        scale-dependent bias measured by the mean error
+
+    """
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
     
     return pred.mean()-obse.mean()
 
 def meanPercentageError(predicted, observed):
-    '''
-    Order-dependent bias as measured by the mean percentage error
-    '''
+    """Order-dependent bias as measured by the mean percentage error
+
+    Parameters
+    ==========
+    predicted : list
+        List of predicted values
+    observed : list
+        List of observed values
+
+    Returns
+    =======
+    bias : float
+        Order dependent bias as measured by the mean percentage error
+    """
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
     pe = percError(pred, obse)
@@ -103,9 +147,25 @@ def meanPercentageError(predicted, observed):
     return mpe
 
 def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
-    '''
-    Order-dependent bias as measured by the median of the log accuracy ratio
-    '''
+    """Order-dependent bias as measured by the median of the log accuracy ratio
+
+    Parameters
+    ==========
+    predicted : list
+        List of predicted values
+    observed : list
+        List of observed values
+    mfunc : def
+        Function used to calculate median (default=np.median)
+    base : int
+        Base for the logarithm (default=10)
+
+    Returns
+    =======
+    bias : float
+        median of the log accuracy ratio
+
+    """
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
     la = logAccuracy(pred, obse, base=base)
@@ -114,24 +174,35 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
     return mla
 
 def symmetricSignedBias(predicted, observed):
-    '''
-    Symmetric signed bias, expressed as a percentage
+    """Symmetric signed bias, expressed as a percentage
 
-    '''
+    Parameters
+    ==========
+    predicted : list
+        List of predicted values
+    observed : list
+        List of observed values
+
+    Returns
+    =======
+    bias : float
+        symmetric signed bias, as a precentage
+    """
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
     mla = medianLogAccuracy(pred, obse, base='e')
     sign = np.sign(mla)
     biasmag = np.exp(np.abs(mla))-1
-    ssb = np.copysign(biasmag, mla) #apply sign of mla to symmetric bias magnitude
+    # apply sign of mla to symmetric bias magnitude
+    ssb = np.copysign(biasmag, mla)
     return 100*ssb
    
 
 #======= Accuracy measures =======#
 
 def accuracy(data, climate=None):
-    '''
-    '''
+    """
+    """
     data = _maskSeries(data)
     if climate is not None:
         clim = _maskSeries(climate)
@@ -144,7 +215,7 @@ def accuracy(data, climate=None):
     return out
 
 def meanSquaredError(data, climate=None):
-    '''Calculate the mean squared error of a data set relative to some reference value
+    """Calculate the mean squared error of a data set relative to some reference value
 
     The chosen reference can be persistence, a provided climatological mean (scalar)
     or a provided climatology (observation vector).
@@ -167,7 +238,7 @@ def meanSquaredError(data, climate=None):
     See Also
     ========
     RMSE, meanAbsError
-    '''
+    """
     dat = _maskSeries(data)
     n_pts = len(dat)
     dif = _diff(dat, climate=climate)
@@ -178,7 +249,7 @@ def meanSquaredError(data, climate=None):
 
 
 def RMSE(data, climate=None):
-    '''Calculate the root mean squared error of a data set relative to some reference value
+    """Calculate the root mean squared error of a data set relative to some reference value
 
     The chosen reference can be persistence, a provided climatological mean (scalar)
     or a provided climatology (observation vector).
@@ -201,7 +272,7 @@ def RMSE(data, climate=None):
     See Also
     ========
     meanSquaredError, meanAbsError
-    '''
+    """
     dat = _maskSeries(data)
     msqerr = meanSquaredError(data, climate=climate)
 
@@ -209,7 +280,7 @@ def RMSE(data, climate=None):
 
 
 def meanAbsError(data, climate=None):
-    '''Calculate the mean absolute error of a data set relative to some reference value
+    """Calculate the mean absolute error of a data set relative to some reference value
 
     The chosen reference can be persistence, a provided climatological mean (scalar)
     or a provided climatology (observation vector).
@@ -232,7 +303,7 @@ def meanAbsError(data, climate=None):
     See Also
     ========
     medAbsError, meanSquaredError, RMSE
-    '''
+    """
     data =  _maskSeries(data)
     n_pts = len(data)
     adif = np.abs(_diff(data, climate=climate))
@@ -241,7 +312,7 @@ def meanAbsError(data, climate=None):
 
 
 def medAbsError(data, climate=None):
-    '''Calculate the median absolute error of a data set relative to some reference value
+    """Calculate the median absolute error of a data set relative to some reference value
 
     The chosen reference can be persistence, a provided climatological mean (scalar)
     or a provided climatology (observation vector).
@@ -264,7 +335,7 @@ def medAbsError(data, climate=None):
     See Also
     ========
     meanAbsError, meanSquaredError, RMSE
-    '''
+    """
     dat = _maskSeries(data)
     n_pts = len(dat)
     dif = _diff(dat, climate=climate)
@@ -275,8 +346,8 @@ def medAbsError(data, climate=None):
 
 #======= Scaled/Relative Accuracy measures =======#
 def scaledAccuracy(predicted, observed):
-    '''
-    '''
+    """
+    """
     metrics = {'nRMSE': nRMSE, 'MASE': MASE,
                'MAPE': meanAPE, 'MdAPE': functools.partial(meanAPE, mfunc=np.median),
                'MdSymAcc': medSymAccuracy}
@@ -288,7 +359,7 @@ def scaledAccuracy(predicted, observed):
 
 
 def nRMSE(predicted, observed):
-    '''Calculate the normalized root mean squared error of a data set relative to some reference value
+    """Calculate the normalized root mean squared error of a data set relative to some reference value
 
     The chosen reference can be an observation vector or, a provided climatological mean (scalar). This 
     definition is due to Yu and Ridley (2002).
@@ -313,7 +384,7 @@ def nRMSE(predicted, observed):
     See Also
     ========
     RMSE
-    '''
+    """
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
     n_pts = len(pred)
@@ -331,12 +402,12 @@ def nRMSE(predicted, observed):
 
 
 def scaledError(predicted, observed):
-    '''Scaled errors, see Hyndman and Koehler (2006)
+    """Scaled errors, see Hyndman and Koehler (2006)
 
     References:
     R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
-    '''
+    """
     n_pts = len(predicted.ravel())
     try:
         dum = len(observed)
@@ -355,15 +426,15 @@ def scaledError(predicted, observed):
 
 
 def MASE(predicted, observed):
-    '''Mean Absolute Scaled Error'''
+    """Mean Absolute Scaled Error"""
     q = scaledError(predicted, observed)
     n_pts = len(predicted.ravel())
     return np.abs(q).sum()/n_pts
 
 
 def forecastError(predicted, observed, full=True):
-    '''Error, defined using the sign convention of Jolliffe and Stephenson (Ch. 5)
-    '''
+    """Error, defined using the sign convention of Jolliffe and Stephenson (Ch. 5)
+    """
     pred = np.asanyarray(predicted).astype(float)
     obse = np.asanyarray(observed).astype(float)
     err = pred-obse
@@ -374,28 +445,28 @@ def forecastError(predicted, observed, full=True):
 
 
 def percError(predicted, observed):
-    '''Percentage Error
+    """Percentage Error
 
-    '''
+    """
     err, pred, obse = forecastError(predicted, observed, full=True)
     res = err/obse
     return 100*res
 
 
 def absPercError(predicted, observed):
-    '''Absolute percentage error
-    '''
+    """Absolute percentage error
+    """
     err, pred, obse = forecastError(predicted, observed, full=True)
     res = np.abs(err/obse)
     return 100*res
 
 
 def logAccuracy(predicted, observed, base=10):
-    '''Log Accuracy Ratio, defined as log(predicted/observed) or log(predicted)-log(observed)
+    """Log Accuracy Ratio, defined as log(predicted/observed) or log(predicted)-log(observed)
 
     Using base 2 is computationally much faster, so unless the base is important to interpretation
     we recommend using that.
-    '''
+    """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
     #check for positivity
@@ -408,7 +479,7 @@ def logAccuracy(predicted, observed, base=10):
 
 
 def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
-    '''Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.
+    """Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.
 
     The accuracy ratio is given by (prediction/observation), to avoid the bias inherent in mean/median percentage error
     metrics we use the log of the accuracy ratio (which is symmetric about 0 for changes of the same factor). Specifically,
@@ -426,7 +497,7 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
     Reference:
     Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on percentage errors for radiation belt
     modeling applications, Los Alamos National Laboratory Report, LA-UR-15-24592.
-    '''
+    """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
     if method=='UPE':
@@ -465,9 +536,9 @@ def meanAPE(predicted, observed, mfunc=np.mean):
 
 #======= Precision (scale) Measures =======#
 def medAbsDev(series, scale=False, median=False):
-    '''
+    """
     Computes the median absolute deviation from the median
-    '''
+    """
     series = _maskSeries(series)
     #get median absolute deviation of unmasked elements
     perc50 = np.median(series.compressed())
@@ -481,31 +552,31 @@ def medAbsDev(series, scale=False, median=False):
 
 
 def rSD(predicted):
-    '''
+    """
     Computes the "robust standard deviation", i.e. the median absolute deviation times a correction factor
 
     The median absolute deviation (medAbsDev) scaled by a factor of 1.4826 recovers the standard deviation when
     applied to a normal distribution. However, unlike the standard deviation the medAbsDev has a high breakdown 
     point and is therefore considered a robust estimator.
-    '''
+    """
     return medAbsDev(predicted, scale=True)
 
 
 def rCV(predicted):
-    '''
+    """
     Computes the "robust coefficient of variation", i.e. median absolute deviation divided by the median
 
     By analogy with the coefficient of variation, which is the standard deviation divided by the mean, rCV
     gives the median absolute deviation (aka rSD) divided by the median, thereby providing a scaled measure
     of precision/spread.
-    '''
+    """
     mad, perc50 = medAbsDev(predicted, scale=True, median=True)
 
     return mad/perc50
 
 
 def Sn(data, scale=True, correct=True):
-    '''
+    """
     Computes the Sn statistic, which is a robust measure of scale.
 
     Sn is more efficient than the median absolute deviation, and is not constructed with the 
@@ -534,7 +605,7 @@ def Sn(data, scale=True, correct=True):
     See Also
     ========
     medAbsDev
-    '''
+    """
     def dropPoint(vec, i):
         if i==0: return vec[1:]
         elif i==len(vec): return vec[:-1]
@@ -595,7 +666,7 @@ def Sn(data, scale=True, correct=True):
 
 
 def normSn(data, **kwargs):
-    '''
+    """
     Computes the normalized Sn statistic, a scaled measure of spread.
 
     We here scale the Sn estimator by the median, giving a non-symmetric alternative
@@ -614,7 +685,7 @@ def normSn(data, **kwargs):
     See Also
     ========
     rCV
-    '''
+    """
     series = _maskSeries(data)
     p50 = np.median(series.compressed())
     return Sn(data, **kwargs)/p50
@@ -624,7 +695,7 @@ def normSn(data, **kwargs):
 #import xarray ##TODO: do I want to port this to use xarray instead of dmarray??
 
 class ContingencyNxN(dm.dmarray):
-    '''Class to work with NxN contingency tables for forecast verification
+    """Class to work with NxN contingency tables for forecast verification
 
     Examples
     ========
@@ -640,7 +711,7 @@ class ContingencyNxN(dm.dmarray):
     >>> tt.peirce()
     0.52285681714546284
 
-    '''
+    """
     def __new__(cls, input_array, attrs=None, dtype=None):
         if not dtype:
             obj = np.asarray(input_array).view(cls)
@@ -681,7 +752,7 @@ class ContingencyNxN(dm.dmarray):
                     self.get2x2(cat).summary(verbose=verbose)
 
     def heidke(self):
-        '''Calculate the generalized Heidke Skill Score for the NxN contingency table
+        """Calculate the generalized Heidke Skill Score for the NxN contingency table
 
         Returns
         =======
@@ -698,7 +769,7 @@ class ContingencyNxN(dm.dmarray):
         >>> tt = verify.ContingencyNxN([[50,91,71],[47,2364,170],[54,205,3288])
         >>> tt.heidke()
         0.80535269033647217
-        '''
+        """
         N = self.sum()
         Pyo = 0
         #term 1 in numerator
@@ -719,7 +790,7 @@ class ContingencyNxN(dm.dmarray):
         return hss
 
     def peirce(self):
-        '''Calculate the generalized Peirce Skill Score for the NxN contingency table
+        """Calculate the generalized Peirce Skill Score for the NxN contingency table
 
         Returns
         =======
@@ -736,7 +807,7 @@ class ContingencyNxN(dm.dmarray):
         >>> tt = verify.ContingencyNxN([[50,91,71],[47,2364,170],[54,205,3288])
         >>> tt.peirce()
         0.81071330546125309
-        '''
+        """
         N = self.sum()
         Pyo = 0
         #term 1 in numerator
@@ -758,13 +829,13 @@ class ContingencyNxN(dm.dmarray):
         return pss
 
     def PC(self):
-        '''Returns the Proportion Correct (PC) for the NxN contingency table
-        '''
+        """Returns the Proportion Correct (PC) for the NxN contingency table
+        """
         self.attrs['PC'] = self.trace()/self.sum()
         return self.attrs['PC']
 
     def get2x2(self, category):
-        '''Get 2x2 sub-table from multicategory contingency table
+        """Get 2x2 sub-table from multicategory contingency table
 
         Examples
         ========
@@ -789,7 +860,7 @@ class ContingencyNxN(dm.dmarray):
          'PeirceScore': 0.30495035520187008,
          'ThreatScore': 0.15974440894568689}
 
-        '''
+        """
         a = self[category, category]
         b = self[category,:].sum() - a
         c = self[:,category].sum() - a
@@ -798,7 +869,7 @@ class ContingencyNxN(dm.dmarray):
             
 
 class Contingency2x2(ContingencyNxN):
-    '''Class to work with 2x2 contingency tables for forecast verification
+    """Class to work with 2x2 contingency tables for forecast verification
 
     The table is defined following the standard presentation in works such 
     as Wilks [2006], where the columns are observations and the rows are 
@@ -836,7 +907,7 @@ class Contingency2x2(ContingencyNxN):
     >>> tt.peirce()
     0.52285681714546284
 
-    '''
+    """
     def __new__(cls, input_array, attrs=None, dtype=None, stats=False):
         if not dtype:
             obj = np.asarray(input_array).view(cls)
@@ -853,18 +924,18 @@ class Contingency2x2(ContingencyNxN):
         return obj
 
     def _abcd(self):
-        '''Returns the 4 elements of the contingency table
+        """Returns the 4 elements of the contingency table
 
         a = True positives, b = False positives, c = False negatives, d = True Negatives
-        '''
+        """
         a, b = self[0,0], self[0,1]
         c, d = self[1,0], self[1,1]
         return a,b,c,d
 
     @classmethod
     def fromBoolean(cls, predicted, observed):
-        '''Construct a 2x2 contingency table from two boolean input arrays
-        '''
+        """Construct a 2x2 contingency table from two boolean input arrays
+        """
         pred = np.asarray(predicted).astype(bool)
         obse = np.asarray(observed).astype(bool)
         fToT = np.logical_and(pred, np.logical_and(pred, obse)).sum()
@@ -874,10 +945,10 @@ class Contingency2x2(ContingencyNxN):
         return cls([[fToT, fToF],[fFoT, fFoF]], attrs={'pred':pred, 'obs':obse})
 
     def majorityClassFraction(self):
-        '''Proportion Correct (a.k.a. "accuracy" in machine learning) for majority classifier
+        """Proportion Correct (a.k.a. "accuracy" in machine learning) for majority classifier
 
         
-        '''
+        """
         a,b,c,d = self._abcd()
         nmc = [0.0, 0.0]
         mc = self.sum(axis=0)
@@ -887,7 +958,7 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['MajorityClassFraction']
 
     def MatthewsCC(self):
-        '''
+        """
         Matthews Correlation Coefficient
 
         Examples
@@ -898,7 +969,7 @@ class Contingency2x2(ContingencyNxN):
         >>> ct = verify.Contingency2x2.fromBoolean(pred_series, event_series)
         >>> ct.MatthewsCC()
         -0.333...
-        '''
+        """
         TP,FP,FN,TN = self._abcd()
         numer = np.float64((TP*TN) - (FP*FN))
         sum_ac, sum_ab = TP+FN, TP+FP
@@ -987,7 +1058,7 @@ class Contingency2x2(ContingencyNxN):
         return ci95
 
     def _AgrestiCI(self, prob, n, mult=1.96):
-        '''Agresti-Coull interval. See eqn. 7.67 in Wilks [2006] (p.327)'''
+        """Agresti-Coull interval. See eqn. 7.67 in Wilks [2006] (p.327)"""
         z, zz = 1.96, 3.84
         norm = 1 + zz/n
         new_p = (prob + zz/(2*n))/norm
@@ -997,14 +1068,14 @@ class Contingency2x2(ContingencyNxN):
         return new_p, ci95
 
     def POFD(self, ci=None):
-        '''Calculate the Probability of False Detection (POFD), a.k.a. False Alarm Rate
+        """Calculate the Probability of False Detection (POFD), a.k.a. False Alarm Rate
 
         Returns
         =======
         pofd : float
             The probability of false detection of the contingency table data
             This is also added to the attrs attribute of the table object
-        '''
+        """
         a,b,c,d = self._abcd()
         n = b+d
         self.attrs['POFD'] = b/n
@@ -1023,14 +1094,14 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['POFD']
 
     def POD(self, ci=None):
-        '''Calculate the Probability of Detection, a.k.a. hit rate (ratio of correct forecasts to number of event occurrences)
+        """Calculate the Probability of Detection, a.k.a. hit rate (ratio of correct forecasts to number of event occurrences)
 
         Returns
         =======
         hitrate : float
             The hit rate of the contingency table data
             This is also added to the attrs attribute of the table object
-        '''
+        """
         a,b,c,d = self._abcd()
         n = a+c
         self.attrs['POD'] = a/n
@@ -1046,14 +1117,14 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['POD']
 
     def FAR(self, ci=None):
-        '''False Alarm Ratio, the fraction of incorrect "yes" forecasts
+        """False Alarm Ratio, the fraction of incorrect "yes" forecasts
 
         Returns
         =======
         far : float
             The false alarm ratio of the contingency table data
             This is also added to the attrs attribute of the table object
-        '''
+        """
         a,b,c,d = self._abcd()
         n = a+b
         self.attrs['FAR'] = b/n
@@ -1069,7 +1140,7 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['FAR']
 
     def threat(self, ci=None):
-        '''Calculate the Threat Score (a.k.a. critical success index)
+        """Calculate the Threat Score (a.k.a. critical success index)
 
         This is a ratio of verification, i.e., the proportion of correct forecasts
         after removing correct "no" forecasts (or 'true negatives').
@@ -1080,7 +1151,7 @@ class Contingency2x2(ContingencyNxN):
             The threat score of the contingency table data
             This is also added to the attrs attribute of the table object
     
-        '''
+        """
         a,b,c,d = self._abcd()
         self.attrs['ThreatScore'] = a/(a+b+c)
         if ci is not None and ci == 'bootstrap':
@@ -1089,7 +1160,7 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['ThreatScore']
 
     def equitableThreat(self, ci=None):
-        '''Calculate the Equitable Threat Score (a.k.a. Gilbert Skill Score)
+        """Calculate the Equitable Threat Score (a.k.a. Gilbert Skill Score)
 
         This is a ratio of verification, i.e., the proportion of correct forecasts
         after removing correct "no" forecasts (or 'true negatives').
@@ -1100,7 +1171,7 @@ class Contingency2x2(ContingencyNxN):
             The threat score of the contingency table data
             This is also added to the attrs attribute of the table object
     
-        '''
+        """
         a,b,c,d = self._abcd()
         aref = (a+b)*(a+c)/self.sum()
         self.attrs['EquitableThreatScore'] = (a-aref)/(a-aref+b+c)
@@ -1110,7 +1181,7 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['EquitableThreatScore']
 
     def heidke(self, ci=None):
-        '''Calculate the Heidke Skill Score for the 2x2 contingency table
+        """Calculate the Heidke Skill Score for the 2x2 contingency table
 
         This is a skill score based on the proportion of correct forecasts referred to
         the proportion expected correct by chance. 
@@ -1121,7 +1192,7 @@ class Contingency2x2(ContingencyNxN):
             The Heidke skill score of the contingency table data
             This is also added to the attrs attribute of the table object
 
-        '''
+        """
         super(Contingency2x2, self).heidke()
         if ci is not None and ci == 'bootstrap':
             self.attrs['HeidkeScoreCI95'] = self._bootstrapCI(func='heidke')
@@ -1129,7 +1200,7 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['HeidkeScore']
 
     def peirce(self, ci=None):
-        '''Calculate the Peirce Skill Score for the 2x2 contingency table
+        """Calculate the Peirce Skill Score for the 2x2 contingency table
 
         Returns
         =======
@@ -1137,7 +1208,7 @@ class Contingency2x2(ContingencyNxN):
             The Peirce skill score of the contingency table data
             This is also added to the attrs attribute of the table object
 
-        '''
+        """
         super(Contingency2x2, self).peirce()
         if ci is not None:
             POFD = self.POFD()
@@ -1161,8 +1232,8 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['PeirceScore']
 
     def PC(self, ci=None):
-        '''Returns the Proportion Correct (PC) for the 2x2 contingency table
-        '''
+        """Returns the Proportion Correct (PC) for the 2x2 contingency table
+        """
         super(Contingency2x2, self).PC()
         if ci is not None and ci == 'bootstrap':
             self.attrs['PCCI95'] = self._bootstrapCI(func='PC')
@@ -1170,14 +1241,14 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['PC']
 
     def oddsRatio(self):
-        '''Calculate the odds ratio for the 2x2 contingency table
+        """Calculate the odds ratio for the 2x2 contingency table
 
         Returns
         =======
         odds : float
              The odds ratio for the contingency table data
              This is also added to the attrs attribute of the table object
-        '''
+        """
         a,b,c,d = self._abcd()
         numer = a*d
         denom = b*c
@@ -1187,14 +1258,14 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['OddsRatio']
 
     def yuleQ(self):
-        '''Calculate Yule's Q (odds ratio skill score) for the 2x2 contingency table
+        """Calculate Yule's Q (odds ratio skill score) for the 2x2 contingency table
 
         Returns
         =======
         yule : float
              Yule's Q for the contingency table data
              This is also added to the attrs attribute of the table object
-        '''
+        """
         odds = self.oddsRatio()
         yule = (odds-1)/(odds+1)
 
@@ -1203,7 +1274,7 @@ class Contingency2x2(ContingencyNxN):
 
 
     def bias(self, ci=None):
-        '''The frequency bias of the forecast calculated as the ratio of yes forecasts to number of yes events
+        """The frequency bias of the forecast calculated as the ratio of yes forecasts to number of yes events
 
         An unbiased forecast will have bias=1, showing that the number of forecasts is the same
         as the number of events. Bias>1 means that more events were forecast than observed (overforecast).
@@ -1214,7 +1285,7 @@ class Contingency2x2(ContingencyNxN):
             The bias of the contingency table data
             This is also added to the attrs attribute of the table object
 
-        '''
+        """
         a,b,c,d = self._abcd()
         bias_num = a + b
         bias_den = a + c
