@@ -1016,7 +1016,8 @@ class ContingencyNxN(dm.dmarray):
                     self.get2x2(cat).summary(verbose=verbose)
 
     def heidke(self):
-        """Calculate the generalized Heidke Skill Score for the NxN contingency table
+        """Calculate the generalized Heidke Skill Score for the NxN contingency
+        table
 
         Returns
         =======
@@ -1026,19 +1027,21 @@ class ContingencyNxN(dm.dmarray):
 
         Examples
         ========
-        Goldsmith's non-probabilistic forecasts for freezing rain (cat 0), snow (cat 1)
-        and rain (cat 2). [see Wilks, 1995, p273-274]
+        Goldsmith's non-probabilistic forecasts for freezing rain (cat 0), snow
+        (cat 1), and rain (cat 2). [see Wilks, 1995, p273-274]
 
         >>> import verify
         >>> tt = verify.ContingencyNxN([[50,91,71],[47,2364,170],[54,205,3288])
         >>> tt.heidke()
         0.80535269033647217
+
         """
         N = self.sum()
         Pyo = 0
-        #term 1 in numerator
+        # term 1 in numerator
         Pyo = self.PC()
-        #term 2 in numerator including term 1 in denominator (only in square table)
+        # term 2 in numerator including term 1 in denominator (only in square
+        # table)
         PyPo = 0
         for i in range(self.shape[0]):
             Py, Po = 0, 0 
@@ -1048,13 +1051,14 @@ class ContingencyNxN(dm.dmarray):
             Py /= N
             Po /= N
             PyPo += Py*Po
-        #put it together
+        # put it together
         hss = (Pyo - PyPo)/(1.0 - PyPo)
         self.attrs['HeidkeScore'] = hss
         return hss
 
     def peirce(self):
-        """Calculate the generalized Peirce Skill Score for the NxN contingency table
+        """Calculate the generalized Peirce Skill Score for the NxN contingency
+        table
 
         Returns
         =======
@@ -1064,19 +1068,21 @@ class ContingencyNxN(dm.dmarray):
 
         Examples
         ========
-        Goldsmith's non-probabilistic forecasts for freezing rain (cat 0), snow (cat 1)
-        and rain (cat 2). [see Wilks, 1995, p273-274]
+        Goldsmith's non-probabilistic forecasts for freezing rain (cat 0), snow
+        (cat 1), and rain (cat 2). [see Wilks, 1995, p273-274]
 
         >>> import verify
         >>> tt = verify.ContingencyNxN([[50,91,71],[47,2364,170],[54,205,3288])
         >>> tt.peirce()
         0.81071330546125309
+
         """
         N = self.sum()
         Pyo = 0
-        #term 1 in numerator
+        # term 1 in numerator
         Pyo = self.PC()
-        #term 2 in numerator including term 1 in denominator (only in square table)
+        # term 2 in numerator including term 1 in denominator (only in square
+        # table)
         Po2, PyPo = 0, 0
         for i in range(self.shape[0]):
             Py, Po = 0, 0 
@@ -1087,7 +1093,7 @@ class ContingencyNxN(dm.dmarray):
             Po /= N
             Po2 += Po*Po
             PyPo += Py*Po
-        #put it together
+        # put it together
         pss = (Pyo - PyPo)/(1.0 - Po2)
         self.attrs['PeirceScore'] = pss
         return pss
@@ -1103,8 +1109,8 @@ class ContingencyNxN(dm.dmarray):
 
         Examples
         ========
-        Goldsmith's non-probabilistic forecasts for freezing rain (cat 0), snow (cat 1)
-        and rain (cat 2). [see Wilks, 1995, p273]
+        Goldsmith's non-probabilistic forecasts for freezing rain (cat 0), snow
+        (cat 1), and rain (cat 2). [see Wilks, 1995, p273]
 
         >>> import verify
         >>> tt = verify.ContingencyNxN([[50,91,71],[47,2364,170],[54,205,3288])
@@ -1190,7 +1196,9 @@ class Contingency2x2(ContingencyNxN):
     def _abcd(self):
         """Returns the 4 elements of the contingency table
 
-        a = True positives, b = False positives, c = False negatives, d = True Negatives
+        a = True positives, b = False positives, c = False negatives,
+        d = True Negatives
+
         """
         a, b = self[0,0], self[0,1]
         c, d = self[1,0], self[1,1]
@@ -1209,8 +1217,8 @@ class Contingency2x2(ContingencyNxN):
         return cls([[fToT, fToF],[fFoT, fFoF]], attrs={'pred':pred, 'obs':obse})
 
     def majorityClassFraction(self):
-        """Proportion Correct (a.k.a. "accuracy" in machine learning) for majority classifier
-
+        """Proportion Correct (a.k.a. "accuracy" in machine learning) for
+        majority classifier
         
         """
         a,b,c,d = self._abcd()
@@ -1222,8 +1230,7 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['MajorityClassFraction']
 
     def MatthewsCC(self):
-        """
-        Matthews Correlation Coefficient
+        """Matthews Correlation Coefficient
 
         Examples
         ========
@@ -1246,6 +1253,18 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['MatthewsCC']
 
     def summary(self, verbose=False, ci=None):
+        """ Summary table
+
+        Parameters
+        ==========
+        verbose : boolian
+            Print output to stdout (default=False)
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
+
+        """
+
         dum = self.POFD(ci=ci)
         dum = self.POD(ci=ci)
         dum = self.PC(ci=ci)
@@ -1261,20 +1280,26 @@ class Contingency2x2(ContingencyNxN):
         dum = self.yuleQ()
         a,b,c,d = self._abcd()
         if verbose:
-            print('Contingency2x2([\n  [{:6g},{:6g}],\n  [{:6g},{:6g}])\n'.format(a,b,c,d))
+            print('Contingency2x2([\n  ' +
+                  '[{:6g},{:6g}],\n  [{:6g},{:6g}])\n'.format(a,b,c,d))
             qual = ['MajorityClassFraction', 'MatthewsCC']
-            stats = ['Bias', 'FAR', 'PC', 'POFD', 'POD', 'ThreatScore', 'OddsRatio']
-            skill = ['HeidkeScore','PeirceScore','EquitableThreatScore','YuleQ']
+            stats = ['Bias', 'FAR', 'PC', 'POFD', 'POD', 'ThreatScore',
+                     'OddsRatio']
+            skill = ['HeidkeScore', 'PeirceScore', 'EquitableThreatScore',
+                     'YuleQ']
             print("Summary Statistics")
             print("==================")
             for key in stats:
                 if key+'CI95' in self.attrs:
                     if self.attrs[key+'CI95'].shape:
-                        #bootstrapped confidence intervals, which may be asymmetric
-                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, self.attrs[key], 
-                                                                   self.attrs[key+'CI95'][0], self.attrs[key+'CI95'][1]))
+                        # bootstrapped confidence intervals, which may be
+                        # asymmetric
+                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, \
+                                self.attrs[key], self.attrs[key+'CI95'][0], \
+                                self.attrs[key+'CI95'][1]))
                     else:
-                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, self.attrs[key], self.attrs[key+'CI95']))
+                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, \
+                                    self.attrs[key], self.attrs[key+'CI95']))
                 else:
                     print("{0}: {1:0.4f}".format(key, self.attrs[key]))
             print("\nSkill Scores")
@@ -1282,11 +1307,15 @@ class Contingency2x2(ContingencyNxN):
             for key in skill:
                 if key+'CI95' in self.attrs:
                     if self.attrs[key+'CI95'].shape:
-                        #bootstrapped confidence intervals, which may be asymmetric
-                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, self.attrs[key], 
-                                                                   self.attrs[key+'CI95'][0], self.attrs[key+'CI95'][1]))
+                        # bootstrapped confidence intervals, which may be
+                        # asymmetric
+                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, \
+                                                    self.attrs[key], \
+                                                    self.attrs[key+'CI95'][0], \
+                                                    self.attrs[key+'CI95'][1]))
                     else:
-                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, self.attrs[key], self.attrs[key+'CI95']))
+                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, \
+                                    self.attrs[key], self.attrs[key+'CI95']))
                 else:
                     print("{0}: {1:0.4f}".format(key, self.attrs[key]))
             print("\nClassification Quality Metrics")
@@ -1295,14 +1324,34 @@ class Contingency2x2(ContingencyNxN):
                 print("{0}: {1:0.4f}".format(key, self.attrs[key]))
 
     def _bootstrapCI(self, interval=0.95, nsamp=2000, func=None, seed=1406):
+        """ bootstrap confidence interval
+
+        Parameters
+        ==========
+        interval : float
+            Interval (default=0.95)
+        nsamp : int
+            Number of samples (default=2000)
+        func : function
+            method to calcuate quantity of interest
+        seed : int
+            Seed for random number generator (default=1406)
+
+        Returns
+        -------
+        ps : float
+            percentile
+        """
         if func is None:
-            raise ValueError('_bootstrapCI: a method name must be provided that returns the quantity of interest')
+            raise ValueError('_bootstrapCI: a method name must be provided ' +
+                             'that returns the quantity of interest')
         if seed is not None:
             np.random.seed(seed)
 
         bootval = np.empty(nsamp)
         if 'obs' in self.attrs and 'pred' in self.attrs:
-            inds = np.random.randint(0, len(self.attrs['obs']), size=(nsamp,len(self.attrs['obs'])))
+            inds = np.random.randint(0, len(self.attrs['obs']),
+                                     size=(nsamp,len(self.attrs['obs'])))
             for outidx, draw in enumerate(inds):
                 tmppred = self.attrs['pred'][draw]
                 tmpobs = self.attrs['obs'][draw]
@@ -1313,16 +1362,53 @@ class Contingency2x2(ContingencyNxN):
             ps = np.nanpercentile(bootval, [btm, tp])
             ci95 = ps[1]-ps[0]
         else:
-            raise AttributeError('_bootstrapCI: Contingency2x2 must have predicted and observed boolean arrays (create with fromBoolean)')
+            raise AttributeError('_bootstrapCI: Contingency2x2 must have ' +
+                                 'predicted and observed boolean arrays ' +
+                                 '(create with fromBoolean)')
         return ps
 
     def _WaldCI(self, prob, n, mult=1.96):
+        """ Wald confidence interval
+
+        Parameters
+        ==========
+        prob : float
+            Probability
+        n : float
+            number of samples
+        mult : float
+            Multiplier (default=1.96)
+
+        Returns
+        =======
+        ci95 : float
+            confidence interval
+
+        """
         stdErr = np.sqrt((prob*(1-prob))/n) #std. error of binomial
         ci95 = mult*stdErr
         return ci95
 
     def _AgrestiCI(self, prob, n, mult=1.96):
-        """Agresti-Coull interval. See eqn. 7.67 in Wilks [2006] (p.327)"""
+        """Agresti-Coull interval. See eqn. 7.67 in Wilks [2006] (p.327)
+
+        Parameters
+        ==========
+        prob : float
+            Probability
+        n : float
+            number of samples
+        mult : float
+            Multiplier (default=1.96)
+
+        Returns
+        =======
+        new_p : float
+            new normalized probability
+        ci95 : float
+            confidence interval
+
+        """
         z, zz = 1.96, 3.84
         norm = 1 + zz/n
         new_p = (prob + zz/(2*n))/norm
@@ -1332,7 +1418,14 @@ class Contingency2x2(ContingencyNxN):
         return new_p, ci95
 
     def POFD(self, ci=None):
-        """Calculate the Probability of False Detection (POFD), a.k.a. False Alarm Rate
+        """Calculate the Probability of False Detection (POFD), a.k.a. False
+        Alarm Rate
+
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
 
         Returns
         =======
@@ -1345,9 +1438,13 @@ class Contingency2x2(ContingencyNxN):
         self.attrs['POFD'] = b/n
         if ci is not None:
             citype = 'Wald' if ci is True else ci #default to Wald CI
-            if citype == 'AC': #note that the Agresti-Coull method also modifies the estimated param
-                #method 2 - Agresti-Coull
-                self.attrs['POFD'], self.attrs['POFDCI95'] = self._AgrestiCI(self.attrs['POFD'], n)
+            if citype == 'AC':
+                # note that the Agresti-Coull method also modifies the estimated
+                # param
+                #
+                # method 2 - Agresti-Coull
+                (self.attrs['POFD'],
+                 self.attrs['POFDCI95']) = self._AgrestiCI(self.attrs['POFD'],n)
             elif citype == 'Wald':
                 #default method - Wald interval
                 self.attrs['POFDCI95'] = self._WaldCI(self.attrs['POFD'], n)
@@ -1358,7 +1455,14 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['POFD']
 
     def POD(self, ci=None):
-        """Calculate the Probability of Detection, a.k.a. hit rate (ratio of correct forecasts to number of event occurrences)
+        """Calculate the Probability of Detection, a.k.a. hit rate (ratio of
+        correct forecasts to number of event occurrences)
+
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
 
         Returns
         =======
@@ -1370,9 +1474,11 @@ class Contingency2x2(ContingencyNxN):
         n = a+c
         self.attrs['POD'] = a/n
         if ci is not None:
-            citype = 'Wald' if ci is True else ci #default to Wald CI, as A-C can modify param
+            # default to Wald CI, as A-C can modify param
+            citype = 'Wald' if ci is True else ci
             if citype == 'AC':
-                self.attrs['POD'], self.attrs['PODCI95'] = self._AgrestiCI(self.attrs['POD'], n)
+                (self.attrs['POD'],
+                 self.attrs['PODCI95']) = self._AgrestiCI(self.attrs['POD'], n)
             elif citype == 'Wald':
                 self.attrs['PODCI95'] = self._WaldCI(self.attrs['POD'], n)
             elif citype == 'bootstrap':
@@ -1382,6 +1488,12 @@ class Contingency2x2(ContingencyNxN):
 
     def FAR(self, ci=None):
         """False Alarm Ratio, the fraction of incorrect "yes" forecasts
+
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
 
         Returns
         =======
@@ -1393,9 +1505,13 @@ class Contingency2x2(ContingencyNxN):
         n = a+b
         self.attrs['FAR'] = b/n
         if ci:
-            citype = 'Wald' if ci is True else ci #default to Wald CI, as A-C can modify param
-            if citype == 'AC': #note that the Agresti-Coull method also modifies the estimated param
-                self.attrs['FAR'], self.attrs['FARCI95'] = self._AgrestiCI(self.attrs['FAR'], n)
+            # default to Wald CI, as A-C can modify param
+            citype = 'Wald' if ci is True else ci
+            if citype == 'AC':
+                # note that the Agresti-Coull method also modifies the
+                # estimated param
+                (self.attrs['FAR'],
+                 self.attrs['FARCI95']) = self._AgrestiCI(self.attrs['FAR'], n)
             elif citype == 'Wald':
                 self.attrs['FARCI95'] = self._WaldCI(self.attrs['FAR'], n)
             elif citype == 'bootstrap':
@@ -1406,15 +1522,23 @@ class Contingency2x2(ContingencyNxN):
     def threat(self, ci=None):
         """Calculate the Threat Score (a.k.a. critical success index)
 
-        This is a ratio of verification, i.e., the proportion of correct forecasts
-        after removing correct "no" forecasts (or 'true negatives').
-    
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
+
         Returns
         =======
         thr : float
             The threat score of the contingency table data
             This is also added to the attrs attribute of the table object
     
+        Notes
+        =====
+        This is a ratio of verification, i.e., the proportion of correct
+        forecasts after removing correct "no" forecasts (or 'true negatives').
+
         """
         a,b,c,d = self._abcd()
         self.attrs['ThreatScore'] = a/(a+b+c)
@@ -1426,35 +1550,53 @@ class Contingency2x2(ContingencyNxN):
     def equitableThreat(self, ci=None):
         """Calculate the Equitable Threat Score (a.k.a. Gilbert Skill Score)
 
-        This is a ratio of verification, i.e., the proportion of correct forecasts
-        after removing correct "no" forecasts (or 'true negatives').
-    
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
+
         Returns
         =======
         thr : float
             The threat score of the contingency table data
             This is also added to the attrs attribute of the table object
-    
+
+        Notes
+        =====
+        This is a ratio of verification, i.e., the proportion of correct
+        forecasts after removing correct "no" forecasts (or 'true negatives').
+
         """
         a,b,c,d = self._abcd()
         aref = (a+b)*(a+c)/self.sum()
         self.attrs['EquitableThreatScore'] = (a-aref)/(a-aref+b+c)
         if ci is not None and ci == 'bootstrap':
-            self.attrs['EquitableThreatScoreCI95'] = self._bootstrapCI(func='equitableThreat')
-            return (self.attrs['EquitableThreatScore'], self.attrs['EquitableThreatScoreCI95'])
+            self.attrs['EquitableThreatScoreCI95'] = \
+                self._bootstrapCI(func='equitableThreat')
+            return (self.attrs['EquitableThreatScore'],
+                    self.attrs['EquitableThreatScoreCI95'])
         return self.attrs['EquitableThreatScore']
 
     def heidke(self, ci=None):
         """Calculate the Heidke Skill Score for the 2x2 contingency table
 
-        This is a skill score based on the proportion of correct forecasts referred to
-        the proportion expected correct by chance. 
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
 
         Returns
         =======
         hss : float
             The Heidke skill score of the contingency table data
             This is also added to the attrs attribute of the table object
+
+        Notes
+        ======
+        This is a skill score based on the proportion of correct forecasts
+        referred to the proportion expected correct by chance. 
 
         """
         super(Contingency2x2, self).heidke()
@@ -1465,6 +1607,12 @@ class Contingency2x2(ContingencyNxN):
 
     def peirce(self, ci=None):
         """Calculate the Peirce Skill Score for the 2x2 contingency table
+
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
 
         Returns
         =======
@@ -1480,9 +1628,11 @@ class Contingency2x2(ContingencyNxN):
             a,b,c,d = self._abcd()
             nFD = b+d
             nD  = a+c
-            citype = 'Wald' if ci is True else ci #default to Wald CI, as A-C can modify param
+            # default to Wald CI, as A-C can modify param
+            citype = 'Wald' if ci is True else ci
             if ci == 'AC':
-                POFD, stderrPOFD = self._AgrestiCI(self.attrs['POFD'], nFD, mult=1)
+                POFD, stderrPOFD = self._AgrestiCI(self.attrs['POFD'], nFD,
+                                                   mult=1)
                 POD, stderrPOD = self._AgrestiCI(self.attrs['POD'], nD, mult=1)
                 ci95 = 1.96*np.sqrt(stderrPOD**2+stderrPOFD**2)
             elif citype == 'Wald':
@@ -1497,6 +1647,18 @@ class Contingency2x2(ContingencyNxN):
 
     def PC(self, ci=None):
         """Returns the Proportion Correct (PC) for the 2x2 contingency table
+
+        Parameters
+        ==========
+        ci : NoneType, str, boolian
+            confidence interval (options None, 'bootstrap', True (for 'Wald'),
+            or 'AC') (default=None)
+
+        Returns
+        =======
+        pc: float
+            Returns and updates 'PC' attribute
+
         """
         super(Contingency2x2, self).PC()
         if ci is not None and ci == 'bootstrap':
@@ -1522,7 +1684,8 @@ class Contingency2x2(ContingencyNxN):
         return self.attrs['OddsRatio']
 
     def yuleQ(self):
-        """Calculate Yule's Q (odds ratio skill score) for the 2x2 contingency table
+        """Calculate Yule's Q (odds ratio skill score) for the 2x2 contingency
+        table
 
         Returns
         =======
@@ -1538,16 +1701,20 @@ class Contingency2x2(ContingencyNxN):
 
 
     def bias(self, ci=None):
-        """The frequency bias of the forecast calculated as the ratio of yes forecasts to number of yes events
-
-        An unbiased forecast will have bias=1, showing that the number of forecasts is the same
-        as the number of events. Bias>1 means that more events were forecast than observed (overforecast).
+        """The frequency bias of the forecast calculated as the ratio of yes
+        forecasts to number of yes events
 
         Returns
         =======
         bias : float
             The bias of the contingency table data
             This is also added to the attrs attribute of the table object
+
+        Notes
+        =====
+        An unbiased forecast will have bias=1, showing that the number of
+        forecasts is the same as the number of events. Bias>1 means that more
+        events were forecast than observed (overforecast).
 
         """
         a,b,c,d = self._abcd()
