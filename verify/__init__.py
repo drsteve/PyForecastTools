@@ -109,9 +109,9 @@ def bias(predicted, observed):
 
     Parameters
     ==========
-    predicted : list
+    predicted : array-like
         List of predicted values
-    observed : list
+    observed : array-like
         List of observed values
 
     Returns
@@ -130,9 +130,9 @@ def meanPercentageError(predicted, observed):
 
     Parameters
     ==========
-    predicted : list
+    predicted : array-like
         List of predicted values
-    observed : list
+    observed : array-like
         List of observed values
 
     Returns
@@ -151,9 +151,9 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
 
     Parameters
     ==========
-    predicted : list
+    predicted : array-like
         List of predicted values
-    observed : list
+    observed : array-like
         List of observed values
     mfunc : def
         Function used to calculate median (default=np.median)
@@ -178,9 +178,9 @@ def symmetricSignedBias(predicted, observed):
 
     Parameters
     ==========
-    predicted : list
+    predicted : array-like
         List of predicted values
-    observed : list
+    observed : array-like
         List of observed values
 
     Returns
@@ -201,7 +201,24 @@ def symmetricSignedBias(predicted, observed):
 #======= Accuracy measures =======#
 
 def accuracy(data, climate=None):
-    """
+    """ Calculates different accuracy metrics (see notes)
+
+    Parameters
+    ==========
+    data : array-like
+        List of data
+    climate : NoneType or float
+        climatological mean to use as reference value (default=None)
+
+    Returns
+    =======
+    out : dict
+        Dictionary containing accuracy metrics
+        MSE : mean squared error
+        RMSE : root mean squared error
+        MAE : mean absolute error
+        MdAE : median absolute error
+
     """
     data = _maskSeries(data)
     if climate is not None:
@@ -215,20 +232,15 @@ def accuracy(data, climate=None):
     return out
 
 def meanSquaredError(data, climate=None):
-    """Calculate the mean squared error of a data set relative to some reference value
+    """Mean squared error of a data set relative to a reference value
 
-    The chosen reference can be persistence, a provided climatological mean (scalar)
-    or a provided climatology (observation vector).
 
     Parameters
     ==========
     data : array-like
         data to calculate mean squared error, default reference is persistence
-
-    Other Parameters
-    ================
-    climate: float
-        climatological mean to use as reference value
+    climate: float or NoneType
+        climatological mean to use as reference value (default=None)
 
     Returns
     =======
@@ -238,6 +250,12 @@ def meanSquaredError(data, climate=None):
     See Also
     ========
     RMSE, meanAbsError
+
+    Notes
+    =====
+    The chosen reference can be persistence, a provided climatological mean
+    (scalar), or a provided climatology (observation vector).
+
     """
     dat = _maskSeries(data)
     n_pts = len(dat)
@@ -249,29 +267,30 @@ def meanSquaredError(data, climate=None):
 
 
 def RMSE(data, climate=None):
-    """Calculate the root mean squared error of a data set relative to some reference value
-
-    The chosen reference can be persistence, a provided climatological mean (scalar)
-    or a provided climatology (observation vector).
+    """root mean squared error of a data set relative to a reference value
 
     Parameters
     ==========
     data : array-like
         data to calculate mean squared error, default reference is persistence
-
-    Other Parameters
-    ================
-    climate: float
-        climatological mean to use as reference value
+    climate: float or NoneType
+        climatological mean to use as reference value (default=None)
     
     Returns
     =======
     out : float
-        the root-mean-squared error of the data set relative to the chosen reference
+        the root-mean-squared error of the data set relative to the chosen
+        reference
 
     See Also
     ========
     meanSquaredError, meanAbsError
+
+    Notes
+    =====
+    The chosen reference can be persistence, a provided climatological mean
+    (scalar) or a provided climatology (observation vector).
+
     """
     dat = _maskSeries(data)
     msqerr = meanSquaredError(data, climate=climate)
@@ -280,20 +299,14 @@ def RMSE(data, climate=None):
 
 
 def meanAbsError(data, climate=None):
-    """Calculate the mean absolute error of a data set relative to some reference value
-
-    The chosen reference can be persistence, a provided climatological mean (scalar)
-    or a provided climatology (observation vector).
+    """mean absolute error of a data set relative to some reference value
 
     Parameters
     ==========
     data : array-like
         data to calculate mean squared error, default reference is persistence
-
-    Other Parameters
-    ================
-    climate: float
-        climatology to use as reference
+    climate: float or NoneType
+        climatology to use as reference (default=None)
     
     Returns
     =======
@@ -303,6 +316,12 @@ def meanAbsError(data, climate=None):
     See Also
     ========
     medAbsError, meanSquaredError, RMSE
+
+    Notes
+    =====
+    The chosen reference can be persistence, a provided climatological mean
+    (scalar) or a provided climatology (observation vector).
+
     """
     data =  _maskSeries(data)
     n_pts = len(data)
@@ -312,29 +331,31 @@ def meanAbsError(data, climate=None):
 
 
 def medAbsError(data, climate=None):
-    """Calculate the median absolute error of a data set relative to some reference value
-
-    The chosen reference can be persistence, a provided climatological mean (scalar)
-    or a provided climatology (observation vector).
+    """median absolute error of a data set relative to some reference value
 
     Parameters
     ==========
     data : array-like
-        data to calculate median absolute error, default reference is persistence
-
-    Other Parameters
-    ================
-    climate: float
-        climatology to use as reference
+        data to calculate median absolute error, default reference is
+        persistence
+    climate: float or NoneType
+        climatology to use as reference (default=None)
     
     Returns
     =======
     out : float
-        the median absolute error of the data set relative to the chosen reference
+        the median absolute error of the data set relative to the chosen
+        reference
 
     See Also
     ========
     meanAbsError, meanSquaredError, RMSE
+
+    Notes
+    =====
+    The chosen reference can be persistence, a provided climatological mean
+    (scalar) or a provided climatology (observation vector).
+
     """
     dat = _maskSeries(data)
     n_pts = len(dat)
