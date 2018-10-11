@@ -732,8 +732,26 @@ def meanAPE(predicted, observed, mfunc=np.mean):
 
 #======= Precision (scale) Measures =======#
 def medAbsDev(series, scale=False, median=False):
-    """
-    Computes the median absolute deviation from the median
+    """ Computes the median absolute deviation from the median
+
+    Parameters
+    ==========
+    series : array-like
+        Input data
+    scale : boolian
+        Scale so that median absolute deviation is the same as the standard
+        deviation for normal distributions (default=False)
+    median : boolian
+        Return the median of the series as well as the median absolute deviation
+        (default=False)
+
+    Returns
+    =======
+    mad : float
+        median absolute deviation
+    perc50 : float
+        median of series, optional output
+    
     """
     series = _maskSeries(series)
     #get median absolute deviation of unmasked elements
@@ -748,23 +766,55 @@ def medAbsDev(series, scale=False, median=False):
 
 
 def rSD(predicted):
-    """
-    Computes the "robust standard deviation", i.e. the median absolute deviation times a correction factor
+    """ robust standard deviation
 
-    The median absolute deviation (medAbsDev) scaled by a factor of 1.4826 recovers the standard deviation when
-    applied to a normal distribution. However, unlike the standard deviation the medAbsDev has a high breakdown 
+    Parameters
+    ==========
+    predicted : array-like
+        Predicted input
+
+    Returns
+    =======
+    rsd : float
+        robust standard deviation, the scaled med abs dev
+
+    Notes
+    =====
+    Computes the "robust standard deviation", i.e. the median absolute
+    deviation times a correction factor
+
+    The median absolute deviation (medAbsDev) scaled by a factor of 1.4826
+    recovers the standard deviation when applied to a normal distribution.
+    However, unlike the standard deviation the medAbsDev has a high breakdown 
     point and is therefore considered a robust estimator.
+
     """
     return medAbsDev(predicted, scale=True)
 
 
 def rCV(predicted):
-    """
-    Computes the "robust coefficient of variation", i.e. median absolute deviation divided by the median
+    """ robust coefficient of variation
 
-    By analogy with the coefficient of variation, which is the standard deviation divided by the mean, rCV
-    gives the median absolute deviation (aka rSD) divided by the median, thereby providing a scaled measure
+    Parameters
+    ==========
+    predicted : array-like
+        Predicted input
+
+    Returns
+    =======
+    rcv : float
+        robust coefficient of variation (see notes)
+
+    Notes
+    =====
+    Computes the "robust coefficient of variation", i.e. median absolute
+    deviation divided by the median
+
+    By analogy with the coefficient of variation, which is the standard
+    deviation divided by the mean, rCV gives the median absolute deviation
+    (aka rSD) divided by the median, thereby providing a scaled measure
     of precision/spread.
+
     """
     mad, perc50 = medAbsDev(predicted, scale=True, median=True)
 
@@ -772,26 +822,18 @@ def rCV(predicted):
 
 
 def Sn(data, scale=True, correct=True):
-    """
-    Computes the Sn statistic, which is a robust measure of scale.
-
-    Sn is more efficient than the median absolute deviation, and is not constructed with the 
-    assumption of a symmetric distribution, because it does not measure distance from an assumed
-    central location. To quote RC1993, "...Sn looks at a typical distance between observations, 
-    which is still valid at asymmetric distributions."
-
-    [RC1993] P.J.Rouseeuw and C.Croux, "Alternatives to the Median Absolute Deviation", J. Amer. Stat. Assoc.,
-    88 (424), pp.1273-1283. Equation 2.1, but note that they use "low" and "high" medians:
-    Sn = c * 1.1926 * LOMED_{i} ( HIMED_{j} (|x_i - x_j|) )
-
-    Note that the implementation of the original formulation is slow for large n. As the original formulation
-    is identical to using a true median for odd-length series, we do so here automatically to gain a significant
-    speedup.
+    """Sn statistic, a robust measure of scale
 
     Parameters
     ==========
     data : array-like
         data to calculate Sn statistic for
+    scale : boolian
+        Scale so that output is the same as the standard deviation for if the
+        distribution is normal (default=True)
+        (default=True)
+    correct : boolian
+        Set a correction factor (default=True)
 
     Returns
     =======
@@ -801,7 +843,27 @@ def Sn(data, scale=True, correct=True):
     See Also
     ========
     medAbsDev
+
+    Notes
+    =====
+    Sn is more efficient than the median absolute deviation, and is not
+    constructed with the assumption of a symmetric distribution, because it
+    does not measure distance from an assumed central location. To quote RC1993,
+    "...Sn looks at a typical distance between observations,  which is still
+    valid at asymmetric distributions."
+
+    [RC1993] P.J.Rouseeuw and C.Croux, "Alternatives to the Median Absolute
+    Deviation", J. Amer. Stat. Assoc., 88 (424), pp.1273-1283. Equation 2.1,
+    but note that they use "low" and "high" medians:
+    Sn = c * 1.1926 * LOMED_{i} ( HIMED_{j} (|x_i - x_j|) )
+
+    Note that the implementation of the original formulation is slow for large
+    n. As the original formulation is identical to using a true median for
+    odd-length series, we do so here automatically to gain a significant
+    speedup.
+
     """
+    # Define local utility functions
     def dropPoint(vec, i):
         if i==0: return vec[1:]
         elif i==len(vec): return vec[:-1]
@@ -831,7 +893,9 @@ def Sn(data, scale=True, correct=True):
     series.compressed().sort()
     n_pts = len(series)
     seriesodd = True if (n_pts%2==1) else False
-    truemedian = seriesodd #odd number of points, so use true median (shouldn't make a difference... but seems to)
+    #odd number of points, so use true median (shouldn't make a difference...
+    # but seems to)
+    truemedian = seriesodd
     #truemedian = False
     imd = np.empty(n_pts)
     #for each i, find median of absolute differences
@@ -862,16 +926,14 @@ def Sn(data, scale=True, correct=True):
 
 
 def normSn(data, **kwargs):
-    """
-    Computes the normalized Sn statistic, a scaled measure of spread.
-
-    We here scale the Sn estimator by the median, giving a non-symmetric alternative
-    to the robust coefficient of variation (rCV).
+    """ Computes the normalized Sn statistic, a scaled measure of spread.
 
     Parameters
     ==========
     data : array-like
         data to calculate normSn statistic for
+    **kwards : dict
+        Optional keyword arguements (see Sn)
 
     Returns
     =======
@@ -881,6 +943,12 @@ def normSn(data, **kwargs):
     See Also
     ========
     rCV
+
+    Notes
+    =====
+    We here scale the Sn estimator by the median, giving a non-symmetric
+    alternative to the robust coefficient of variation (rCV).
+
     """
     series = _maskSeries(data)
     p50 = np.median(series.compressed())
