@@ -1,5 +1,10 @@
 """Module containing verification and performance metrics
 
+With the exception of the ContingencyNxN and Contingency2x2 classes,
+the inputs for all metrics are assumed to be array-like and 1D. Bad
+values are assumed to be stored as NaN and these are excluded in
+metric calculations.
+
 Author: Steve Morley
 Institution: Los Alamos National Laboratory
 Contact: smorley@lanl.gov
@@ -31,12 +36,12 @@ def skill(A_data, A_ref, A_perf=0):
         Accuracy measure of data set
     A_ref : float
         Accuracy measure for reference forecast
-    A_perf : float
+    A_perf : float, optional
         Accuracy measure for "perfect forecast" (Default = 0)
 
     Returns
     =======
-    out : float
+    ss_ref : float
         Forecast skill for the given forecast, relative to the reference, using
         the chosen accuracy measure
 
@@ -75,6 +80,21 @@ def percBetter(predict1, predict2, observed):
     For example, if we want to know whether a new forecast performs better than
     a reference forecast...
 
+    Parameters
+    ==========
+    predict1 : array-like
+        Array-like (list, numpy array, etc.) of predictions from model A
+    predict2 : array-like
+        Array-like (list, numpy array, etc.) of predictions from model B
+    observed : array-like
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
+
+    Returns
+    =======
+    percBetter : float
+        The percentage of observations where method A was closer to observation than method B
+
+
     Examples
     ========
     >>> import verify
@@ -110,16 +130,17 @@ def bias(predicted, observed):
     Parameters
     ==========
     predicted : array-like
-        List of predicted values
+        Array-like (list, numpy array, etc.) of predictions
     observed : array-like
-        List of observed values
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
 
     Returns
     =======
     bias : float
-        scale-dependent bias measured by the mean error
+        Mean error of prediction
 
     """
+
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
     
@@ -131,15 +152,17 @@ def meanPercentageError(predicted, observed):
     Parameters
     ==========
     predicted : array-like
-        List of predicted values
+        Array-like (list, numpy array, etc.) of predictions
     observed : array-like
-        List of observed values
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
 
     Returns
     =======
-    bias : float
-        Order dependent bias as measured by the mean percentage error
+    mpe : float
+        Mean percentage error of prediction
+    
     """
+>>>>>>> docstrings
     pred =  _maskSeries(predicted)
     obse =  _maskSeries(observed)
     pe = percError(pred, obse)
@@ -152,18 +175,18 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
     Parameters
     ==========
     predicted : array-like
-        List of predicted values
+        Array-like (list, numpy array, etc.) of predictions
     observed : array-like
-        List of observed values
-    mfunc : function
-        Function used to calculate median (default=np.median)
-    base : int
-        Base for the logarithm (default=10)
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
+    mfunc : function, optional
+        Function to use for central tendency (default: numpy.median)
+    base : number, optional
+        Base to use for logarithmic transform (default: 10)
 
     Returns
     =======
-    bias : float
-        median of the log accuracy ratio
+    mla : float
+        Median log accuracy of prediction
 
     """
     pred =  _maskSeries(predicted)
@@ -201,23 +224,28 @@ def symmetricSignedBias(predicted, observed):
 #======= Accuracy measures =======#
 
 def accuracy(data, climate=None):
-    """ Calculates different accuracy metrics (see notes)
+    """Convenience function to calculate a selection of unscaled accuracy measures
 
     Parameters
     ==========
     data : array-like
-        List of data
-    climate : NoneType or float
-        climatological mean to use as reference value (default=None)
+        Array-like (list, numpy array, etc.) of predictions
+    climate : array-like or float, optional
+        Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+        If climate is None (default) then the accuracy is assessed relative to persistence.
 
     Returns
     =======
     out : dict
-        Dictionary containing accuracy metrics
-        MSE : mean squared error
-        RMSE : root mean squared error
-        MAE : mean absolute error
-        MdAE : median absolute error
+        Dictionary containing unscaled accuracy measures
+        MSE - mean squared error
+        RMSE - root mean squared error
+        MAE - mean absolute error
+        MdAE - median absolute error
+
+    See Also
+    ========
+    meanSquaredError, RMSE, meanAbsError, medAbsError
 
     """
     data = _maskSeries(data)
@@ -239,8 +267,9 @@ def meanSquaredError(data, climate=None):
     ==========
     data : array-like
         data to calculate mean squared error, default reference is persistence
-    climate: float or NoneType
-        climatological mean to use as reference value (default=None)
+    climate : array-like or float, optional
+        Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+        If climate is None (default) then the accuracy is assessed relative to persistence. 
 
     Returns
     =======
@@ -267,15 +296,16 @@ def meanSquaredError(data, climate=None):
 
 
 def RMSE(data, climate=None):
-    """root mean squared error of a data set relative to a reference value
+    """Calcualte the root mean squared error of a data set relative to a reference value
 
     Parameters
     ==========
     data : array-like
         data to calculate mean squared error, default reference is persistence
-    climate: float or NoneType
-        climatological mean to use as reference value (default=None)
-    
+    climate : array-like or float, optional
+        Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+        If climate is None (default) then the accuracy is assessed relative to persistence. 
+
     Returns
     =======
     out : float
@@ -305,9 +335,10 @@ def meanAbsError(data, climate=None):
     ==========
     data : array-like
         data to calculate mean squared error, default reference is persistence
-    climate: float or NoneType
-        climatology to use as reference (default=None)
-    
+    climate : array-like or float, optional
+        Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+        If climate is None (default) then the accuracy is assessed relative to persistence. 
+
     Returns
     =======
     out : float
@@ -336,11 +367,11 @@ def medAbsError(data, climate=None):
     Parameters
     ==========
     data : array-like
-        data to calculate median absolute error, default reference is
-        persistence
-    climate: float or NoneType
-        climatology to use as reference (default=None)
-    
+        data to calculate median absolute error, default reference is persistence
+    climate : array-like or float, optional
+        Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
+        If climate is None (default) then the accuracy is assessed relative to persistence. 
+
     Returns
     =======
     out : float
@@ -372,20 +403,23 @@ def scaledAccuracy(predicted, observed):
     Parameters
     ==========
     predicted: array-like
-        predicted data for which to calculate mean squared error
-    observed: float
-        observation vector (or climatological value (scalar)) to use as
-        reference value
+        Array-like (list, numpy array, etc.) of predictions
+    observed : array-like
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
 
     Returns
     =======
     out : dict
-        Dictionary containing the different scaled/relative accuracy measures
-        nRMSE : normalized root mean squared error
-        MASE : mean absolute scaled error
-        MAPE : mean absolute percentage error
-        MdAPE : median absolute percentage error
-        MdSymAcc : median symmetric accuracy
+        Dictionary containing scaled or relative accuracy measures
+        nRMSE - normalized root mean squared error
+        MASE - mean absolute scaled error
+        MAPE - mean absolute percentage error
+        MdAPE - median absolute percentage error
+        MdSymAcc - median symmetric accuracy
+
+    See Also
+    ========
+    medSymAccuracy, meanAPE, MASE, nRMSE
 
     """
     metrics = {'nRMSE': nRMSE, 'MASE': MASE, 'MAPE': meanAPE,
@@ -393,7 +427,7 @@ def scaledAccuracy(predicted, observed):
                'MdSymAcc': medSymAccuracy}
     out = dict()
     for met in metrics:
-        out[met] = metrics[met](predcted, observed)
+        out[met] = metrics[met](predicted, observed)
 
     return out
 
@@ -469,6 +503,10 @@ def scaledError(predicted, observed):
     R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
 
+    See Also
+    ========
+    MASE
+   
     """
     n_pts = len(predicted.ravel())
     try:
@@ -493,15 +531,25 @@ def MASE(predicted, observed):
     Parameters
     ==========
     predicted: array-like
-        predicted data for which to calculate mean squared error
+        predicted data for which to calculate MASE
     observed: float
         observation vector (or climatological value (scalar)) to use as
         reference value
 
     Returns
     =======
-    mase : float
-        the mean absolute scaled error
+    out : float
+        the mean absolute scaled error of the data set
+
+    See Also
+    ========
+    scaledError
+
+    Notes
+    =====
+    References:
+    R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
+    accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
 
     """
     q = scaledError(predicted, observed)
@@ -514,22 +562,24 @@ def forecastError(predicted, observed, full=True):
 
     Parameters
     ==========
-    predicted: array-like
-        predicted data for which to calculate mean squared error
-    observed: float
-        observation vector (or climatological value (scalar)) to use as
-        reference value
-    full : boolian
-        return precition and observations or just error (default=True)
+    predicted : array-like
+        Array-like (list, numpy array, etc.) of predictions
+    observed : array-like
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
+    full : boolean, optional
+        Switch determining nature of return value. When it is True (the
+        default) the function returns the errors as well as the predicted
+        and observed values as numpy arrays of floats, when False only the
+        array of forecast errors is returned.
 
     Returns
     =======
     err : float
         the mean absolute scaled error
     pred : array-like
-        Optional return of predicted input, included if full is True
+        Optional return array of predicted values as floats, included if full is True
     obse : array-like
-        Optional return of observed input, included if full is True
+        Optional return array of observed values as floats, included if full is True
 
     Notes
     =====
@@ -550,16 +600,15 @@ def percError(predicted, observed):
 
     Parameters
     ==========
-    predicted: array-like
-        predicted data for which to calculate mean squared error
-    observed: float
-        observation vector (or climatological value (scalar)) to use as
-        reference value
+    predicted : array-like
+        Array-like (list, numpy array, etc.) of predictions
+    observed : array-like
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
 
     Returns
     =======
-    mase : float
-        the mean absolute scaled error
+    perc : float
+        Array of forecast errors expressed as a percentage
 
     """
     err, pred, obse = forecastError(predicted, observed, full=True)
@@ -572,16 +621,15 @@ def absPercError(predicted, observed):
 
     Parameters
     ==========
-    predicted: array-like
-        predicted data for which to calculate mean squared error
-    observed: float
-        observation vector (or climatological value (scalar)) to use as
-        reference value
+    predicted : array-like
+        Array-like (list, numpy array, etc.) of predictions
+    observed : array-like
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
 
     Returns
     =======
-    mase : float
-        the mean absolute scaled error
+    perc : array
+        Array of absolute percentage errors
 
     """
     err, pred, obse = forecastError(predicted, observed, full=True)
@@ -589,43 +637,60 @@ def absPercError(predicted, observed):
     return 100*res
 
 
-def logAccuracy(predicted, observed, base=10):
-    """defined as log(predicted/observed) or log(predicted)-log(observed)
-
+def logAccuracy(predicted, observed, base=10, mask=True):
+    """Log Accuracy Ratio, defined as log(predicted/observed) or log(predicted)-log(observed)
 
     Parameters
     ==========
-    predicted: array-like
-        predicted data for which to calculate mean squared error
-    observed: float
-        observation vector (or climatological value (scalar)) to use as
-        reference value
-    base : int or str
-        Base for logarithm (allows 10, 2, and 'e') (default=10)
+    predicted : array-like
+        Array-like (list, numpy array, etc.) of predictions
+    observed : array-like
+        Array-like (list, numpy array, etc.) of observed values of scalar quantity
+    base : number, optional
+        Base to use for logarithmic transform (allows 10, 2, and 'e') (default: 10)
+    mask : boolean, optional
+        Switch to set masking behaviour. If True (default) the function will mask out NaN and negative values,
+        and will return a masked array. If False, the presence of negative numbers will raise a ValueError and
+        NaN will propagate through the calculation.
 
     Returns
     =======
-    log_ratio : float
-        log accuracy ratio
-
+    logacc : array or masked array
+        Array of absolute percentage errors 
+        
     Notes
     =====
     Using base 2 is computationally much faster, so unless the base is
     important to interpretation we recommend using that.
 
     """
-    pred = _maskSeries(predicted)
-    obse = _maskSeries(observed)
-    # check for positivity
-    if (pred<=0).any() and (obse<=0).any():
+    if mask:
+        pred = _maskSeries(predicted)
+        obse = _maskSeries(observed)
+        negs_p = predicted <= 0
+        negs_o = observed <= 0
+        pred.mask = np.logical_or(pred.mask, negs_p)
+        obse.mask = np.logical_or(obse.mask, negs_o)
+    else:
+        pred = np.asanyarray(predicted)
+        obse = np.asanyarray(observed)
+    #check for positivity
+    if (pred<=0).any() or (obse<=0).any():
         raise ValueError('logAccuracy: input data are required to be positive')
     logfuncs = {10: np.log10, 2: np.log2, 'e': np.log}
     if base not in logfuncs:
-        raise NotImplementedError
-    return logfuncs[base](pred/obse)
+        supportedbases = '['+ ', '.join([str(key) for key in logfuncs]) + ']'
+        raise NotImplementedError('logAccuracy: Selected base ({0}) for logarithms not supported.'.format(base) +
+                                  'Supported values are {0}'.format(supportedbases))
+    logacc = logfuncs[base](pred/obse)
+    if mask:
+        return logfuncs[base](pred/obse)
+    else:
+        
+        return logfuncs[base](pred/obse)
 
 
-def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
+def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
     """Scaled measure of accuracy that is not biased to over- or
     under-predictions.
 
@@ -638,15 +703,18 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
         reference value
     mfunc : function
         function for calculating the median (default=np.median)
-    method : str
-        Method for scaling the accuracy ratios, including UPE (unsigned
-        percentage error), log, and another implementation of log that is
-        used if any other input is specified.  (default='log')
+    method : string, optional
+        Method to use for calculating the median symmetric accuracy (MSA). Options 
+        are 'log' which uses the median of the re-exponentiated absolute log accuracy,
+        'UPE' which calculates MSA using the unsigned percentage error, and
+        None (default), in which case the method is implemented as described above. 
+        The UPE method has reduced accuracy compared to the other methods and is included
+        primarily for testing purposes.
 
     Returns
     =======
     msa : float
-        the median symmetric accuracy
+        Array of median symmetric accuracy
 
     Notes
     =====
@@ -676,7 +744,16 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
-    if method=='UPE':
+    if method is None:
+        absLogAcc = np.abs(logAccuracy(pred, obse, base=2)) #is this different from the method above for large series??
+        symAcc = np.exp2(mfunc(absLogAcc))
+        msa = 100*(symAcc-1)
+    elif method=='log':
+        ##median(log(Q)) method
+        absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
+        symAcc = mfunc(np.exp2(absLogAcc))
+        msa = 100*(symAcc-1)
+    elif method=='UPE':
         ##unsigned percentage error method
         PleO = pred >= obse
         OltP = np.logical_not(PleO)
@@ -685,18 +762,11 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method='log'):
         unsRelErr[OltP] = (obse[OltP]-pred[OltP])/pred[OltP]
         unsPercErr = unsRelErr*100
         msa = mfunc(unsPercErr.compressed())
-    elif method=='log':
-        ##median(log(Q)) method
-        absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
-        symAcc = mfunc(np.exp2(absLogAcc))
-        msa = 100*(symAcc-1)
     else:
-        # Is this different from the method above for large series??
-        absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
-        symAcc = np.exp2(mfunc(absLogAcc))
-        msa = 100*(symAcc-1)
+        raise NotImplementedError('medSymAccuracy: invalid method {0}. Valid ' +
+                                  'options are None, "log" or ' +
+                                  '"UPE".'.format(method))
 
-        #raise ValueError('method kwarg should take the value "log" or "UPE".')
     return msa
 
 
