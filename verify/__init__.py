@@ -489,7 +489,7 @@ def scaledError(predicted, observed):
     Parameters
     ==========
     predicted: array-like
-        predicted data for which to calculate mean squared error
+        predicted data for which to calculate scaled error
     observed: float
         observation vector (or climatological value (scalar)) to use as
         reference value
