@@ -822,10 +822,10 @@ def medAbsDev(series, scale=False, median=False):
     ==========
     series : array-like
         Input data
-    scale : boolian
+    scale : boolean
         Scale so that median absolute deviation is the same as the standard
         deviation for normal distributions (default=False)
-    median : boolian
+    median : boolean
         Return the median of the series as well as the median absolute deviation
         (default=False)
 
@@ -912,11 +912,11 @@ def Sn(data, scale=True, correct=True):
     ==========
     data : array-like
         data to calculate Sn statistic for
-    scale : boolian
+    scale : boolean
         Scale so that output is the same as the standard deviation for if the
         distribution is normal (default=True)
         (default=True)
-    correct : boolian
+    correct : boolean
         Set a correction factor (default=True)
 
     Returns
@@ -1341,9 +1341,9 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        verbose : boolian
+        verbose : boolean
             Print output to stdout (default=False)
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1507,7 +1507,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1544,7 +1544,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1575,7 +1575,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1608,7 +1608,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1636,7 +1636,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1667,7 +1667,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1694,7 +1694,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
@@ -1734,7 +1734,7 @@ class Contingency2x2(ContingencyNxN):
 
         Parameters
         ==========
-        ci : NoneType, str, boolian
+        ci : NoneType, str, boolean
             confidence interval (options None, 'bootstrap', True (for 'Wald'),
             or 'AC') (default=None)
 
