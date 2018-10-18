@@ -4,7 +4,7 @@ Sub-module to provide simple plotting for exploratory data analysis
 import numpy
 import matplotlib.pyplot as plt
 
-from .metrics import _maskSeries
+from .metrics import _maskSeries, bias
 from .categorical import Contingency2x2
 
 def set_target(target, figsize=None, loc=111, polar=False):
@@ -70,10 +70,9 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
     Parameters
     ==========
     predicted :  array-like
-        predicted data for which to calculate mean squared error
+        predicted data (model output)
     observed : array-like
-        observation vector (or climatological value (scalar)) to use as
-        reference value
+        observation vector reference value
 
     Other Parameters
     ================
@@ -115,11 +114,11 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
     that the quantile level is the same for both points, but not what that 
     quantile level actually is.
 
-    If the data sets have the same size, the q-q plot is essentially a plot of
-    sorted data set 1 against sorted data set 2. If the data sets are not of
-    equal size, the quantiles are usually picked to correspond to the sorted
-    values from the smaller data set and then the quantiles for the larger data
-    set are interpolated. Following NIST's Engineering Statistics Handbook.
+    For equal length samples, the q-q plot displays sorted(sample1) against 
+    sorted(sample2). If the samples are not of equal length, the quantiles 
+    for the smaller sample are calculated and data from the larger sample are
+    interpolated to those quantiles. See, e.g., NIST's Engineering Statistics
+    Handbook.
     """
     #pre-process and sort observed and predicted data
     q_pred = _maskSeries(predicted).compressed()
@@ -172,6 +171,30 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     """
     observed is binary
     predicted is predicted probability
+
+    Parameters
+    ==========
+    predicted :  array-like
+        predicted data, continuous data (e.g. probability)
+    observed : array-like
+        observation vector of binary events (boolean or 0,1)
+
+    Other Parameters
+    ================
+    low : float or None
+        Set the lowest threshold to use.
+    high : float or None
+        Set the highest threshold to use
+    xyline : boolean
+        Toggles the display of a line of y=x (perfect model). Default True.
+    target : figure, axes, or None
+        The object on which plotting will happen. If **None** (default)
+        then a figure an axes will be created. If a matplotlib figure is
+        supplied a set of axes will be made, and if matplotlib axes are 
+        given then the plot will be made on those axes.
+    plot_kwargs : dict
+        Dictionary containing plot keyword arguments to pass to matplotlib's
+        scatter function.
 
     Returns
     =======
@@ -249,3 +272,200 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     out['Axes'] = ax
 
     return out
+
+
+def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
+                  isoSTD=True):
+    """Taylor diagrams for comparing model performance
+
+    Parameters
+    ==========
+    predicted :  array-like
+        predicted data 
+    observed : array-like
+        observation vector
+
+    Other Parameters
+    ================
+    norm : boolean or float
+        Selects whether the values should be normalized (default is False).
+        If a value is given this will be used to normalize the inputs.
+    xyline : boolean
+        Toggles the display of a line of y=x (perfect model). Default True.
+    addTo : axes, or None
+        The object on which plotting will happen. If **None** (default)
+        then a figure and axes will be created. If matplotlib axes are 
+        given then the plot will be made on those axes, assuming that the 
+        point is being added to a previously generated Taylor diagram.
+    modelName : string
+        Name of model to label the point on the Taylor diagram with.
+    isoSTD : boolean
+        Toggle for isocontours of standard deviation. Default is True, but
+        turning them off can reduce visual clutter or prevent intereference
+        with custom plot styles that alter background grid behavior.
+
+    Returns
+    =======
+    out_dict : dict
+        A dictionary containing the Figure, the Axes, and 'Norm' (the value 
+        used to normalize the inputs/outputs).
+
+    Example
+    =======
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as plt
+    >>> from verify.plot import taylorDiagram
+    >>> model1 = np.random.randint(0,40,101).astype(float)
+    >>> model2 = model1*(1 + np.arange(101)/70)
+    >>> obs = model1 + np.random.randn(101)
+    >>> obs[[2,3,8,9,15,16,30,31]] = obs[[31,30,16,15,9,8,3,2]]
+    >>> obs *= 0.25 + (5-(np.arange(101)/30.))/4
+    >>> result1 = taylorDiagram(model1, obs, norm=True, modelName='A')
+    >>> result2 = taylorDiagram(model2, obs, norm=result1['Norm'],
+    >>>                         modelName='B', addTo=result1['Axes'])
+    >>> plt.show()
+
+    Notes
+    =====
+    Based on ''Summarizing multiple aspects of model performance in a single
+    diagram' by K.E. Taylor (Radio Science, 2001; doi: 10.1029/2000JD900719)
+    and 'Taylor Diagram Primer' by Taylor (document at
+    https://pcmdi.llnl.gov/staff/taylor/CV/Taylor_diagram_primer.pdf)
+    """
+    #fancy plotting imports
+    from mpl_toolkits.axisartist import floating_axes, angle_helper, grid_finder
+    from matplotlib.projections import PolarAxes
+
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
+    pstd = pred.std(ddof=1) #unbaised sample std.dev. model
+    ostd = obse.std(ddof=1) #unbaised sample std.dev. observed
+    pcorr = numpy.corrcoef(obse, pred)[0,1] # Pearson's r
+    pbias = bias(pred, obse) #mean error
+
+    # Normalize on request
+    if norm:
+        setNormed = True
+        normfac = ostd
+        ostd = ostd / normfac
+        pstd = pstd / normfac
+    else:
+        setNormed = False
+        normfac = 1
+    
+    tr = PolarAxes.PolarTransform()
+    # Correlation labels
+    corrtickvals = numpy.asarray(range(10)+[9.5,9.9])/10.
+    corrtickvals_polar = numpy.arccos(corrtickvals)
+    # Round labels to nearest N digits
+    corrticklabs = []
+    for cval in corrtickvals:
+        lab = '{0:0.2f}'.format(cval) if str(cval)[2]!='0' else \
+              '{0:0.1f}'.format(cval)
+        corrticklabs.append('{0:0.2f}'.format(cval))
+    corrgrid = grid_finder.FixedLocator(corrtickvals_polar)
+    corrticks = grid_finder.DictFormatter(dict(zip(corrtickvals_polar,
+                                                   corrticklabs)))
+
+    # Std. Dev. tick values and labels
+    smin, smax = 0, numpy.ceil(0.8335*ostd)*2
+    stdtickvals = numpy.linspace(smin, smax, 9)
+    # Round labels to nearest N digits
+    stdticklabs = []
+    for stdval in stdtickvals:
+        stdticklabs.append('{0:0.2f}'.format(stdval))
+    
+    stdgrid = grid_finder.FixedLocator(stdtickvals)
+    stdticks = grid_finder.DictFormatter(dict(zip(stdtickvals, stdticklabs)))
+
+    gh_curvegrid = floating_axes.GridHelperCurveLinear(tr,
+                                       extremes=(0, numpy.pi/2, smin, smax),
+                                       grid_locator1=corrgrid,
+                                       grid_locator2=stdgrid,
+                                       tick_formatter1=corrticks,
+                                       tick_formatter2=stdticks
+                                       )
+
+    artists = []
+    #if addTo isn't None then assume we've been given a previously returned
+    #axes object
+    if addTo is None:
+        fig = plt.figure()
+        ax = floating_axes.FloatingSubplot(fig, '111',
+                                           grid_helper=gh_curvegrid)
+        fig.add_subplot(ax)
+
+        #Adjust axes following matplotlib gallery example
+        #Correlation is angular coord
+        ax.axis['top'].set_axis_direction('bottom')
+        ax.axis['top'].toggle(ticklabels=True, label=True)
+        ax.axis['top'].major_ticklabels.set_axis_direction('top')
+        ax.axis['top'].major_ticklabels.set_color('royalblue')
+        ax.axis['top'].label.set_axis_direction('top')
+        ax.axis['top'].label.set_color('royalblue')
+        ax.axis['top'].label.set_text("Pearson's r")
+        #X-axis
+        ax.axis['left'].set_axis_direction('bottom')
+        ax.axis['left'].toggle(ticklabels=True)
+        #Y-axis
+        ax.axis['right'].set_axis_direction('top')
+        ax.axis['right'].toggle(ticklabels=True, label=True)
+        ax.axis['right'].major_ticklabels.set_axis_direction('left')
+        if setNormed:
+            xylabel = 'Normalised standard deviation'
+        else:
+            xylabel = 'Standard deviation'
+        ax.axis['right'].label.set_text(xylabel)
+        ax.axis['left'].label.set_text(xylabel)
+        ax.axis['bottom'].set_visible(False)
+        _ax = ax                   # Display axes
+
+        #Figure set up, done we work with the transformed axes
+        ax = ax.get_aux_axes(tr)   # Axes referenced in polar coords
+        #Add reference point, ref stddev contour and other stddev contours
+        artists.append(ax.scatter(0, ostd, marker='o', linewidths=2,
+                         edgecolors='black', facecolors='None', 
+                         label='Observation', zorder=99))
+        azim = numpy.linspace(0, numpy.pi/2)
+        rad = numpy.zeros_like(azim)
+        rad.fill(ostd)
+        ax.plot(azim, rad, 'k--', alpha=0.75)
+        if isoSTD:
+            for sd in stdtickvals[::2]:
+                rad.fill(sd)
+                ax.plot(azim, rad, linestyle=':', color='dimgrey', alpha=0.75,
+                        zorder=3)
+
+        #Add radial markers at correlation ticks
+        for i in corrtickvals[1:]:
+            ax.plot([numpy.arccos(i), numpy.arccos(i)], [0, smax], 
+                    c='royalblue', alpha=0.5, zorder=40)
+
+        #Add contours of centered RMS error
+        rs,ts = numpy.meshgrid(numpy.linspace(smin, smax),
+                               numpy.linspace(0,numpy.pi/2))
+        rms = numpy.sqrt(ostd**2 + rs**2 - 2*ostd*rs*numpy.cos(ts))
+        contours = ax.contour(ts, rs, rms, 4, alpha=0.75, zorder=30,
+                              colors='dimgray')
+        plt.clabel(contours, inline=True, fontsize='smaller', fmt='%1.2f')
+    else:
+        #TODO: add some testing/error handling here
+        ax = addTo
+        fig = ax.figure
+
+    #add present model
+    stdextent = smax-smin
+    twopercent = stdextent/50.0
+    artists.append(ax.scatter(numpy.arccos(pcorr), pstd, marker='o',
+                   label=modelName, zorder=99))
+    dum = ax.text(numpy.arccos(pcorr), pstd+twopercent, modelName,
+                  fontsize='larger')
+
+    out = dict()
+    out['Figure'] = fig
+    out['Axes'] = ax
+    out['Norm'] = normfac
+    out['Atrists'] = artists
+
+    return out
+
