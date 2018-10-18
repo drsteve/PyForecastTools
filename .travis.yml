@@ -20,5 +20,5 @@ install:
  - pip install --force-reinstall "matplotlib${MPL_VERSION}"
 
 script:
- - sudo python setup.py install
+ - python setup.py install
  - python test_verify.py
