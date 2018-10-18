@@ -412,7 +412,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
         ax.axis['right'].toggle(ticklabels=True, label=True)
         ax.axis['right'].major_ticklabels.set_axis_direction('left')
         if setNormed:
-            xylabel = 'Normalised standard deviation'
+            xylabel = 'Normalized standard deviation'
         else:
             xylabel = 'Standard deviation'
         ax.axis['right'].label.set_text(xylabel)
@@ -465,7 +465,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     out['Figure'] = fig
     out['Axes'] = ax
     out['Norm'] = normfac
-    out['Atrists'] = artists
+    out['Artists'] = artists
 
     return out
 
