@@ -6,7 +6,7 @@ python:
 install:
  - pip install --upgrade setuptools
  - pip install numpy
- - pip install matplotlib<3.0
+ - pip install "matplotlib<3.0.0"
 
 script:
  - sudo python setup.py install
