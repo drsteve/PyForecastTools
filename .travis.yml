@@ -14,6 +14,7 @@ matrix:
     env: MPL_VERSION=""
 
 install:
+ - pip install --upgrade pip
  - pip install --upgrade setuptools
  - pip install numpy
  - pip install --force-reinstall "matplotlib${MPL_VERSION}"
