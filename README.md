@@ -12,11 +12,17 @@ version control at [sourceforge.net/p/spacepy/](https://sourceforge.net/p/spacep
 If SpacePy is not available a reduced functionality implementation of the class
 is provided with this package.
 
+PyForecastTools is available through the Python Package Index and can be installed
+simply with
+
+> pip install PyForecastTools --user
+
 To install (local user), run
 
 > python setup.py install --user
 
-The module can then be imported (within a Python script or interpreter) by
+After installation, the module can then be imported (within a Python script or 
+interpreter) by
 
 > import verify
 
