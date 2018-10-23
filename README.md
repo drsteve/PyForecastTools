@@ -17,6 +17,7 @@ provided by PyForecastTools includes:
      - Quantile-Quantile plots
      - Taylor diagrams
      - ROC curves
+     - Reliability diagrams
 
 The module builds on the scientific Python stack (Python, Numpy, MatPlotLib)
 and uses the dmarray class from SpacePy's datamodel.
