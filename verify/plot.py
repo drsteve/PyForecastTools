@@ -289,9 +289,47 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     out_dict : dict
         A dictionary containing the Figure, Axes, ...
 
+    Example
+    =======
+
+    >>> from sklearn.linear_model import LogisticRegression
+    >>> import numpy as np
+    >>> np.random.seed(0)
+    >>> import matplotlib.pyplot as plt
+    >>> from sklearn import svm, datasets
+
+    >>> from verify.plot import reliabilityDiagram, set_target
+
+    >>> classifiers = {'Logistic regression': LogisticRegression(),
+    >>>                'SVC': svm.SVC(kernel='linear', C=1.0)}
+
+    >>> X, y = datasets.make_classification(n_samples=100000, n_features=20,
+    >>>                                     n_informative=2, n_redundant=2)
+    >>> bins = 25
+    >>> train_samples = 100  # Samples used for training the models
+
+    >>> X_train = X[:train_samples]
+    >>> X_test = X[train_samples:]
+    >>> y_train = y[:train_samples]
+    >>> y_test = y[train_samples:] 
+
+    >>> fig, ax = set_target(None)
+    >>> output = []
+    >>> for method, clf in classifiers.items():
+    >>>     clf.fit(X_train, y_train)
+    >>>     if method == "SVC":
+    >>>         # Use SVC scores (predict_proba returns already calibrated probabilities)
+    >>>         pred = clf.decision_function(X_test)
+    >>>     else:
+    >>>         pred = clf.predict_proba(X_test)[:,1]
+    >>>     print(method, pred.shape)
+    >>>     output.append(reliabilityDiagram(pred, y_test, norm=True, 
+    >>>                                      modelName=method, addTo=fig))
+    >>> plt.show()
+
     Notes
     =====
-    Reliability curves show whether the predictions from a probabilistic
+    Reliability diagrams show whether the predictions from a probabilistic
     binary classifier are well calibrated.
     """
     pred = _maskSeries(predicted)
@@ -299,46 +337,66 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
 
     out = dict()
 
-    if normalize:  # Normalize scores into bin [0, 1]
-        pred = (pred - pred.min())/(pred.max() - pred.min())
+    if norm:  #Normalize scores into range [0, 1]
+        pred = (pred-pred.min())/(pred.max()-pred.min())
+        rmin = 0
+        rmax = 1
+    else:
+        rmin = pred.min()
+        rmax = pred.max()
 
-    bin_edges = numpy.histogram_bin_edges(pred, bins='Auto', range=(0,1))
-    bin_width = bin_edges[1]-bin_edges[0]
-    bin_centers = np.linspace(0, 1.0 - bin_width, bins) + bin_width/2.
+    bin_edges = numpy.histogram_bin_edges(pred, bins='auto', range=(rmin, rmax))
+    nbins = len(bin_edges)-1
 
-    pred_binMean = np.empty(bins)
-    empirical_prob_pos = np.empty(bins)
-    for i, threshold in enumerate(bin_centers):
-        #TODO: loop over bin_edges[1:] instead of centers
-        # determine all samples where y_score falls into the i-th bin
-        bin_idx = np.logical_and(threshold-bin_width/2 < pred,
-                                 pred <= threshold+bin_width/2)
-        # Store mean y_score and mean empirical probability of positive class
-        #TODO: can't I just use numpy histogram here?
-        pred_binMean[i] = pred[bin_idx].mean()
-        empirical_prob_pos[i] = obse[bin_idx].mean()
+    pred_binMean = numpy.zeros(nbins)
+    obse_binProb = numpy.zeros(nbins)
+    pred_binMean.fill(numpy.nan)
+    obse_binProb.fill(numpy.nan)
+
+    inds = numpy.digitize(pred, bin_edges)
+    #digitize is left-inclusive, so put the observations
+    #at p=1 into the top bin
+    inds[inds==nbins+1] = nbins
+
+    filledBins = list(set(inds))
+    for idx in filledBins:
+        # Store mean predicted prob and mean empirical probability
+        pred_binMean[idx-1] = pred[inds==idx].mean()
+        obse_binProb[idx-1] = obse[inds==idx].mean()
 
     #TODO: fix up plotting to use Axes
-    plt.figure(0, figsize=(8, 8))
-    plt.subplot2grid((3, 1), (0, 0), rowspan=2)
-    plt.plot([0.0, 1.0], [0.0, 1.0], 'k', label="Perfect")
-    for method, (pred_binMean, empirical_prob_pos) in reliability_scores.items():
-        scores_not_nan = np.logical_not(np.isnan(empirical_prob_pos))
-        plt.plot(y_score_bin_mean[scores_not_nan],
-                 empirical_prob_pos[scores_not_nan], label=method)
-    plt.ylabel("Empirical probability")
-    plt.legend(loc=0)
-    
-    plt.subplot2grid((3, 1), (2, 0))
-    for method, pred_ in pred.items():
-        pred_ = (pred_ - pred_.min()) / (pred_.max() - pred_.min())
-        plt.hist(pred_, range=(0, 1), bins=bins, label=method,
-                 histtype="step", lw=2)
-    plt.xlabel("Predicted Probability")
-    plt.ylabel("Count")
-    plt.legend(loc='upper center', ncol=2)
+    if addTo is None:
+        fig = plt.figure(0, figsize=(8, 8))
+        ax_rel = plt.subplot2grid((3, 1), (0, 0), rowspan=2, fig=fig)
+        ax_hist = plt.subplot2grid((3, 1), (2, 0), fig=fig)
+    else:
+        fig = addTo
+        axes = fig.axes
+        if len(axes)!=2:
+            if len(axes)==1 and len(axes[0].get_children())==10:
+                #probably an empty figure, so let's nuke it
+                ax_rel = plt.subplot2grid((3, 1), (0, 0), rowspan=2, fig=fig)
+                ax_hist = plt.subplot2grid((3, 1), (2, 0), fig=fig)
+            else:
+                raise ValueError
+        else:
+            ax_rel = axes[0]
+            ax_hist = axes[1]
 
-    return pred_binMean, empirical_prob_pos
+    handles, labels = ax_rel.get_legend_handles_labels()
+    if 'y=x' not in labels:
+        ax_rel.plot([0.0, 1.0], [0.0, 1.0], 'k', label='y=x')
+    valid = ~numpy.isnan(obse_binProb)
+    ax_rel.plot(pred_binMean[valid], obse_binProb[valid], label=modelName)
+    ax_rel.set_ylabel('Empirical probability')
+    ax_rel.legend(loc=0)
+    
+    ax_hist.hist(pred, range=(rmin, rmax), bins=bin_edges, histtype='step',
+                 lw=2, normed=True)
+    ax_hist.set_xlabel('Predicted Probability')
+    ax_hist.set_ylabel('Density')
+
+    return pred_binMean, obse_binProb
 
 
 def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
