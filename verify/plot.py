@@ -48,6 +48,8 @@ def set_target(target, figsize=None, loc=111, polar=False):
     Notes
     =====
     Implementation from SpacePy's plot module.
+    SpacePy is available at https://github.com/spacepy/spacepy
+    under a Python Software Foudnation license.
     """
     # Is target a figure?  Make a new axes.
     if type(target) == plt.Figure:
@@ -168,9 +170,7 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
 
 def ROCcurve(predicted, observed, low=None, high=None, nthresh=100, 
              target=None, xyline=True):
-    """
-    observed is binary
-    predicted is predicted probability
+    """Receiver Operating Characteristic curve for assessing model skill
 
     Parameters
     ==========
@@ -273,6 +273,73 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
 
     return out
 
+def reliabilityDiagram(predicted, observed, norm=False, addTo=None, 
+                       modelName=''):
+    """Reliability diagram for a probabilistic forecast model
+
+    Parameters
+    ==========
+    predicted :  array-like
+        predicted data, continuous data (e.g. probability)
+    observed : array-like
+        observation vector of binary events (boolean or 0,1)
+
+    Returns
+    =======
+    out_dict : dict
+        A dictionary containing the Figure, Axes, ...
+
+    Notes
+    =====
+    Reliability curves show whether the predictions from a probabilistic
+    binary classifier are well calibrated.
+    """
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
+
+    out = dict()
+
+    if normalize:  # Normalize scores into bin [0, 1]
+        pred = (pred - pred.min())/(pred.max() - pred.min())
+
+    bin_edges = numpy.histogram_bin_edges(pred, bins='Auto', range=(0,1))
+    bin_width = bin_edges[1]-bin_edges[0]
+    bin_centers = np.linspace(0, 1.0 - bin_width, bins) + bin_width/2.
+
+    pred_binMean = np.empty(bins)
+    empirical_prob_pos = np.empty(bins)
+    for i, threshold in enumerate(bin_centers):
+        #TODO: loop over bin_edges[1:] instead of centers
+        # determine all samples where y_score falls into the i-th bin
+        bin_idx = np.logical_and(threshold-bin_width/2 < pred,
+                                 pred <= threshold+bin_width/2)
+        # Store mean y_score and mean empirical probability of positive class
+        #TODO: can't I just use numpy histogram here?
+        pred_binMean[i] = pred[bin_idx].mean()
+        empirical_prob_pos[i] = obse[bin_idx].mean()
+
+    #TODO: fix up plotting to use Axes
+    plt.figure(0, figsize=(8, 8))
+    plt.subplot2grid((3, 1), (0, 0), rowspan=2)
+    plt.plot([0.0, 1.0], [0.0, 1.0], 'k', label="Perfect")
+    for method, (pred_binMean, empirical_prob_pos) in reliability_scores.items():
+        scores_not_nan = np.logical_not(np.isnan(empirical_prob_pos))
+        plt.plot(y_score_bin_mean[scores_not_nan],
+                 empirical_prob_pos[scores_not_nan], label=method)
+    plt.ylabel("Empirical probability")
+    plt.legend(loc=0)
+    
+    plt.subplot2grid((3, 1), (2, 0))
+    for method, pred_ in pred.items():
+        pred_ = (pred_ - pred_.min()) / (pred_.max() - pred_.min())
+        plt.hist(pred_, range=(0, 1), bins=bins, label=method,
+                 histtype="step", lw=2)
+    plt.xlabel("Predicted Probability")
+    plt.ylabel("Count")
+    plt.legend(loc='upper center', ncol=2)
+
+    return pred_binMean, empirical_prob_pos
+
 
 def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
                   isoSTD=True):
@@ -331,6 +398,8 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     diagram' by K.E. Taylor (Radio Science, 2001; doi: 10.1029/2000JD900719)
     and 'Taylor Diagram Primer' by Taylor (document at
     https://pcmdi.llnl.gov/staff/taylor/CV/Taylor_diagram_primer.pdf)
+    With some implementation aspects inspired by the public domain code of
+    github user ycopin at https://gist.github.com/ycopin/3342888
     """
     #fancy plotting imports
     from mpl_toolkits.axisartist import floating_axes, angle_helper, grid_finder
@@ -338,8 +407,8 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
 
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
-    pstd = pred.std(ddof=1) #unbaised sample std.dev. model
-    ostd = obse.std(ddof=1) #unbaised sample std.dev. observed
+    pstd = pred.std(ddof=1) #unbiased sample std.dev. model
+    ostd = obse.std(ddof=1) #unbiased sample std.dev. observed
     pcorr = numpy.corrcoef(obse, pred)[0,1] # Pearson's r
     pbias = bias(pred, obse) #mean error
 
