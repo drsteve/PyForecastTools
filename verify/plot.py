@@ -396,7 +396,10 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     ax_hist.set_xlabel('Predicted Probability')
     ax_hist.set_ylabel('Density')
 
-    return pred_binMean, obse_binProb
+    out = dict()
+    out['Figure'] = fig
+    out['Axes'] = fig.axes
+    return out
 
 
 def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
