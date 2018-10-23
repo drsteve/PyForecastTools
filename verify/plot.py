@@ -66,7 +66,8 @@ def set_target(target, figsize=None, loc=111, polar=False):
     return fig, ax
 
 
-def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
+def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
+           legend=False, plot_kwargs={}):
     """Quantile-quantile plot for predictions and observations
 
     Parameters
@@ -80,11 +81,13 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
     ================
     xyline : boolean
         Toggles the display of a line of y=x (perfect model). Default True.
-    target : figure, axes, or None
+    addTo : figure, axes, or None
         The object on which plotting will happen. If **None** (default)
         then a figure an axes will be created. If a matplotlib figure is
         supplied a set of axes will be made, and if matplotlib axes are 
         given then the plot will be made on those axes.
+    modelName :
+        Name of model for legend.
     plot_kwargs : dict
         Dictionary containing plot keyword arguments to pass to matplotlib's
         scatter function.
@@ -97,13 +100,22 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
     Example
     =======
     >>> import numpy as np
-    >>> import verify
+    >>> import matplotlib.pyplot as plt
+    >>> from verify.plot import qqplot
     >>> np.random.seed(46)
-    >>> predicted = np.random.randint(0,40,101)
-    >>> observed = predicted + np.random.randn(101)
-    >>> observed = observed[:71] #QQ plots don't require even smaple lengths
-    >>> plot_settings = {'marker': 'X', 'c': np.arange(71), 'cmap':'plasma'}
-    >>> verify.plot.qqplot(predicted, observed, plot_kwargs=plot_settings)
+    >>> model1 = np.random.randint(0,40,101).astype(float)
+    >>> model2 = model1*(1 + np.arange(101)/70)
+    >>> obs = model1 + np.random.randn(101)
+    >>> obs[[2,3,8,9,15,16,30,31]] = obs[[31,30,16,15,9,8,3,2]]
+    >>> obs *= 0.25 + (5-(np.arange(101)/30.))/4
+    >>> observed = obs[:71] #QQ plots don't require even sample lengths
+    >>> plot_settings = {'marker': 'X', 'c': np.arange(71), 'cmap':'cool'}
+    >>> out1 = qqplot(model1, observed, modelName='1',
+    >>>               plot_kwargs=plot_settings)
+    >>> plot_settings = {'marker': 'o'}
+    >>> out2 = qqplot(model2, observed, modelName='2', legend=True,
+    >>>               plot_kwargs=plot_settings, addTo=out1['Axes'])
+    >>> plt.show()
 
     Notes
     =====
@@ -141,7 +153,7 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
         return quants
 
     #get target and plot
-    fig, ax = set_target(target=target)
+    fig, ax = set_target(target=addTo)
     if q_len>o_len:
         plot_obse = q_obse
         plot_pred = numpy.percentile(q_pred, 100*quantsFromSorted(q_obse))
@@ -151,15 +163,23 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
     else:
         plot_pred = q_pred
         plot_obse = q_obse
-    ax.scatter(plot_pred, plot_obse, **plot_kwargs)
+    ax.scatter(plot_pred, plot_obse, label=modelName, **plot_kwargs)
     ax.set_ylabel('Observed')
     ax.set_xlabel('Predicted')
     ax.set_title('Q-Q plot')
+    if legend:
+        ax.legend(loc=0)
 
     if xyline:
-        #add y=x line
+        #add y=x line, force axes to be equal
         ax.plot([0,1],[0,1], transform=ax.transAxes, linestyle='--', 
                              linewidth=1.0, color='black')
+        ylims = ax.get_ylim()
+        xlims = ax.get_xlim()
+        newmin = min(xlims[0], ylims[0])
+        newmax = max(xlims[1], ylims[1])
+        ax.set_xlim([newmin, newmax])
+        ax.set_ylim([newmin, newmax])
 
     out = dict()
     out['Figure'] = fig
@@ -169,7 +189,7 @@ def qqplot(predicted, observed, xyline=True, target=None, plot_kwargs={}):
 
 
 def ROCcurve(predicted, observed, low=None, high=None, nthresh=100, 
-             target=None, xyline=True):
+             addTo=None, xyline=True, modelName='', legend=False):
     """Receiver Operating Characteristic curve for assessing model skill
 
     Parameters
@@ -187,7 +207,7 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
         Set the highest threshold to use
     xyline : boolean
         Toggles the display of a line of y=x (perfect model). Default True.
-    target : figure, axes, or None
+    addTo : figure, axes, or None
         The object on which plotting will happen. If **None** (default)
         then a figure an axes will be created. If a matplotlib figure is
         supplied a set of axes will be made, and if matplotlib axes are 
@@ -205,30 +225,35 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     =======
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
-    
-    >>> from sklearn import svm, datasets
-    >>> from sklearn.model_selection import StratifiedKFold
-    
-    >>> iris = datasets.load_iris()
-    >>> X = iris.data
-    >>> y = iris.target
-    >>> X, y = X[y != 2], y[y != 2]
-    >>> n_samples, n_features = X.shape
-    
-    >>> random_state = np.random.RandomState(0)
-    >>> X = np.c_[X, random_state.randn(n_samples, 200 * n_features)]
-    
-    >>> cv = StratifiedKFold(n_splits=6)
-    >>> classifier = svm.SVC(kernel='linear', probability=True,
-    >>>                      random_state=random_state)
+    >>> from sklearn import svm, datasets, linear_model
+
+    >>> from verify.plot import ROCcurve, set_target
+
+    >>> np.random.seed(0)
+    >>> classifiers = {'Logistic regression': linear_model.LogisticRegression(),
+    >>>                'SVC': svm.SVC(kernel='linear',
+    >>>                               decision_function_shape='ovr',
+    >>>                               probability=True)}
+
+    >>> X, y = datasets.make_classification(n_samples=10000, n_features=21,
+    >>>                                     n_informative=8, n_redundant=2,
+    >>>                                     n_classes=2, n_repeated=1,
+    >>>                                     n_clusters_per_class=3,
+    >>>                                     flip_y=0.2)
+    >>> Nsample_train = 100
+    >>> X_train = X[:Nsample_train]
+    >>> X_test = X[Nsample_train:]
+    >>> y_train = y[:Nsample_train]
+    >>> y_test = y[Nsample_train:] 
 
     >>> fig, ax = set_target(None)
     >>> output = []
-    
-    >>> for train, test in cv.split(X, y):
-    >>>     probas_ = classifier.fit(X[train], y[train]).predict_proba(X[test])
-    >>>     output.append(ROCcurve(probas_[:, 1], y[test], target=ax))
-    #compare to http://scikit-learn.org/stable/_images/sphx_glr_plot_roc_crossval_001.png
+    >>> for method, model in classifiers.items():
+    >>>     model.fit(X_train, y_train)
+    >>>     pred = model.predict_proba(X_test)[:,1]
+    >>>     output.append(ROCcurve(pred, y_test, modelName=method, addTo=ax))
+    >>> output[-1]['Axes'].legend()
+    >>> plt.show()
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
@@ -254,16 +279,20 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     pofds[-1] = 0
 
     #get target and plot
-    fig, ax = set_target(target=target)
+    fig, ax = set_target(target=addTo)
 
-    ax.plot(pofds, pods, drawstyle='steps-post')
+    ax.plot(pofds, pods, drawstyle='steps-post', label=modelName)
     if xyline:
         #add y=x line
         ax.plot([0,1],[0,1], transform=ax.transAxes, linestyle='--', 
                              linewidth=1.0, color='black')
 
-    ax.set_ylabel('Probability of Detection')
     ax.set_xlabel('Probability of False Detection')
+    ax.set_ylabel('Probability of Detection')
+    ax.set_xlim([0,1])
+    ax.set_ylim([0,1])
+    if legend:
+        ax.legend(loc=0)
 
     out['POD'] = pods
     out['POFD'] = pofds
@@ -274,7 +303,7 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     return out
 
 def reliabilityDiagram(predicted, observed, norm=False, addTo=None, 
-                       modelName=''):
+                       modelName='', xyline=True, legend=False):
     """Reliability diagram for a probabilistic forecast model
 
     Parameters
@@ -291,23 +320,24 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
 
     Example
     =======
-
-    >>> from sklearn.linear_model import LogisticRegression
     >>> import numpy as np
-    >>> np.random.seed(0)
     >>> import matplotlib.pyplot as plt
-    >>> from sklearn import svm, datasets
+    >>> from sklearn import svm, datasets, linear_model
 
     >>> from verify.plot import reliabilityDiagram, set_target
 
-    >>> classifiers = {'Logistic regression': LogisticRegression(),
-    >>>                'SVC': svm.SVC(kernel='linear', C=1.0)}
+    >>> np.random.seed(0)
+    >>> classifiers = {'Logistic regression': linear_model.LogisticRegression(),
+    >>>                'SVC': svm.SVC(kernel='linear',
+    >>>                               decision_function_shape='ovr',
+    >>>                               probability=True)}
 
-    >>> X, y = datasets.make_classification(n_samples=100000, n_features=20,
-    >>>                                     n_informative=2, n_redundant=2)
-    >>> bins = 25
+    >>> X, y = datasets.make_classification(n_samples=10000, n_features=21,
+    >>>                                     n_informative=8, n_redundant=2,
+    >>>                                     n_classes=2, n_repeated=1,
+    >>>                                     n_clusters_per_class=3,
+    >>>                                     flip_y=0.2)
     >>> train_samples = 100  # Samples used for training the models
-
     >>> X_train = X[:train_samples]
     >>> X_test = X[train_samples:]
     >>> y_train = y[:train_samples]
@@ -315,14 +345,9 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
 
     >>> fig, ax = set_target(None)
     >>> output = []
-    >>> for method, clf in classifiers.items():
-    >>>     clf.fit(X_train, y_train)
-    >>>     if method == "SVC":
-    >>>         # Use SVC scores (predict_proba returns already calibrated probabilities)
-    >>>         pred = clf.decision_function(X_test)
-    >>>     else:
-    >>>         pred = clf.predict_proba(X_test)[:,1]
-    >>>     print(method, pred.shape)
+    >>> for method, model in classifiers.items():
+    >>>     model.fit(X_train, y_train)
+    >>>     pred = model.predict_proba(X_test)[:,1]
     >>>     output.append(reliabilityDiagram(pred, y_test, norm=True, 
     >>>                                      modelName=method, addTo=fig))
     >>> plt.show()
@@ -347,6 +372,9 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
 
     bin_edges = numpy.histogram_bin_edges(pred, bins='auto', range=(rmin, rmax))
     nbins = len(bin_edges)-1
+    if nbins>100: #too busy for plot
+        bin_edges = numpy.histogram_bin_edges(pred, bins=100, range=(rmin, rmax))
+        nbins = len(bin_edges)-1
 
     pred_binMean = numpy.zeros(nbins)
     obse_binProb = numpy.zeros(nbins)
@@ -364,7 +392,6 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         pred_binMean[idx-1] = pred[inds==idx].mean()
         obse_binProb[idx-1] = obse[inds==idx].mean()
 
-    #TODO: fix up plotting to use Axes
     if addTo is None:
         fig = plt.figure(0, figsize=(8, 8))
         ax_rel = plt.subplot2grid((3, 1), (0, 0), rowspan=2, fig=fig)
@@ -378,27 +405,36 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
                 ax_rel = plt.subplot2grid((3, 1), (0, 0), rowspan=2, fig=fig)
                 ax_hist = plt.subplot2grid((3, 1), (2, 0), fig=fig)
             else:
-                raise ValueError
+                raise ValueError('reliabilityDiagram: supplied Figure for'+\
+                                 'plotting appears to have been used for a'+\
+                                 'different purpose.')
         else:
             ax_rel = axes[0]
             ax_hist = axes[1]
 
     handles, labels = ax_rel.get_legend_handles_labels()
-    if 'y=x' not in labels:
-        ax_rel.plot([0.0, 1.0], [0.0, 1.0], 'k', label='y=x')
+    if 'y=x' not in labels or xyline is True:
+        ax_rel.plot([0.0, 1.0], [0.0, 1.0], 'k--', label='y=x')
     valid = ~numpy.isnan(obse_binProb)
     ax_rel.plot(pred_binMean[valid], obse_binProb[valid], label=modelName)
     ax_rel.set_ylabel('Empirical probability')
-    ax_rel.legend(loc=0)
+    ax_rel.xaxis.set_major_formatter(plt.NullFormatter())
+    if legend:
+        ax_rel.legend(loc=0)
     
     ax_hist.hist(pred, range=(rmin, rmax), bins=bin_edges, histtype='step',
                  lw=2, normed=True)
     ax_hist.set_xlabel('Predicted Probability')
     ax_hist.set_ylabel('Density')
 
+    ax_rel.set_xlim([rmin, rmax])
+    ax_rel.set_ylim([rmin, rmax])
+    ax_hist.set_xlim([rmin, rmax])
+
     out = dict()
     out['Figure'] = fig
     out['Axes'] = fig.axes
+
     return out
 
 
