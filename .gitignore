@@ -1,0 +1,21 @@
+# Byte compiled files, etc.
+__pycache__/
+*.pyc
+
+# Build and install
+build/
+dist/
+docs/_build/
+doctrees/
+dependency_links.txt
+PKG-INFO
+requires.txt
+SOURCES.txt
+top_level.txt
+
+# Coverage
+htmlcov/
+.coverage
+
+# Vi chaff
+*.swp
