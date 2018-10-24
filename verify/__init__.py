@@ -512,7 +512,7 @@ def scaledError(predicted, observed):
     """
     pred = np.asanyarray(predicted).astype(float)
     obse = np.asanyarray(observed).astype(float)
-    
+
     n_pts = len(pred.ravel())
 
     if len(obse)==1:
@@ -553,8 +553,11 @@ def MASE(predicted, observed):
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
 
     """
-    q = scaledError(predicted, observed)
-    n_pts = len(predicted.ravel())
+    pred = np.asanyarray(predicted).astype(float)
+    obse = np.asanyarray(observed).astype(float)
+
+    q = scaledError(pred, obse)
+    n_pts = len(pred.ravel())
     return np.abs(q).sum()/n_pts
 
 
