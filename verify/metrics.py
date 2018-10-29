@@ -516,7 +516,7 @@ def scaledError(predicted, observed):
     dsum = np.sum(np.abs(np.diff(obse)))
 
     q = dif/((1/(n_pts-1))*dsum)
-    
+
     return q
 
 
@@ -547,8 +547,11 @@ def MASE(predicted, observed):
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
 
     """
-    q = scaledError(predicted, observed)
-    n_pts = len(predicted.ravel())
+    pred = np.asanyarray(predicted).astype(float)
+    obse = np.asanyarray(observed).astype(float)
+
+    q = scaledError(pred, obse)
+    n_pts = len(pred.ravel())
     return np.abs(q).sum()/n_pts
 
 
