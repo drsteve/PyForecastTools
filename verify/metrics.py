@@ -573,8 +573,8 @@ def forecastError(predicted, observed, full=True):
 
     Returns
     =======
-    err : float
-        the mean absolute scaled error
+    err : array
+        the forecast error
     pred : array
         Optional return array of predicted values as floats, included if full
         is True
