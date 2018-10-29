@@ -504,17 +504,16 @@ def scaledError(predicted, observed):
     MASE
    
     """
-    n_pts = len(predicted.ravel())
-    try:
-        dum = len(observed)
-    except TypeError:
-        observed = np.array([observed])
+    pred = np.asanyarray(predicted).astype(float)
+    obse = np.asanyarray(observed).astype(float)
 
-    if len(observed)==1:
-        observed = np.asanyarray(observed).repeat(n_pts)
+    n_pts = len(pred.ravel())
 
-    dif = _diff(predicted, observed)
-    dsum = np.sum(np.abs(np.diff(observed)))
+    if len(obse)==1:
+        obse= np.asanyarray(observed).repeat(n_pts)
+
+    dif = _diff(pred, obse)
+    dsum = np.sum(np.abs(np.diff(obse)))
 
     q = dif/((1/(n_pts-1))*dsum)
     
