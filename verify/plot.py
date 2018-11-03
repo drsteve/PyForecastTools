@@ -521,7 +521,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     
     tr = PolarAxes.PolarTransform()
     # Correlation labels
-    corrtickvals = numpy.asarray(range(10)+[9.5,9.9])/10.
+    corrtickvals = numpy.asarray(list(range(10))+[9.5,9.9])/10.
     corrtickvals_polar = numpy.arccos(corrtickvals)
     # Round labels to nearest N digits
     corrticklabs = []
@@ -529,9 +529,9 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
         lab = '{0:0.2f}'.format(cval) if str(cval)[2]!='0' else \
               '{0:0.1f}'.format(cval)
         corrticklabs.append('{0:0.2f}'.format(cval))
+    valsAndLabs = list(zip(corrtickvals_polar, corrticklabs))
     corrgrid = grid_finder.FixedLocator(corrtickvals_polar)
-    corrticks = grid_finder.DictFormatter(dict(zip(corrtickvals_polar,
-                                                   corrticklabs)))
+    corrticks = grid_finder.DictFormatter(dict(valsAndLabs))
 
     # Std. Dev. tick values and labels
     smin, smax = 0, numpy.ceil(0.8335*ostd)*2
@@ -540,9 +540,10 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     stdticklabs = []
     for stdval in stdtickvals:
         stdticklabs.append('{0:0.2f}'.format(stdval))
-    
+
+    valsAndLabs = list(zip(stdtickvals, stdticklabs))
     stdgrid = grid_finder.FixedLocator(stdtickvals)
-    stdticks = grid_finder.DictFormatter(dict(zip(stdtickvals, stdticklabs)))
+    stdticks = grid_finder.DictFormatter(dict(valsAndLabs))
 
     gh_curvegrid = floating_axes.GridHelperCurveLinear(tr,
                                        extremes=(0, numpy.pi/2, smin, smax),
