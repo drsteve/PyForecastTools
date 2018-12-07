@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from .metrics import _maskSeries, bias
 from .categorical import Contingency2x2
 
-def set_target(target, figsize=None, loc=111, polar=False):
+def setTarget(target, figsize=None, loc=111, polar=False):
     """
     Given a *target* on which to plot a figure, determine if that *target*
     is **None** or a matplotlib figure or axes object.  Based on the type
@@ -23,10 +23,10 @@ def set_target(target, figsize=None, loc=111, polar=False):
     Other Parameters
     ================
     figsize : tuple
-        A two-item tuple/list giving the dimensions of the figure, in inches.  
+        A two-item tuple/list giving the dimensions of the figure, in inches.
         Defaults to Matplotlib defaults.
-    loc : integer 
-        The subplot triple that specifies the location of the axes object.  
+    loc : integer
+        The subplot triple that specifies the location of the axes object.
         Defaults to 111.
     polar : bool
         Set the axes object to polar coodinates.  Defaults to **False**.
@@ -41,9 +41,9 @@ def set_target(target, figsize=None, loc=111, polar=False):
     Examples
     ========
     >>> import matplotlib.pyplot as plt
-    >>> from verify.plot import set_target
+    >>> from verify.plot import setTarget
     >>> fig = plt.figure()
-    >>> fig, ax = set_target(target=fig, loc=211)
+    >>> fig, ax = setTarget(target=fig, loc=211)
 
     Notes
     =====
@@ -54,20 +54,20 @@ def set_target(target, figsize=None, loc=111, polar=False):
     # Is target a figure?  Make a new axes.
     if type(target) == plt.Figure:
         fig = target
-        ax  = fig.add_subplot(loc, polar=polar)
+        ax = fig.add_subplot(loc, polar=polar)
     # Is target an axes?  Make no new items.
     elif issubclass(type(target), plt.Axes):
-        ax  = target
+        ax = target
         fig = ax.figure
     # Is target something else?  Make new everything.
     else:
         fig = plt.figure(figsize=figsize)
-        ax  = fig.add_subplot(loc, polar=polar)
+        ax = fig.add_subplot(loc, polar=polar)
     return fig, ax
 
 
-def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
-           legend=False, plot_kwargs={}):
+def qqPlot(predicted, observed, xyline=True, addTo=None, modelName='',
+           legend=False, plot_kwargs=None):
     """Quantile-quantile plot for predictions and observations
 
     Parameters
@@ -84,7 +84,7 @@ def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
     addTo : figure, axes, or None
         The object on which plotting will happen. If **None** (default)
         then a figure an axes will be created. If a matplotlib figure is
-        supplied a set of axes will be made, and if matplotlib axes are 
+        supplied a set of axes will be made, and if matplotlib axes are
         given then the plot will be made on those axes.
     modelName :
         Name of model for legend.
@@ -101,7 +101,7 @@ def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
     =======
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
-    >>> from verify.plot import qqplot
+    >>> from verify.plot import qqPlot
     >>> np.random.seed(46)
     >>> model1 = np.random.randint(0,40,101).astype(float)
     >>> model2 = model1*(1 + np.arange(101)/70)
@@ -110,10 +110,10 @@ def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
     >>> obs *= 0.25 + (5-(np.arange(101)/30.))/4
     >>> observed = obs[:71] #QQ plots don't require even sample lengths
     >>> plot_settings = {'marker': 'X', 'c': np.arange(71), 'cmap':'cool'}
-    >>> out1 = qqplot(model1, observed, modelName='1',
+    >>> out1 = qqPlot(model1, observed, modelName='1',
     >>>               plot_kwargs=plot_settings)
     >>> plot_settings = {'marker': 'o'}
-    >>> out2 = qqplot(model2, observed, modelName='2', legend=True,
+    >>> out2 = qqPlot(model2, observed, modelName='2', legend=True,
     >>>               plot_kwargs=plot_settings, addTo=out1['Axes'])
     >>> plt.show()
 
@@ -125,11 +125,11 @@ def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
 
     Both axes are in units of their respective data sets. That is, the actual
     quantile level is not plotted. For a given point on the q-q plot, we know
-    that the quantile level is the same for both points, but not what that 
+    that the quantile level is the same for both points, but not what that
     quantile level actually is.
 
-    For equal length samples, the q-q plot displays sorted(sample1) against 
-    sorted(sample2). If the samples are not of equal length, the quantiles 
+    For equal length samples, the q-q plot displays sorted(sample1) against
+    sorted(sample2). If the samples are not of equal length, the quantiles
     for the smaller sample are calculated and data from the larger sample are
     interpolated to those quantiles. See, e.g., NIST's Engineering Statistics
     Handbook.
@@ -148,21 +148,22 @@ def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
     def quantsFromSorted(inarr):
         # quantile given by rank divided by number of elements
         numElem = len(inarr)
-        ranks = numpy.arange(1,numElem+1).astype(float)
+        ranks = numpy.arange(1, numElem+1).astype(float)
         quants = ranks/numElem
         return quants
 
     #get target and plot
-    fig, ax = set_target(target=addTo)
-    if q_len>o_len:
+    fig, ax = setTarget(target=addTo)
+    if q_len > o_len:
         plot_obse = q_obse
         plot_pred = numpy.percentile(q_pred, 100*quantsFromSorted(q_obse))
-    elif q_len<o_len:
+    elif q_len < o_len:
         plot_obse = numpy.percentile(q_obse, 100*quantsFromSorted(q_pred))
         plot_pred = q_pred
     else:
         plot_pred = q_pred
         plot_obse = q_obse
+    if plot_kwargs is None: plot_kwargs = dict()
     ax.scatter(plot_pred, plot_obse, label=modelName, **plot_kwargs)
     ax.set_ylabel('Observed')
     ax.set_xlabel('Predicted')
@@ -172,8 +173,8 @@ def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
 
     if xyline:
         #add y=x line, force axes to be equal
-        ax.plot([0,1],[0,1], transform=ax.transAxes, linestyle='--', 
-                             linewidth=1.0, color='black')
+        ax.plot([0, 1], [0, 1], transform=ax.transAxes, linestyle='--',
+                linewidth=1.0, color='black')
         ylims = ax.get_ylim()
         xlims = ax.get_xlim()
         newmin = min(xlims[0], ylims[0])
@@ -188,7 +189,7 @@ def qqplot(predicted, observed, xyline=True, addTo=None, modelName='',
     return out
 
 
-def ROCcurve(predicted, observed, low=None, high=None, nthresh=100, 
+def rocCurve(predicted, observed, low=None, high=None, nthresh=100,
              addTo=None, xyline=True, modelName='', legend=False):
     """Receiver Operating Characteristic curve for assessing model skill
 
@@ -210,11 +211,8 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     addTo : figure, axes, or None
         The object on which plotting will happen. If **None** (default)
         then a figure an axes will be created. If a matplotlib figure is
-        supplied a set of axes will be made, and if matplotlib axes are 
+        supplied a set of axes will be made, and if matplotlib axes are
         given then the plot will be made on those axes.
-    plot_kwargs : dict
-        Dictionary containing plot keyword arguments to pass to matplotlib's
-        scatter function.
 
     Returns
     =======
@@ -227,7 +225,7 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     >>> import matplotlib.pyplot as plt
     >>> from sklearn import svm, datasets, linear_model
 
-    >>> from verify.plot import ROCcurve, set_target
+    >>> from verify.plot import rocCurve, setTarget
 
     >>> np.random.seed(0)
     >>> classifiers = {'Logistic regression': linear_model.LogisticRegression(),
@@ -244,14 +242,14 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     >>> X_train = X[:Nsample_train]
     >>> X_test = X[Nsample_train:]
     >>> y_train = y[:Nsample_train]
-    >>> y_test = y[Nsample_train:] 
+    >>> y_test = y[Nsample_train:]
 
-    >>> fig, ax = set_target(None)
+    >>> fig, ax = setTarget(None)
     >>> output = []
     >>> for method, model in classifiers.items():
     >>>     model.fit(X_train, y_train)
     >>>     pred = model.predict_proba(X_test)[:,1]
-    >>>     output.append(ROCcurve(pred, y_test, modelName=method, addTo=ax))
+    >>>     output.append(rocCurve(pred, y_test, modelName=method, addTo=ax))
     >>> output[-1]['Axes'].legend()
     >>> plt.show()
     """
@@ -265,12 +263,12 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     if high is None:
         high = pred.max()
     thresholds = numpy.linspace(low, high, num=nthresh)
-    
+
     pods = numpy.zeros(len(thresholds)+2, dtype=float)
     pofds = numpy.zeros(len(thresholds)+2, dtype=float)
     pods[0] = 1
     pofds[0] = 1
-    for idx, thr in enumerate(thresholds,1):
+    for idx, thr in enumerate(thresholds, 1):
         bool_pred = pred >= thr
         ctable = Contingency2x2.fromBoolean(bool_pred, obse)
         pods[idx] = ctable.POD()
@@ -279,18 +277,18 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
     pofds[-1] = 0
 
     #get target and plot
-    fig, ax = set_target(target=addTo)
+    fig, ax = setTarget(target=addTo)
 
     ax.plot(pofds, pods, drawstyle='steps-post', label=modelName)
     if xyline:
         #add y=x line
-        ax.plot([0,1],[0,1], transform=ax.transAxes, linestyle='--', 
-                             linewidth=1.0, color='black')
+        ax.plot([0, 1], [0, 1], transform=ax.transAxes, linestyle='--',
+                linewidth=1.0, color='black')
 
     ax.set_xlabel('Probability of False Detection')
     ax.set_ylabel('Probability of Detection')
-    ax.set_xlim([0,1])
-    ax.set_ylim([0,1])
+    ax.set_xlim([0, 1])
+    ax.set_ylim([0, 1])
     if legend:
         ax.legend(loc=0)
 
@@ -302,7 +300,7 @@ def ROCcurve(predicted, observed, low=None, high=None, nthresh=100,
 
     return out
 
-def reliabilityDiagram(predicted, observed, norm=False, addTo=None, 
+def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
                        modelName='', xyline=True, legend=False):
     """Reliability diagram for a probabilistic forecast model
 
@@ -324,7 +322,7 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     >>> import matplotlib.pyplot as plt
     >>> from sklearn import svm, datasets, linear_model
 
-    >>> from verify.plot import reliabilityDiagram, set_target
+    >>> from verify.plot import reliabilityDiagram, setTarget
 
     >>> np.random.seed(0)
     >>> classifiers = {'Logistic regression': linear_model.LogisticRegression(),
@@ -341,14 +339,14 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     >>> X_train = X[:train_samples]
     >>> X_test = X[train_samples:]
     >>> y_train = y[:train_samples]
-    >>> y_test = y[train_samples:] 
+    >>> y_test = y[train_samples:]
 
-    >>> fig, ax = set_target(None)
+    >>> fig, ax = setTarget(None)
     >>> output = []
     >>> for method, model in classifiers.items():
     >>>     model.fit(X_train, y_train)
     >>>     pred = model.predict_proba(X_test)[:,1]
-    >>>     output.append(reliabilityDiagram(pred, y_test, norm=True, 
+    >>>     output.append(reliabilityDiagram(pred, y_test, norm=True,
     >>>                                      modelName=method, addTo=fig))
     >>> plt.show()
 
@@ -372,7 +370,7 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
 
     bin_edges = numpy.histogram_bin_edges(pred, bins='auto', range=(rmin, rmax))
     nbins = len(bin_edges)-1
-    if nbins>100: #too busy for plot
+    if nbins > 100: #too busy for plot
         bin_edges = numpy.histogram_bin_edges(pred, bins=100, range=(rmin, rmax))
         nbins = len(bin_edges)-1
 
@@ -384,13 +382,13 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     inds = numpy.digitize(pred, bin_edges)
     #digitize is left-inclusive, so put the observations
     #at p=1 into the top bin
-    inds[inds==nbins+1] = nbins
+    inds[inds == nbins+1] = nbins
 
     filledBins = list(set(inds))
     for idx in filledBins:
         # Store mean predicted prob and mean empirical probability
-        pred_binMean[idx-1] = pred[inds==idx].mean()
-        obse_binProb[idx-1] = obse[inds==idx].mean()
+        pred_binMean[idx-1] = pred[inds == idx].mean()
+        obse_binProb[idx-1] = obse[inds == idx].mean()
 
     if addTo is None:
         fig = plt.figure(0, figsize=(8, 8))
@@ -399,8 +397,8 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     else:
         fig = addTo
         axes = fig.axes
-        if len(axes)!=2:
-            if len(axes)==1 and len(axes[0].get_children())==10:
+        if len(axes) != 2:
+            if len(axes) == 1 and len(axes[0].get_children()) == 10:
                 #probably an empty figure, so let's nuke it
                 ax_rel = plt.subplot2grid((3, 1), (0, 0), rowspan=2, fig=fig)
                 ax_hist = plt.subplot2grid((3, 1), (2, 0), fig=fig)
@@ -421,7 +419,7 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     ax_rel.xaxis.set_major_formatter(plt.NullFormatter())
     if legend:
         ax_rel.legend(loc=0)
-    
+
     ax_hist.hist(pred, range=(rmin, rmax), bins=bin_edges, histtype='step',
                  lw=2, normed=True)
     ax_hist.set_xlabel('Predicted Probability')
@@ -445,7 +443,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     Parameters
     ==========
     predicted :  array-like
-        predicted data 
+        predicted data
     observed : array-like
         observation vector
 
@@ -458,8 +456,8 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
         Toggles the display of a line of y=x (perfect model). Default True.
     addTo : axes, or None
         The object on which plotting will happen. If **None** (default)
-        then a figure and axes will be created. If matplotlib axes are 
-        given then the plot will be made on those axes, assuming that the 
+        then a figure and axes will be created. If matplotlib axes are
+        given then the plot will be made on those axes, assuming that the
         point is being added to a previously generated Taylor diagram.
     modelName : string
         Name of model to label the point on the Taylor diagram with.
@@ -471,7 +469,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     Returns
     =======
     out_dict : dict
-        A dictionary containing the Figure, the Axes, and 'Norm' (the value 
+        A dictionary containing the Figure, the Axes, and 'Norm' (the value
         used to normalize the inputs/outputs).
 
     Example
@@ -506,7 +504,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     obse = _maskSeries(observed)
     pstd = pred.std(ddof=1) #unbiased sample std.dev. model
     ostd = obse.std(ddof=1) #unbiased sample std.dev. observed
-    pcorr = numpy.corrcoef(obse, pred)[0,1] # Pearson's r
+    pcorr = numpy.corrcoef(obse, pred)[0, 1] # Pearson's r
     pbias = bias(pred, obse) #mean error
 
     # Normalize on request
@@ -518,15 +516,15 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     else:
         setNormed = False
         normfac = 1
-    
+
     tr = PolarAxes.PolarTransform()
     # Correlation labels
-    corrtickvals = numpy.asarray(list(range(10))+[9.5,9.9])/10.
+    corrtickvals = numpy.asarray(list(range(10))+[9.5, 9.9])/10.
     corrtickvals_polar = numpy.arccos(corrtickvals)
     # Round labels to nearest N digits
     corrticklabs = []
     for cval in corrtickvals:
-        lab = '{0:0.2f}'.format(cval) if str(cval)[2]!='0' else \
+        lab = '{0:0.2f}'.format(cval) if str(cval)[2] != '0' else \
               '{0:0.1f}'.format(cval)
         corrticklabs.append('{0:0.2f}'.format(cval))
     valsAndLabs = list(zip(corrtickvals_polar, corrticklabs))
@@ -546,12 +544,12 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     stdticks = grid_finder.DictFormatter(dict(valsAndLabs))
 
     gh_curvegrid = floating_axes.GridHelperCurveLinear(tr,
-                                       extremes=(0, numpy.pi/2, smin, smax),
-                                       grid_locator1=corrgrid,
-                                       grid_locator2=stdgrid,
-                                       tick_formatter1=corrticks,
-                                       tick_formatter2=stdticks
-                                       )
+                                                       extremes=(0, numpy.pi/2, smin, smax),
+                                                       grid_locator1=corrgrid,
+                                                       grid_locator2=stdgrid,
+                                                       tick_formatter1=corrticks,
+                                                       tick_formatter2=stdticks
+                                                      )
 
     artists = []
     #if addTo isn't None then assume we've been given a previously returned
@@ -591,8 +589,8 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
         ax = ax.get_aux_axes(tr)   # Axes referenced in polar coords
         #Add reference point, ref stddev contour and other stddev contours
         artists.append(ax.scatter(0, ostd, marker='o', linewidths=2,
-                         edgecolors='black', facecolors='None', 
-                         label='Observation', zorder=99))
+                                  edgecolors='black', facecolors='None',
+                                  label='Observation', zorder=99))
         azim = numpy.linspace(0, numpy.pi/2)
         rad = numpy.zeros_like(azim)
         rad.fill(ostd)
@@ -605,12 +603,12 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
 
         #Add radial markers at correlation ticks
         for i in corrtickvals[1:]:
-            ax.plot([numpy.arccos(i), numpy.arccos(i)], [0, smax], 
+            ax.plot([numpy.arccos(i), numpy.arccos(i)], [0, smax],
                     c='royalblue', alpha=0.5, zorder=40)
 
         #Add contours of centered RMS error
-        rs,ts = numpy.meshgrid(numpy.linspace(smin, smax),
-                               numpy.linspace(0,numpy.pi/2))
+        rs, ts = numpy.meshgrid(numpy.linspace(smin, smax),
+                                numpy.linspace(0, numpy.pi/2))
         rms = numpy.sqrt(ostd**2 + rs**2 - 2*ostd*rs*numpy.cos(ts))
         contours = ax.contour(ts, rs, rms, 4, alpha=0.75, zorder=30,
                               colors='dimgray')
@@ -624,7 +622,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     stdextent = smax-smin
     twopercent = stdextent/50.0
     artists.append(ax.scatter(numpy.arccos(pcorr), pstd, marker='o',
-                   label=modelName, zorder=99))
+                              label=modelName, zorder=99))
     dum = ax.text(numpy.arccos(pcorr), pstd+twopercent, modelName,
                   fontsize='larger')
 
@@ -635,4 +633,3 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     out['Artists'] = artists
 
     return out
-
