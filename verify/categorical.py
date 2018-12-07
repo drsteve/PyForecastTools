@@ -21,7 +21,6 @@ All rights reserved.
 """
 
 from __future__ import division
-import functools
 import numpy as np
 
 try:
@@ -37,7 +36,7 @@ class ContingencyNxN(dm.dmarray):
 
     Examples
     ========
-    
+
     >>> import verify
     >>> tt = verify.ContingencyNxN([[28,72],[23,2680]])
     >>> tt.sum()
@@ -72,7 +71,7 @@ class ContingencyNxN(dm.dmarray):
 
         if verbose:
             stats = ['PC']
-            skill = ['HeidkeScore','PeirceScore']
+            skill = ['HeidkeScore', 'PeirceScore']
             print("Summary Statistics")
             print("==================")
             for key in stats:
@@ -118,10 +117,10 @@ class ContingencyNxN(dm.dmarray):
         # table)
         PyPo = 0
         for i in range(self.shape[0]):
-            Py, Po = 0, 0 
+            Py, Po = 0, 0
             for j in range(self.shape[0]):
-                Py += self[i,j]
-                Po += self[j,i]
+                Py += self[i, j]
+                Po += self[j, i]
             Py /= N
             Po /= N
             PyPo += Py*Po
@@ -159,10 +158,10 @@ class ContingencyNxN(dm.dmarray):
         # table)
         Po2, PyPo = 0, 0
         for i in range(self.shape[0]):
-            Py, Po = 0, 0 
+            Py, Po = 0, 0
             for j in range(self.shape[0]):
-                Py += self[i,j]
-                Po += self[j,i]
+                Py += self[i, j]
+                Po += self[j, i]
             Py /= N
             Po /= N
             Po2 += Po*Po
@@ -206,17 +205,17 @@ class ContingencyNxN(dm.dmarray):
 
         """
         a = self[category, category]
-        b = self[category,:].sum() - a
-        c = self[:,category].sum() - a
-        d = self.sum()-self[category,:].sum() - self[:,category].sum() + a
-        return Contingency2x2([[a,b],[c,d]])
-            
+        b = self[category, :].sum() - a
+        c = self[:, category].sum() - a
+        d = self.sum()-self[category, :].sum() - self[:, category].sum() + a
+        return Contingency2x2([[a, b], [c, d]])
+
 
 class Contingency2x2(ContingencyNxN):
     """Class to work with 2x2 contingency tables for forecast verification
 
-    The table is defined following the standard presentation in works such 
-    as Wilks [2006], where the columns are observations and the rows are 
+    The table is defined following the standard presentation in works such
+    as Wilks [2006], where the columns are observations and the rows are
     predictions. For a binary forecast, this gives a table
 
     +-------------+-------------------------------+
@@ -228,7 +227,7 @@ class Contingency2x2(ContingencyNxN):
     |Predicted+---+---------------+---------------+
     |         | N | False Negative| True Negative |
     +---------+---+---------------+---------------+
-    
+
 
     Note that in many machine learning applications this table is called a
     ``confusion matrix'' and the columns and rows are often transposed.
@@ -252,14 +251,14 @@ class Contingency2x2(ContingencyNxN):
     0.52285681714546284
 
     """
-    def __new__(cls, input_array, attrs=None, dtype=None, stats=False):
+    def __new__(cls, input_array, attrs=None, dtype=None):
         if not dtype:
             obj = np.asarray(input_array).view(cls)
         else:
             obj = np.asarray(input_array).view(cls).astype(dtype)
         if obj.ndim != 2:
             raise ValueError('2x2 contingency tables must be 2-dimensional')
-        if obj.shape != (2,2):
+        if obj.shape != (2, 2):
             raise ValueError('2x2 contingency tables must be have shape (2,2)')
         if attrs != None:
             obj.attrs = attrs
@@ -274,9 +273,9 @@ class Contingency2x2(ContingencyNxN):
         d = True Negatives
 
         """
-        a, b = self[0,0], self[0,1]
-        c, d = self[1,0], self[1,1]
-        return a,b,c,d
+        a, b = self[0, 0], self[0, 1]
+        c, d = self[1, 0], self[1, 1]
+        return a, b, c, d
 
     @classmethod
     def fromBoolean(cls, predicted, observed):
@@ -288,17 +287,17 @@ class Contingency2x2(ContingencyNxN):
         fToF = np.logical_and(pred, np.logical_and(pred, ~obse)).sum()
         fFoT = np.logical_and(~pred, np.logical_and(~pred, obse)).sum()
         fFoF = np.logical_and(~pred, np.logical_and(~pred, ~obse)).sum()
-        return cls([[fToT, fToF],[fFoT, fFoF]], attrs={'pred':pred, 'obs':obse})
+        return cls([[fToT, fToF], [fFoT, fFoF]], attrs={'pred': pred, 'obs': obse})
 
     def majorityClassFraction(self):
         """Proportion Correct (a.k.a. "accuracy" in machine learning) for
         majority classifier
-        
+
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         nmc = [0.0, 0.0]
         mc = self.sum(axis=0)
-        argorder = [nmc, mc] if a<d else [mc,nmc]
+        argorder = [nmc, mc] if a < d else [mc, nmc]
         dum = self.__class__(argorder)
         self.attrs['MajorityClassFraction'] = dum.PC()
         return self.attrs['MajorityClassFraction']
@@ -315,11 +314,11 @@ class Contingency2x2(ContingencyNxN):
         >>> ct.MatthewsCC()
         -0.333...
         """
-        TP,FP,FN,TN = self._abcd()
+        TP, FP, FN, TN = self._abcd()
         numer = np.float64((TP*TN) - (FP*FN))
         sum_ac, sum_ab = TP+FN, TP+FP
         sum_cd, sum_bd = FN+TN, FP+TN
-        if (sum_ac==0) or (sum_ab==0) or (sum_cd==0) or (sum_bd==0):
+        if (sum_ac == 0) or (sum_ab == 0) or (sum_cd == 0) or (sum_bd == 0):
             denom = np.float64(1.0)
         else:
             denom = np.sqrt(np.float64(sum_ac*sum_ab*sum_cd*sum_bd))
@@ -352,10 +351,10 @@ class Contingency2x2(ContingencyNxN):
         dum = self.MatthewsCC()
         dum = self.oddsRatio()
         dum = self.yuleQ()
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         if verbose:
             print('Contingency2x2([\n  ' +
-                  '[{:6g},{:6g}],\n  [{:6g},{:6g}])\n'.format(a,b,c,d))
+                  '[{:6g},{:6g}],\n  [{:6g},{:6g}])\n'.format(a, b, c, d))
             qual = ['MajorityClassFraction', 'MatthewsCC']
             stats = ['Bias', 'FAR', 'PC', 'POFD', 'POD', 'ThreatScore',
                      'OddsRatio']
@@ -425,7 +424,7 @@ class Contingency2x2(ContingencyNxN):
         bootval = np.empty(nsamp)
         if 'obs' in self.attrs and 'pred' in self.attrs:
             inds = np.random.randint(0, len(self.attrs['obs']),
-                                     size=(nsamp,len(self.attrs['obs'])))
+                                     size=(nsamp, len(self.attrs['obs'])))
             for outidx, draw in enumerate(inds):
                 tmppred = self.attrs['pred'][draw]
                 tmpobs = self.attrs['obs'][draw]
@@ -441,14 +440,14 @@ class Contingency2x2(ContingencyNxN):
                                  '(create with fromBoolean)')
         return ps
 
-    def _WaldCI(self, prob, n, mult=1.96):
+    def _WaldCI(self, prob, nSamp, mult=1.96):
         """ Wald confidence interval
 
         Parameters
         ==========
         prob : float
             Probability
-        n : float
+        nSamp : float
             number of samples
         mult : float
             Multiplier (default=1.96)
@@ -459,7 +458,7 @@ class Contingency2x2(ContingencyNxN):
             confidence interval
 
         """
-        stdErr = np.sqrt((prob*(1-prob))/n) #std. error of binomial
+        stdErr = np.sqrt((prob*(1-prob))/nSamp) #std. error of binomial
         ci95 = mult*stdErr
         return ci95
 
@@ -507,7 +506,7 @@ class Contingency2x2(ContingencyNxN):
             The probability of false detection of the contingency table data
             This is also added to the attrs attribute of the table object
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         n = b+d
         self.attrs['POFD'] = b/n
         if ci is not None:
@@ -518,7 +517,7 @@ class Contingency2x2(ContingencyNxN):
                 #
                 # method 2 - Agresti-Coull
                 (self.attrs['POFD'],
-                 self.attrs['POFDCI95']) = self._AgrestiCI(self.attrs['POFD'],n)
+                 self.attrs['POFDCI95']) = self._AgrestiCI(self.attrs['POFD'], n)
             elif citype == 'Wald':
                 #default method - Wald interval
                 self.attrs['POFDCI95'] = self._WaldCI(self.attrs['POFD'], n)
@@ -544,7 +543,7 @@ class Contingency2x2(ContingencyNxN):
             The hit rate of the contingency table data
             This is also added to the attrs attribute of the table object
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         n = a+c
         self.attrs['POD'] = a/n
         if ci is not None:
@@ -575,7 +574,7 @@ class Contingency2x2(ContingencyNxN):
             The false alarm ratio of the contingency table data
             This is also added to the attrs attribute of the table object
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         n = a+b
         self.attrs['FAR'] = b/n
         if ci:
@@ -607,14 +606,14 @@ class Contingency2x2(ContingencyNxN):
         thr : float
             The threat score of the contingency table data
             This is also added to the attrs attribute of the table object
-    
+
         Notes
         =====
         This is a ratio of verification, i.e., the proportion of correct
         forecasts after removing correct "no" forecasts (or 'true negatives').
 
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         self.attrs['ThreatScore'] = a/(a+b+c)
         if ci is not None and ci == 'bootstrap':
             self.attrs['ThreatScoreCI95'] = self._bootstrapCI(func='threat')
@@ -642,7 +641,7 @@ class Contingency2x2(ContingencyNxN):
         forecasts after removing correct "no" forecasts (or 'true negatives').
 
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         aref = (a+b)*(a+c)/self.sum()
         self.attrs['EquitableThreatScore'] = (a-aref)/(a-aref+b+c)
         if ci is not None and ci == 'bootstrap':
@@ -670,7 +669,7 @@ class Contingency2x2(ContingencyNxN):
         Notes
         ======
         This is a skill score based on the proportion of correct forecasts
-        referred to the proportion expected correct by chance. 
+        referred to the proportion expected correct by chance.
 
         """
         super(Contingency2x2, self).heidke()
@@ -699,9 +698,9 @@ class Contingency2x2(ContingencyNxN):
         if ci is not None:
             POFD = self.POFD()
             POD = self.POD()
-            a,b,c,d = self._abcd()
+            a, b, c, d = self._abcd()
             nFD = b+d
-            nD  = a+c
+            nD = a+c
             # default to Wald CI, as A-C can modify param
             citype = 'Wald' if ci is True else ci
             if ci == 'AC':
@@ -749,7 +748,7 @@ class Contingency2x2(ContingencyNxN):
              The odds ratio for the contingency table data
              This is also added to the attrs attribute of the table object
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         numer = a*d
         denom = b*c
         odds = numer/denom
@@ -791,11 +790,11 @@ class Contingency2x2(ContingencyNxN):
         events were forecast than observed (overforecast).
 
         """
-        a,b,c,d = self._abcd()
+        a, b, c, d = self._abcd()
         bias_num = a + b
         bias_den = a + c
         bias = bias_num/bias_den
-        
+
         self.attrs['Bias'] = bias
         if ci is not None and ci == 'bootstrap':
             self.attrs['BiasCI95'] = self._bootstrapCI(func='bias')
