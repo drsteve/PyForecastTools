@@ -7,7 +7,7 @@ metric calculations.
 
 With the exception of the ContingencyNxN and Contingency2x2 classes,
 the inputs for all metrics are assumed to be array-like and 1D. Bad
-values are assumed to be stored as NaN and these are excluded in 
+values are assumed to be stored as NaN and these are excluded in
 metric calculations.
 
 Author: Steve Morley
@@ -105,7 +105,7 @@ def percBetter(predict1, predict2, observed):
     countBetter = (np.abs(errA) < np.abs(errB)).sum()
     numCases = len(methA)
     fracBetter = countBetter/numCases
-    
+
     return 100*fracBetter
 
 
@@ -127,8 +127,8 @@ def bias(predicted, observed):
         Mean error of prediction
 
     """
-    pred =  _maskSeries(predicted)
-    obse =  _maskSeries(observed)
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
     
     return pred.mean()-obse.mean()
 
@@ -149,8 +149,8 @@ def meanPercentageError(predicted, observed):
         Mean percentage error of prediction
     
     """
-    pred =  _maskSeries(predicted)
-    obse =  _maskSeries(observed)
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
     pe = percError(pred, obse)
     mpe = pe.mean()
     return mpe
@@ -176,8 +176,8 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
         Median log accuracy of prediction
 
     """
-    pred =  _maskSeries(predicted)
-    obse =  _maskSeries(observed)
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
     la = logAccuracy(pred, obse, base=base)
     mla = mfunc(la)
 
@@ -198,15 +198,15 @@ def symmetricSignedBias(predicted, observed):
     bias : float
         symmetric signed bias, as a precentage
     """
-    pred =  _maskSeries(predicted)
-    obse =  _maskSeries(observed)
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
     mla = medianLogAccuracy(pred, obse, base='e')
     sign = np.sign(mla)
     biasmag = np.exp(np.abs(mla))-1
     # apply sign of mla to symmetric bias magnitude
     ssb = np.copysign(biasmag, mla)
     return 100*ssb
-   
+
 
 #======= Accuracy measures =======#
 
@@ -259,7 +259,7 @@ def meanSquaredError(data, climate=None):
     climate : array-like or float, optional
         Array-like (list, numpy array, etc.) or float of observed values of
         scalar quantity.  If climate is None (default) then the accuracy is
-        assessed relative to persistence. 
+        assessed relative to persistence.
 
     Returns
     =======
@@ -296,7 +296,7 @@ def RMSE(data, climate=None):
     climate : array-like or float, optional
         Array-like (list, numpy array, etc.) or float of observed values of
         scalar quantity. If climate is None (default) then the accuracy is
-        assessed relative to persistence. 
+        assessed relative to persistence.
 
     Returns
     =======
@@ -330,7 +330,7 @@ def meanAbsError(data, climate=None):
     climate : array-like or float, optional
         Array-like (list, numpy array, etc.) or float of observed values of
         scalar quantity.  If climate is None (default) then the accuracy is
-        assessed relative to persistence. 
+        assessed relative to persistence.
 
     Returns
     =======
@@ -347,7 +347,7 @@ def meanAbsError(data, climate=None):
     (scalar) or a provided climatology (observation vector).
 
     """
-    data =  _maskSeries(data)
+    data = _maskSeries(data)
     n_pts = len(data)
     adif = np.abs(_diff(data, climate=climate))
 
@@ -365,7 +365,7 @@ def medAbsError(data, climate=None):
     climate : array-like or float, optional
         Array-like (list, numpy array, etc.) or float of observed values of
         scalar quantity.  If climate is None (default) then the accuracy is
-        assessed relative to persistence. 
+        assessed relative to persistence.
 
     Returns
     =======
@@ -456,20 +456,20 @@ def nRMSE(predicted, observed):
     climatological mean (scalar). This definition is due to Yu and Ridley (2002)
 
     References:
-    Yu, Y., and A. J. Ridley (2008), Validation of the space weather modeling 
-    framework using ground-based magnetometers, Space Weather, 6, S05002, 
+    Yu, Y., and A. J. Ridley (2008), Validation of the space weather modeling
+    framework using ground-based magnetometers, Space Weather, 6, S05002,
     doi:10.1029/2007SW000345.
 
     """
-    pred =  _maskSeries(predicted)
-    obse =  _maskSeries(observed)
+    pred = _maskSeries(predicted)
+    obse = _maskSeries(observed)
     n_pts = len(pred)
     dif = _diff(pred, climate=obse)
 
     dif2 = dif**2.0
     sig_dif2 = dif2.sum()
 
-    if len(obse)==1:
+    if len(obse) == 1:
         obse = np.asanyarray(obse).repeat(n_pts)
 
     norm = np.sum(obse**2.0)
@@ -496,21 +496,21 @@ def scaledError(predicted, observed):
     Notes
     =====
     References:
-    R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
+    R.J. Hyndman and A.B. Koehler, Another look at measures of forecast
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
 
     See Also
     ========
     MASE
-   
+
     """
     pred = np.asanyarray(predicted).astype(float)
     obse = np.asanyarray(observed).astype(float)
 
     n_pts = len(pred.ravel())
 
-    if len(obse)==1:
-        obse= np.asanyarray(observed).repeat(n_pts)
+    if len(obse) == 1:
+        obse = np.asanyarray(observed).repeat(n_pts)
 
     dif = _diff(pred, obse)
     dsum = np.sum(np.abs(np.diff(obse)))
@@ -543,7 +543,7 @@ def MASE(predicted, observed):
     Notes
     =====
     References:
-    R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
+    R.J. Hyndman and A.B. Koehler, Another look at measures of forecast
     accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.
 
     """
@@ -663,8 +663,8 @@ def logAccuracy(predicted, observed, base=10, mask=True):
     Returns
     =======
     logacc : array or masked array
-        Array of absolute percentage errors 
-        
+        Array of absolute percentage errors
+
     Notes
     =====
     Using base 2 is computationally much faster, so unless the base is
@@ -682,7 +682,7 @@ def logAccuracy(predicted, observed, base=10, mask=True):
         pred = np.asanyarray(predicted)
         obse = np.asanyarray(observed)
     #check for positivity
-    if (pred<=0).any() or (obse<=0).any():
+    if (pred <= 0).any() or (obse <= 0).any():
         raise ValueError('logAccuracy: input data are required to be positive')
     logfuncs = {10: np.log10, 2: np.log2, 'e': np.log}
     if base not in logfuncs:
@@ -695,8 +695,8 @@ def logAccuracy(predicted, observed, base=10, mask=True):
     if mask:
         return logfuncs[base](pred/obse)
     else:
-        
         return logfuncs[base](pred/obse)
+
 
 def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
     """Scaled measure of accuracy that is not biased to over- or
@@ -758,12 +758,12 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
         absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
         symAcc = np.exp2(mfunc(absLogAcc))
         msa = 100*(symAcc-1)
-    elif method=='log':
+    elif method == 'log':
         ##median(log(Q)) method
         absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
         symAcc = mfunc(np.exp2(absLogAcc))
         msa = 100*(symAcc-1)
-    elif method=='UPE':
+    elif method == 'UPE':
         ##unsigned percentage error method
         PleO = pred >= obse
         OltP = np.logical_not(PleO)
@@ -792,7 +792,6 @@ def meanAPE(predicted, observed, mfunc=np.mean):
         reference value
     mfunc : function
         function to calculate mean (default=np.mean)
-        
 
     Returns
     =======
@@ -831,7 +830,7 @@ def medAbsDev(series, scale=False, median=False):
         median absolute deviation
     perc50 : float
         median of series, optional output
-    
+
     """
     series = _maskSeries(series)
     #get median absolute deviation of unmasked elements
@@ -865,7 +864,7 @@ def rSD(predicted):
 
     The median absolute deviation (medAbsDev) scaled by a factor of 1.4826
     recovers the standard deviation when applied to a normal distribution.
-    However, unlike the standard deviation the medAbsDev has a high breakdown 
+    However, unlike the standard deviation the medAbsDev has a high breakdown
     point and is therefore considered a robust estimator.
 
     """
@@ -945,8 +944,8 @@ def Sn(data, scale=True, correct=True):
     """
     # Define local utility functions
     def dropPoint(vec, i):
-        if i==0: return vec[1:]
-        elif i==len(vec): return vec[:-1]
+        if i == 0: return vec[1:]
+        elif i == len(vec): return vec[:-1]
         else:
             vec1 = vec.tolist()
             vec1[:i].extend(vec1[i+1:])
@@ -955,7 +954,7 @@ def Sn(data, scale=True, correct=True):
     def lowmed(vec):
         lenvec = len(vec)
         if len(vec)%2: #odd
-           ind = int(lenvec//2)
+            ind = int(lenvec//2)
         else:
             ind = int(lenvec/2.0)-1
         q = np.partition(vec, ind)
@@ -972,7 +971,7 @@ def Sn(data, scale=True, correct=True):
     series = _maskSeries(data)
     series.compressed().sort()
     n_pts = len(series)
-    seriesodd = True if (n_pts%2==1) else False
+    seriesodd = True if (n_pts%2 == 1) else False
     #odd number of points, so use true median (shouldn't make a difference...
     # but seems to)
     truemedian = seriesodd
@@ -997,7 +996,7 @@ def Sn(data, scale=True, correct=True):
     cn = 1.0
     cfac = [1.0, 0.743, 1.851, 0.954, 1.351, 0.993, 1.198, 1.005, 1.131]
     if correct:
-        if (n_pts <= 9):
+        if n_pts <= 9:
             cn = cfac[n_pts-1]
         elif seriesodd: #n odd, >= 11
             cn = n_pts/(n_pts - 0.9)
@@ -1064,18 +1063,18 @@ def _diff(data, climate=None):
         n_pts = len(fc)
 
     if climate is not None:
-        if clim.ndim ==0:
+        if clim.ndim == 0:
             clim = clim.tolist()
-        elif len(clim)==1:
+        elif len(clim) == 1:
             #climate is a scalar
             climate = climate[0]
         else:
             try:
-                assert clim.shape==fc.shape
+                assert clim.shape == fc.shape
             except:
                 AssertionError('If climate is not scalar, it must have the ' +
                                'same shape as data')
-               
+
         dif = fc - clim #climate - data
     else:
         dif = np.diff(fc)
