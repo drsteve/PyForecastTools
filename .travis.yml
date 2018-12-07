@@ -1,12 +1,24 @@
 language: python
-python:
- - "2.7"
- - "3.6"
+
+matrix:
+ include:
+  - python: 2.7
+    env: MPL_VERSION="<=2.2.3"
+  - python: 3.5
+    env: MPL_VERSION="<=2.2.3"
+  - python: 3.5
+    env: MPL_VERSION=""
+  - python: 3.6
+    env: MPL_VERSION="<=2.2.3"
+  - python: 3.6
+    env: MPL_VERSION=""
 
 install:
+ - pip install --upgrade pip
  - pip install --upgrade setuptools
  - pip install numpy
+ - pip install --force-reinstall "matplotlib${MPL_VERSION}"
 
 script:
- - sudo python setup.py install
+ - python setup.py install
  - python test_verify.py

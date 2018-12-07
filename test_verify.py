@@ -189,7 +189,7 @@ class perfectContinuous(unittest.TestCase):
 
     def test_percBetter(self):
         '''Percent Better of perfect prediction, relative to all-incorrect is 100'''
-        badmodel = verify._maskSeries(self.predvec) - 1 
+        badmodel = verify.metrics._maskSeries(self.predvec) - 1 
         self.assertEqual(verify.percBetter(self.predvec, badmodel, self.obsvec), 100)
 
     def test_logAccuracy(self):
