@@ -23,7 +23,7 @@ The module builds on the scientific Python stack (Python, Numpy, MatPlotLib)
 and uses the dmarray class from SpacePy's datamodel.
 
 SpacePy is available through the Python Package Index, MacPorts, and is under
-version control at [sourceforge.net/p/spacepy/](https://sourceforge.net/p/spacepy)
+version control at [github.com/spacepy/spacepy](https://github.com/spacepy/spacepy)
 If SpacePy is not available a reduced functionality implementation of the class
 is provided with this package.
 
