@@ -17,8 +17,9 @@ install:
  - pip install --upgrade pip
  - pip install --upgrade setuptools
  - pip install numpy
+ - pip install pytest
  - pip install --force-reinstall "matplotlib${MPL_VERSION}"
 
 script:
  - python setup.py install
- - python test_verify.py
+ - python -m pytest
