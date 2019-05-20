@@ -301,7 +301,8 @@ def rocCurve(predicted, observed, low=None, high=None, nthresh=100,
     return out
 
 def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
-                       modelName='', xyline=True, legend=False):
+                       modelName='', bins=None, xyline=True, legend=False,
+                       plotkwargs={}, histkwargs={}):
     """Reliability diagram for a probabilistic forecast model
 
     Parameters
@@ -310,6 +311,33 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         predicted data, continuous data (e.g. probability)
     observed : array-like
         observation vector of binary events (boolean or 0,1)
+
+    Other Parameters
+    ================
+    norm : boolean
+        Normalize input scores into [0,1] interval. Default False.
+    addTo : figure, axes, or None
+        The object on which plotting will happen. If **None** (default)
+        then a figure an axes will be created. If a matplotlib figure is
+        supplied a set of axes will be made, and if matplotlib axes are
+        given then the plot will be made on those axes.
+    modelName : string
+        Name for model to be supplied to legend. Default empty string.
+    bins : nonetype, int, sequence of scalars, or str
+        Provides bin information as required by numpy.histogram. An integer
+        sets the number of equally-sized bins used for the calibration function
+        and refinement distribution. A sequence of scalars will be used to 
+        define the bin edges, and a string must be a valid binning method per
+        numpy.histogram. The default is to use numpy's 'auto' method, limited
+        to a maximum of 100 bins.
+    xyline : boolean
+        Toggles the display of a line of y=x (perfect model). Default True.
+    legend : boolean
+        Toggles the display of a legend with the labels defined in 'modelName'
+    plotkwargs : dict
+        Dictionary of keyword arguments for the calibration function
+    histkwargs : dict
+        Dictionary of keyword arguments for the refinement distribution
 
     Returns
     =======
@@ -368,11 +396,16 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         rmin = pred.min()
         rmax = pred.max()
 
-    bin_edges = numpy.histogram_bin_edges(pred, bins='auto', range=(rmin, rmax))
+    if bins is None:
+        bins='auto'
+        limit = True
+    else:
+        limit = False # if user supplied bins, dispense with the limit...
+    bin_edges = numpy.histogram_bin_edges(pred, bins=bins, range=(rmin, rmax))
     nbins = len(bin_edges)-1
-    if nbins > 100: #too busy for plot
-        bin_edges = numpy.histogram_bin_edges(pred, bins=100, range=(rmin, rmax))
-        nbins = len(bin_edges)-1
+    if (limit) and (nbins > 100): #too busy for plot
+        bins = numpy.histogram_bin_edges(pred, bins=100, range=(rmin, rmax))
+        nbins = len(bins)-1
 
     pred_binMean = numpy.zeros(nbins)
     obse_binProb = numpy.zeros(nbins)
@@ -389,6 +422,7 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         # Store mean predicted prob and mean empirical probability
         pred_binMean[idx-1] = pred[inds == idx].mean()
         obse_binProb[idx-1] = obse[inds == idx].mean()
+    print(obse_binProb)
 
     if addTo is None:
         fig = plt.figure(0, figsize=(8, 8))
@@ -414,14 +448,19 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     if 'y=x' not in labels or xyline is True:
         ax_rel.plot([0.0, 1.0], [0.0, 1.0], 'k--', label='y=x')
     valid = ~numpy.isnan(obse_binProb)
-    ax_rel.plot(pred_binMean[valid], obse_binProb[valid], label=modelName)
+    if 'label' not in plotkwargs:
+        plotkwargs['label'] = modelName
+    ax_rel.plot(pred_binMean[valid], obse_binProb[valid], **plotkwargs)
     ax_rel.set_ylabel('Empirical probability')
     ax_rel.xaxis.set_major_formatter(plt.NullFormatter())
     if legend:
         ax_rel.legend(loc=0)
 
-    ax_hist.hist(pred, range=(rmin, rmax), bins=bin_edges, histtype='step',
-                 lw=2, normed=True)
+    histkwargs['bins'] = bins
+    if 'histtype' not in histkwargs: histkwargs['histtype'] = 'step'
+    if 'lw' not in histkwargs: histkwargs['lw'] = 2
+    if 'normed' not in histkwargs: histkwargs['normed'] = True
+    ax_hist.hist(pred, range=(rmin, rmax), **histkwargs)
     ax_hist.set_xlabel('Predicted Probability')
     ax_hist.set_ylabel('Density')
 
