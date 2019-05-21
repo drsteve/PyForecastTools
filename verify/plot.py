@@ -422,7 +422,6 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         # Store mean predicted prob and mean empirical probability
         pred_binMean[idx-1] = pred[inds == idx].mean()
         obse_binProb[idx-1] = obse[inds == idx].mean()
-    print(obse_binProb)
 
     if addTo is None:
         fig = plt.figure(0, figsize=(8, 8))
