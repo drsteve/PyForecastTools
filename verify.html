@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>PyForecastTools - Model Validation and Forecast Verification &#8212; PyForecastTools 1.0 documentation</title>
+    <title>Verify - Package contents &#8212; PyForecastTools 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,7 +14,6 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="PyForecastTools documentation" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -31,91 +30,37 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="pyforecasttools-model-validation-and-forecast-verification">
-<h1>PyForecastTools - Model Validation and Forecast Verification<a class="headerlink" href="#pyforecasttools-model-validation-and-forecast-verification" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="verify-core-metrics-and-classes">
-<h2>Verify - Core metrics and classes<a class="headerlink" href="#verify-core-metrics-and-classes" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="verify-package-contents">
+<h1>Verify - Package contents<a class="headerlink" href="#verify-package-contents" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p><a class="reference internal" href="#metrics">Metrics</a></p></li>
-<li><p><a class="reference internal" href="#contingency-tables">Contingency Tables</a></p></li>
+<li><p><a class="reference internal" href="#modules">Modules</a></p></li>
 </ul>
-<div class="section" id="metrics">
-<h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h3>
-<p class="rubric">Functions</p>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p class="rubric">Contents</p>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skill</span></code>(A_data, A_ref[, A_perf])</p></td>
-<td><p>Generic forecast skill score for quantifying forecast improvement</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="metrics.html#module-verify.metrics" title="verify.metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">metrics</span></code></a></p></td>
+<td><p>Module containing verification and performance metrics</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">percBetter</span></code>(predict1, predict2, observed)</p></td>
-<td><p>The percentage of cases when method A was closer to actual than method B</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="categorical.html#module-verify.categorical" title="verify.categorical"><code class="xref py py-obj docutils literal notranslate"><span class="pre">categorical</span></code></a></p></td>
+<td><p>Module containing contingency table classes and related metrics</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bias</span></code>(predicted, observed)</p></td>
-<td><p>Scale-dependent bias as measured by the mean error</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot.html#module-verify.plot" title="verify.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a></p></td>
+<td><p>Sub-module to provide simple plotting for exploratory data analysis</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanPercentageError</span></code>(predicted, observed)</p></td>
-<td><p>Order-dependent bias as measured by the mean percentage error</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">medianLogAccuracy</span></code>(predicted, observed[, …])</p></td>
-<td><p>Order-dependent bias as measured by the median of the log accuracy ratio</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">symmetricSignedBias</span></code>(predicted, observed)</p></td>
-<td><p>Symmetric signed bias, expressed as a percentage</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">accuracy</span></code>(data[, climate])</p></td>
-<td><p>Convenience function to calculate a selection of unscaled accuracy measures</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">medSymAccuracy</span></code>(predicted, observed[, mfunc, …])</p></td>
-<td><p>Scaled measure of accuracy that is not biased to over- or under-predictions.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanSquaredError</span></code>(data[, climate])</p></td>
-<td><p>Mean squared error of a data set relative to a reference value</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSE</span></code>(data[, climate])</p></td>
-<td><p>Calcualte the root mean squared error of a data set relative to a reference value</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAPE</span></code>(predicted, observed[, mfunc])</p></td>
-<td><p>mean absolute percentage error</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAbsError</span></code>(data[, climate])</p></td>
-<td><p>mean absolute error of a data set relative to some reference value</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">medAbsError</span></code>(data[, climate])</p></td>
-<td><p>median absolute error of a data set relative to some reference value</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaledAccuracy</span></code>(predicted, observed)</p></td>
-<td><p>Calculate scaled and relative accuracy measures</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">nRMSE</span></code>(predicted, observed)</p></td>
-<td><p>normalized root mean squared error of a data set relative to a reference value</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="contingency-tables">
-<h3>Contingency Tables<a class="headerlink" href="#contingency-tables" title="Permalink to this headline">¶</a></h3>
-<p class="rubric">Classes</p>
-<table class="longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContingencyNxN</span></code></p></td>
-<td><p>Class to work with NxN contingency tables for forecast verification</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Contingency2x2</span></code></p></td>
-<td><p>Class to work with 2x2 contingency tables for forecast verification</p></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">datamodel</span></code></p></td>
+<td><p>Modified numpy array based on SpacePy’s datamodel</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="module-verify">
-<span id="function-class-documentation"></span><h3>Function/Class Documentation<a class="headerlink" href="#module-verify" title="Permalink to this headline">¶</a></h3>
+<span id="function-class-documentation"></span><h2>Function/Class Documentation<a class="headerlink" href="#module-verify" title="Permalink to this headline">¶</a></h2>
 <p>Module containing verification and performance metrics</p>
 <p>With the exception of the ContingencyNxN and Contingency2x2 classes,
 the inputs for all metrics are assumed to be array-like and 1D. Bad
@@ -123,7 +68,7 @@ values are assumed to be stored as NaN and these are excluded in
 metric calculations.</p>
 <p>With the exception of the ContingencyNxN and Contingency2x2 classes,
 the inputs for all metrics are assumed to be array-like and 1D. Bad
-values are assumed to be stored as NaN and these are excluded in 
+values are assumed to be stored as NaN and these are excluded in
 metric calculations.</p>
 <p>Author: Steve Morley
 Institution: Los Alamos National Laboratory
@@ -131,7 +76,6 @@ Contact: <a class="reference external" href="mailto:smorley&#37;&#52;&#48;lanl&#
 Los Alamos National Laboratory</p>
 <p>Copyright (c) 2017, Los Alamos National Security, LLC
 All rights reserved.</p>
-</div>
 </div>
 </div>
 
@@ -149,21 +93,26 @@ All rights reserved.</p>
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=drsteve&repo=PyForecastTools&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
 
 
 <h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">PyForecastTools - Model Validation and Forecast Verification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#verify-core-metrics-and-classes">Verify - Core metrics and classes</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics - Core metrics and classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Contingency Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot.html">Plot - Visual Analysis Tools</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">PyForecastTools documentation</a></li>
   </ul></li>
 </ul>
 </div>

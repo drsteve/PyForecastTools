@@ -1,49 +1,21 @@
-############################################################
-PyForecastTools - Model Validation and Forecast Verification
-############################################################
-
-Verify - Core metrics and classes
-=================================
+Verify - Package contents
+=========================
 
 .. currentmodule:: verify
 
-- `Metrics`_
-- `Contingency Tables`_
+- `Modules`_
 
-Metrics
+Modules
 -------
-.. rubric:: Functions
+.. rubric:: Contents
 
 .. autosummary::
     :toctree: autosummary
 
-    skill
-    percBetter
-    bias
-    meanPercentageError
-    medianLogAccuracy
-    symmetricSignedBias
-    accuracy
-    medSymAccuracy
-    meanSquaredError
-    RMSE
-    meanAPE
-    meanAbsError
-    medAbsError
-    scaledAccuracy
-    nRMSE
-
-
-Contingency Tables
-------------------
-.. rubric:: Classes
-
-.. autosummary::
-    :template: clean_class.rst
-    :toctree: autosummary
-
-    ContingencyNxN
-    Contingency2x2
+    metrics
+    categorical
+    plot
+    datamodel
 
 Function/Class Documentation
 ----------------------------

@@ -1,0 +1,17 @@
+Contingency Tables
+==================
+.. currentmodule:: verify
+
+.. rubric:: Classes
+
+.. autosummary::
+    :template: clean_class.rst
+    :toctree: autosummary
+
+    ContingencyNxN
+    Contingency2x2
+
+Function/Class Documentation
+----------------------------
+.. automodule:: contingency
+   :members:

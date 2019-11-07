@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>PyForecastTools documentation &#8212; PyForecastTools 1.0 documentation</title>
+    <title>PyForecastTools documentation &#8212; PyForecastTools 1.0.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -14,7 +14,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PyForecastTools - Model Validation and Forecast Verification" href="verify.html" />
+    <link rel="next" title="Metrics - Core metrics and classes" href="metrics.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -33,13 +33,64 @@
             
   <div class="section" id="pyforecasttools-documentation">
 <h1>PyForecastTools documentation<a class="headerlink" href="#pyforecasttools-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
+<p>A Python module to provide model validation and forecast verification tools,
+including a set of convenient plot functions. A selection of capabilites
+provided by PyForecastTools includes:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Accuracy and bias metrics for continuous predictands</dt><dd><ul>
+<li><p>Unscaled/absolute measures</p></li>
+<li><p>Relative measures</p></li>
+<li><p>Scaled measures</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>2x2 and NxN contingency table classes</dt><dd><ul>
+<li><p>Wide range of contingency table metrics and scores</p></li>
+<li><p>Multiple methods of calculating confidence intervals on scores</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Convenient plotting for visually comparing models and data</dt><dd><ul>
+<li><p>Quantile-Quantile plots</p></li>
+<li><p>Taylor diagrams</p></li>
+<li><p>ROC curves</p></li>
+<li><p>Reliability diagrams</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>The module builds on the scientific Python stack (Python, Numpy, MatPlotLib)
+and uses the dmarray class from SpacePy’s datamodel.</p>
+<p>SpacePy is available through the Python Package Index, MacPorts, and is under
+version control at [github.com/spacepy/spacepy](<a class="reference external" href="https://github.com/spacepy/spacepy">https://github.com/spacepy/spacepy</a>)
+If SpacePy is not available a reduced functionality implementation of the class
+is provided with this package.</p>
+<p>PyForecastTools is available through the Python Package Index and can be installed
+simply with</p>
+<p>&gt; pip install PyForecastTools –user</p>
+<p>To install (local user), run</p>
+<p>&gt; python setup.py install –user</p>
+<p>After installation, the module can then be imported (within a Python script or
+interpreter) by</p>
+<p>&gt; import verify</p>
+<p>For help, please see the docstrings for each function and/or class.</p>
+<p>..module::verify</p>
+</div>
+<div class="section" id="contents">
+<h1>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="verify.html">PyForecastTools - Model Validation and Forecast Verification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="verify.html#verify-core-metrics-and-classes">Verify - Core metrics and classes</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics - Core metrics and classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Contingency Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot.html">Plot - Visual Analysis Tools</a></li>
 </ul>
 </div>
 <div class="section" id="indices-and-tables">
@@ -66,18 +117,27 @@
 
 
 
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=drsteve&repo=PyForecastTools&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
 
 
 <h3>Navigation</h3>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="verify.html">PyForecastTools - Model Validation and Forecast Verification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics - Core metrics and classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Contingency Tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot.html">Plot - Visual Analysis Tools</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="verify.html" title="next chapter">PyForecastTools - Model Validation and Forecast Verification</a></li>
+      <li>Next: <a href="metrics.html" title="next chapter">Metrics - Core metrics and classes</a></li>
   </ul></li>
 </ul>
 </div>

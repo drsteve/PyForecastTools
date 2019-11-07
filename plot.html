@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Plot - Visual Analysis Tools &#8212; PyForecastTools 1.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Contingency Tables" href="categorical.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="plot-visual-analysis-tools">
+<h1>Plot - Visual Analysis Tools<a class="headerlink" href="#plot-visual-analysis-tools" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-verify.plot">
+<span id="function-class-documentation"></span><h2>Function/Class Documentation<a class="headerlink" href="#module-verify.plot" title="Permalink to this headline">¶</a></h2>
+<p>Sub-module to provide simple plotting for exploratory data analysis</p>
+<dl class="function">
+<dt id="verify.plot.qqPlot">
+<code class="sig-prename descclassname">verify.plot.</code><code class="sig-name descname">qqPlot</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">xyline=True</em>, <em class="sig-param">addTo=None</em>, <em class="sig-param">modelName=''</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">plot_kwargs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.plot.qqPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quantile-quantile plot for predictions and observations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data (model output)</p></li>
+<li><p><strong>observed</strong> (<em>array-like</em>) – observation vector reference value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>xyline</strong> (<em>boolean</em>) – Toggles the display of a line of y=x (perfect model). Default True.</p></li>
+<li><p><strong>addTo</strong> (<em>figure, axes, or None</em>) – The object on which plotting will happen. If <strong>None</strong> (default)
+then a figure an axes will be created. If a matplotlib figure is
+supplied a set of axes will be made, and if matplotlib axes are
+given then the plot will be made on those axes.</p></li>
+<li><p><strong>modelName</strong> – Name of model for legend.</p></li>
+<li><p><strong>plot_kwargs</strong> (<em>dict</em>) – Dictionary containing plot keyword arguments to pass to matplotlib’s
+scatter function.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>out_dict</strong> – A dictionary containing the Figure and the Axes</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">verify.plot</span> <span class="k">import</span> <span class="n">qqPlot</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">46</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">101</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model2</span> <span class="o">=</span> <span class="n">model1</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="o">/</span><span class="mi">70</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="n">model1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">31</span><span class="p">]]</span> <span class="o">=</span> <span class="n">obs</span><span class="p">[[</span><span class="mi">31</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">*=</span> <span class="mf">0.25</span> <span class="o">+</span> <span class="p">(</span><span class="mi">5</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="o">/</span><span class="mf">30.</span><span class="p">))</span><span class="o">/</span><span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">observed</span> <span class="o">=</span> <span class="n">obs</span><span class="p">[:</span><span class="mi">71</span><span class="p">]</span> <span class="c1">#QQ plots don&#39;t require even sample lengths</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_settings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;marker&#39;</span><span class="p">:</span> <span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">71</span><span class="p">),</span> <span class="s1">&#39;cmap&#39;</span><span class="p">:</span><span class="s1">&#39;cool&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out1</span> <span class="o">=</span> <span class="n">qqPlot</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">observed</span><span class="p">,</span> <span class="n">modelName</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="n">plot_kwargs</span><span class="o">=</span><span class="n">plot_settings</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot_settings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;marker&#39;</span><span class="p">:</span> <span class="s1">&#39;o&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">out2</span> <span class="o">=</span> <span class="n">qqPlot</span><span class="p">(</span><span class="n">model2</span><span class="p">,</span> <span class="n">observed</span><span class="p">,</span> <span class="n">modelName</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>              <span class="n">plot_kwargs</span><span class="o">=</span><span class="n">plot_settings</span><span class="p">,</span> <span class="n">addTo</span><span class="o">=</span><span class="n">out1</span><span class="p">[</span><span class="s1">&#39;Axes&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>The q-q plot is formed by:
+- Vertical axis: Estimated quantiles from observed data
+- Horizontal axis: Estimated quantiles from predicted data</p>
+<p>Both axes are in units of their respective data sets. That is, the actual
+quantile level is not plotted. For a given point on the q-q plot, we know
+that the quantile level is the same for both points, but not what that
+quantile level actually is.</p>
+<p>For equal length samples, the q-q plot displays sorted(sample1) against
+sorted(sample2). If the samples are not of equal length, the quantiles
+for the smaller sample are calculated and data from the larger sample are
+interpolated to those quantiles. See, e.g., NIST’s Engineering Statistics
+Handbook.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="verify.plot.reliabilityDiagram">
+<code class="sig-prename descclassname">verify.plot.</code><code class="sig-name descname">reliabilityDiagram</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">norm=False</em>, <em class="sig-param">addTo=None</em>, <em class="sig-param">modelName=''</em>, <em class="sig-param">bins=None</em>, <em class="sig-param">xyline=True</em>, <em class="sig-param">legend=False</em>, <em class="sig-param">plotkwargs={}</em>, <em class="sig-param">histkwargs={}</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.plot.reliabilityDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reliability diagram for a probabilistic forecast model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data, continuous data (e.g. probability)</p></li>
+<li><p><strong>observed</strong> (<em>array-like</em>) – observation vector of binary events (boolean or 0,1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>norm</strong> (<em>boolean</em>) – Normalize input scores into [0,1] interval. Default False.</p></li>
+<li><p><strong>addTo</strong> (<em>figure, axes, or None</em>) – The object on which plotting will happen. If <strong>None</strong> (default)
+then a figure an axes will be created. If a matplotlib figure is
+supplied a set of axes will be made, and if matplotlib axes are
+given then the plot will be made on those axes.</p></li>
+<li><p><strong>modelName</strong> (<em>string</em>) – Name for model to be supplied to legend. Default empty string.</p></li>
+<li><p><strong>bins</strong> (<em>nonetype, int, sequence of scalars, or str</em>) – Provides bin information as required by numpy.histogram. An integer
+sets the number of equally-sized bins used for the calibration function
+and refinement distribution. A sequence of scalars will be used to
+define the bin edges, and a string must be a valid binning method per
+numpy.histogram. The default is to use numpy’s ‘auto’ method, limited
+to a maximum of 100 bins.</p></li>
+<li><p><strong>xyline</strong> (<em>boolean</em>) – Toggles the display of a line of y=x (perfect model). Default True.</p></li>
+<li><p><strong>legend</strong> (<em>boolean</em>) – Toggles the display of a legend with the labels defined in ‘modelName’</p></li>
+<li><p><strong>plotkwargs</strong> (<em>dict</em>) – Dictionary of keyword arguments for the calibration function</p></li>
+<li><p><strong>histkwargs</strong> (<em>dict</em>) – Dictionary of keyword arguments for the refinement distribution</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>out_dict</strong> – A dictionary containing the Figure, Axes, …</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">svm</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">linear_model</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">verify.plot</span> <span class="k">import</span> <span class="n">reliabilityDiagram</span><span class="p">,</span> <span class="n">setTarget</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifiers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Logistic regression&#39;</span><span class="p">:</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(),</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="s1">&#39;SVC&#39;</span><span class="p">:</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                              <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                              <span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">)}</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">n_informative</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_repeated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">n_clusters_per_class</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">flip_y</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_samples</span> <span class="o">=</span> <span class="mi">100</span>  <span class="c1"># Samples used for training the models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">train_samples</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">train_samples</span><span class="p">:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">train_samples</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">train_samples</span><span class="p">:]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">setTarget</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">classifiers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reliabilityDiagram</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                     <span class="n">modelName</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">addTo</span><span class="o">=</span><span class="n">fig</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>Reliability diagrams show whether the predictions from a probabilistic
+binary classifier are well calibrated.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="verify.plot.rocCurve">
+<code class="sig-prename descclassname">verify.plot.</code><code class="sig-name descname">rocCurve</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">low=None</em>, <em class="sig-param">high=None</em>, <em class="sig-param">nthresh=100</em>, <em class="sig-param">addTo=None</em>, <em class="sig-param">xyline=True</em>, <em class="sig-param">modelName=''</em>, <em class="sig-param">legend=False</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.plot.rocCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Receiver Operating Characteristic curve for assessing model skill</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data, continuous data (e.g. probability)</p></li>
+<li><p><strong>observed</strong> (<em>array-like</em>) – observation vector of binary events (boolean or 0,1)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>low</strong> (<em>float or None</em>) – Set the lowest threshold to use.</p></li>
+<li><p><strong>high</strong> (<em>float or None</em>) – Set the highest threshold to use</p></li>
+<li><p><strong>xyline</strong> (<em>boolean</em>) – Toggles the display of a line of y=x (perfect model). Default True.</p></li>
+<li><p><strong>addTo</strong> (<em>figure, axes, or None</em>) – The object on which plotting will happen. If <strong>None</strong> (default)
+then a figure an axes will be created. If a matplotlib figure is
+supplied a set of axes will be made, and if matplotlib axes are
+given then the plot will be made on those axes.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>out_dict</strong> – A dictionary containing the Figure, Axes, POD, POFD, and Thresholds</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">svm</span><span class="p">,</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">linear_model</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">verify.plot</span> <span class="k">import</span> <span class="n">rocCurve</span><span class="p">,</span> <span class="n">setTarget</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">classifiers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Logistic regression&#39;</span><span class="p">:</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LogisticRegression</span><span class="p">(),</span>
+<span class="gp">&gt;&gt;&gt; </span>               <span class="s1">&#39;SVC&#39;</span><span class="p">:</span> <span class="n">svm</span><span class="o">.</span><span class="n">SVC</span><span class="p">(</span><span class="n">kernel</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                              <span class="n">decision_function_shape</span><span class="o">=</span><span class="s1">&#39;ovr&#39;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                              <span class="n">probability</span><span class="o">=</span><span class="kc">True</span><span class="p">)}</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">n_informative</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">n_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_repeated</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">n_clusters_per_class</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span>                                    <span class="n">flip_y</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Nsample_train</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:</span><span class="n">Nsample_train</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_test</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="n">Nsample_train</span><span class="p">:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_train</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="n">Nsample_train</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y_test</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">Nsample_train</span><span class="p">:]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">setTarget</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">classifiers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rocCurve</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">modelName</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">addTo</span><span class="o">=</span><span class="n">ax</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;Axes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="verify.plot.setTarget">
+<code class="sig-prename descclassname">verify.plot.</code><code class="sig-name descname">setTarget</code><span class="sig-paren">(</span><em class="sig-param">target</em>, <em class="sig-param">figsize=None</em>, <em class="sig-param">loc=111</em>, <em class="sig-param">polar=False</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.plot.setTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a <em>target</em> on which to plot a figure, determine if that <em>target</em>
+is <strong>None</strong> or a matplotlib figure or axes object.  Based on the type
+of <em>target</em>, a figure and/or axes will be either located or generated.
+Both the figure and axes objects are returned to the caller for further
+manipulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>target</strong> (<em>object</em>) – The object on which plotting will happen.</p>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>figsize</strong> (<em>tuple</em>) – A two-item tuple/list giving the dimensions of the figure, in inches.
+Defaults to Matplotlib defaults.</p></li>
+<li><p><strong>loc</strong> (<em>integer</em>) – The subplot triple that specifies the location of the axes object.
+Defaults to 111.</p></li>
+<li><p><strong>polar</strong> (<em>bool</em>) – Set the axes object to polar coodinates.  Defaults to <strong>False</strong>.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>fig</strong> (<em>object</em>) – A matplotlib figure object on which to plot.</p></li>
+<li><p><strong>ax</strong> (<em>object</em>) – A matplotlib subplot object on which to plot.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">verify.plot</span> <span class="k">import</span> <span class="n">setTarget</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">setTarget</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="mi">211</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>Implementation from SpacePy’s plot module.
+SpacePy is available at <a class="reference external" href="https://github.com/spacepy/spacepy">https://github.com/spacepy/spacepy</a>
+under a Python Software Foudnation license.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="verify.plot.taylorDiagram">
+<code class="sig-prename descclassname">verify.plot.</code><code class="sig-name descname">taylorDiagram</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">norm=False</em>, <em class="sig-param">addTo=None</em>, <em class="sig-param">modelName=''</em>, <em class="sig-param">isoSTD=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.plot.taylorDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Taylor diagrams for comparing model performance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data</p></li>
+<li><p><strong>observed</strong> (<em>array-like</em>) – observation vector</p></li>
+</ul>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>norm</strong> (<em>boolean or float</em>) – Selects whether the values should be normalized (default is False).
+If a value is given this will be used to normalize the inputs.</p></li>
+<li><p><strong>xyline</strong> (<em>boolean</em>) – Toggles the display of a line of y=x (perfect model). Default True.</p></li>
+<li><p><strong>addTo</strong> (<em>axes, or None</em>) – The object on which plotting will happen. If <strong>None</strong> (default)
+then a figure and axes will be created. If matplotlib axes are
+given then the plot will be made on those axes, assuming that the
+point is being added to a previously generated Taylor diagram.</p></li>
+<li><p><strong>modelName</strong> (<em>string</em>) – Name of model to label the point on the Taylor diagram with.</p></li>
+<li><p><strong>isoSTD</strong> (<em>boolean</em>) – Toggle for isocontours of standard deviation. Default is True, but
+turning them off can reduce visual clutter or prevent intereference
+with custom plot styles that alter background grid behavior.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>out_dict</strong> – A dictionary containing the Figure, the Axes, and ‘Norm’ (the value
+used to normalize the inputs/outputs).</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">verify.plot</span> <span class="k">import</span> <span class="n">taylorDiagram</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">101</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model2</span> <span class="o">=</span> <span class="n">model1</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="o">/</span><span class="mi">70</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">=</span> <span class="n">model1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span><span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">31</span><span class="p">]]</span> <span class="o">=</span> <span class="n">obs</span><span class="p">[[</span><span class="mi">31</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span> <span class="o">*=</span> <span class="mf">0.25</span> <span class="o">+</span> <span class="p">(</span><span class="mi">5</span><span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="o">/</span><span class="mf">30.</span><span class="p">))</span><span class="o">/</span><span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result1</span> <span class="o">=</span> <span class="n">taylorDiagram</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">modelName</span><span class="o">=</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result2</span> <span class="o">=</span> <span class="n">taylorDiagram</span><span class="p">(</span><span class="n">model2</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">result1</span><span class="p">[</span><span class="s1">&#39;Norm&#39;</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>                        <span class="n">modelName</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="n">addTo</span><span class="o">=</span><span class="n">result1</span><span class="p">[</span><span class="s1">&#39;Axes&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="rubric">Notes</p>
+<p>Based on ‘’Summarizing multiple aspects of model performance in a single
+diagram’ by K.E. Taylor (Radio Science, 2001; doi: 10.1029/2000JD900719)
+and ‘Taylor Diagram Primer’ by Taylor (document at
+<a class="reference external" href="https://pcmdi.llnl.gov/staff/taylor/CV/Taylor_diagram_primer.pdf">https://pcmdi.llnl.gov/staff/taylor/CV/Taylor_diagram_primer.pdf</a>)
+With some implementation aspects inspired by the public domain code of
+github user ycopin at <a class="reference external" href="https://gist.github.com/ycopin/3342888">https://gist.github.com/ycopin/3342888</a></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">PyForecastTools</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=drsteve&repo=PyForecastTools&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics - Core metrics and classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="categorical.html">Contingency Tables</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Plot - Visual Analysis Tools</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="categorical.html" title="previous chapter">Contingency Tables</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Los Alamos National Security, LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/plot.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
