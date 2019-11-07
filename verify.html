@@ -1,40 +1,34 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>PyForecastTools - Model Validation and Forecast Verification &mdash; PyForecastTools 1.0 documentation</title>
-    
+    <meta charset="utf-8" />
+    <title>PyForecastTools - Model Validation and Forecast Verification &#8212; PyForecastTools 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="PyForecastTools 1.0 documentation" href="index.html" />
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="PyForecastTools documentation" href="index.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
-  </head>
-  <body role="document">  
+  </head><body>
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="pyforecasttools-model-validation-and-forecast-verification">
@@ -42,62 +36,62 @@
 <div class="section" id="verify-core-metrics-and-classes">
 <h2>Verify - Core metrics and classes<a class="headerlink" href="#verify-core-metrics-and-classes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference internal" href="#metrics">Metrics</a></li>
-<li><a class="reference internal" href="#contingency-tables">Contingency Tables</a></li>
+<li><p><a class="reference internal" href="#metrics">Metrics</a></p></li>
+<li><p><a class="reference internal" href="#contingency-tables">Contingency Tables</a></p></li>
 </ul>
 <div class="section" id="metrics">
 <h3>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h3>
 <p class="rubric">Functions</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#verify.skill" title="verify.skill"><code class="xref py py-obj docutils literal"><span class="pre">skill</span></code></a>(A_data,&nbsp;A_ref[,&nbsp;A_perf])</td>
-<td>Generic forecast skill score formulation for quantification of forecast improvement</td>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">skill</span></code>(A_data, A_ref[, A_perf])</p></td>
+<td><p>Generic forecast skill score for quantifying forecast improvement</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.percBetter" title="verify.percBetter"><code class="xref py py-obj docutils literal"><span class="pre">percBetter</span></code></a>(predict1,&nbsp;predict2,&nbsp;observed)</td>
-<td>The percentage of cases when method A was closer to actual than method B</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">percBetter</span></code>(predict1, predict2, observed)</p></td>
+<td><p>The percentage of cases when method A was closer to actual than method B</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#verify.bias" title="verify.bias"><code class="xref py py-obj docutils literal"><span class="pre">bias</span></code></a>(predicted,&nbsp;observed)</td>
-<td>Scale-dependent bias as measured by the mean error</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bias</span></code>(predicted, observed)</p></td>
+<td><p>Scale-dependent bias as measured by the mean error</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.meanPercentageError" title="verify.meanPercentageError"><code class="xref py py-obj docutils literal"><span class="pre">meanPercentageError</span></code></a>(predicted,&nbsp;observed)</td>
-<td>Order-dependent bias as measured by the mean percentage error</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanPercentageError</span></code>(predicted, observed)</p></td>
+<td><p>Order-dependent bias as measured by the mean percentage error</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#verify.medianLogAccuracy" title="verify.medianLogAccuracy"><code class="xref py py-obj docutils literal"><span class="pre">medianLogAccuracy</span></code></a>(predicted,&nbsp;observed[,&nbsp;...])</td>
-<td>Order-dependent bias as measured by the median of the log accuracy ratio</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">medianLogAccuracy</span></code>(predicted, observed[, …])</p></td>
+<td><p>Order-dependent bias as measured by the median of the log accuracy ratio</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.symmetricSignedBias" title="verify.symmetricSignedBias"><code class="xref py py-obj docutils literal"><span class="pre">symmetricSignedBias</span></code></a>(predicted,&nbsp;observed)</td>
-<td>Symmetric signed bias, expressed as a percentage</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">symmetricSignedBias</span></code>(predicted, observed)</p></td>
+<td><p>Symmetric signed bias, expressed as a percentage</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#verify.accuracy" title="verify.accuracy"><code class="xref py py-obj docutils literal"><span class="pre">accuracy</span></code></a>(data[,&nbsp;climate])</td>
-<td>Convenience function to calculate a selection of unscaled accuracy measures</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">accuracy</span></code>(data[, climate])</p></td>
+<td><p>Convenience function to calculate a selection of unscaled accuracy measures</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.medSymAccuracy" title="verify.medSymAccuracy"><code class="xref py py-obj docutils literal"><span class="pre">medSymAccuracy</span></code></a>(predicted,&nbsp;observed[,&nbsp;mfunc,&nbsp;...])</td>
-<td>Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">medSymAccuracy</span></code>(predicted, observed[, mfunc, …])</p></td>
+<td><p>Scaled measure of accuracy that is not biased to over- or under-predictions.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#verify.meanSquaredError" title="verify.meanSquaredError"><code class="xref py py-obj docutils literal"><span class="pre">meanSquaredError</span></code></a>(data[,&nbsp;climate])</td>
-<td>Calculate the mean squared error of a data set relative to some reference value</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanSquaredError</span></code>(data[, climate])</p></td>
+<td><p>Mean squared error of a data set relative to a reference value</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.RMSE" title="verify.RMSE"><code class="xref py py-obj docutils literal"><span class="pre">RMSE</span></code></a>(data[,&nbsp;climate])</td>
-<td>Calculate the root mean squared error of a data set relative to some reference value</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSE</span></code>(data[, climate])</p></td>
+<td><p>Calcualte the root mean squared error of a data set relative to a reference value</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">meanAPE</span></code>(predicted,&nbsp;observed[,&nbsp;mfunc])</td>
-<td></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAPE</span></code>(predicted, observed[, mfunc])</p></td>
+<td><p>mean absolute percentage error</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.meanAbsError" title="verify.meanAbsError"><code class="xref py py-obj docutils literal"><span class="pre">meanAbsError</span></code></a>(data[,&nbsp;climate])</td>
-<td>Calculate the mean absolute error of a data set relative to some reference value</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAbsError</span></code>(data[, climate])</p></td>
+<td><p>mean absolute error of a data set relative to some reference value</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#verify.medAbsError" title="verify.medAbsError"><code class="xref py py-obj docutils literal"><span class="pre">medAbsError</span></code></a>(data[,&nbsp;climate])</td>
-<td>Calculate the median absolute error of a data set relative to some reference value</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">medAbsError</span></code>(data[, climate])</p></td>
+<td><p>median absolute error of a data set relative to some reference value</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.scaledAccuracy" title="verify.scaledAccuracy"><code class="xref py py-obj docutils literal"><span class="pre">scaledAccuracy</span></code></a>(predicted,&nbsp;observed)</td>
-<td>Convenience function to calculate a selection of relative, or scaled, accuracy measures</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaledAccuracy</span></code>(predicted, observed)</p></td>
+<td><p>Calculate scaled and relative accuracy measures</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="#verify.nRMSE" title="verify.nRMSE"><code class="xref py py-obj docutils literal"><span class="pre">nRMSE</span></code></a>(predicted,&nbsp;observed)</td>
-<td>Calculate the normalized root mean squared error of a data set relative to some reference value</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">nRMSE</span></code>(predicted, observed)</p></td>
+<td><p>normalized root mean squared error of a data set relative to a reference value</p></td>
 </tr>
 </tbody>
 </table>
@@ -105,17 +99,17 @@
 <div class="section" id="contingency-tables">
 <h3>Contingency Tables<a class="headerlink" href="#contingency-tables" title="Permalink to this headline">¶</a></h3>
 <p class="rubric">Classes</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#verify.ContingencyNxN" title="verify.ContingencyNxN"><code class="xref py py-obj docutils literal"><span class="pre">ContingencyNxN</span></code></a></td>
-<td>Class to work with NxN contingency tables for forecast verification</td>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ContingencyNxN</span></code></p></td>
+<td><p>Class to work with NxN contingency tables for forecast verification</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="#verify.Contingency2x2" title="verify.Contingency2x2"><code class="xref py py-obj docutils literal"><span class="pre">Contingency2x2</span></code></a></td>
-<td>Class to work with 2x2 contingency tables for forecast verification</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Contingency2x2</span></code></p></td>
+<td><p>Class to work with 2x2 contingency tables for forecast verification</p></td>
 </tr>
 </tbody>
 </table>
@@ -123,6 +117,10 @@
 <div class="section" id="module-verify">
 <span id="function-class-documentation"></span><h3>Function/Class Documentation<a class="headerlink" href="#module-verify" title="Permalink to this headline">¶</a></h3>
 <p>Module containing verification and performance metrics</p>
+<p>With the exception of the ContingencyNxN and Contingency2x2 classes,
+the inputs for all metrics are assumed to be array-like and 1D. Bad
+values are assumed to be stored as NaN and these are excluded in
+metric calculations.</p>
 <p>With the exception of the ContingencyNxN and Contingency2x2 classes,
 the inputs for all metrics are assumed to be array-like and 1D. Bad
 values are assumed to be stored as NaN and these are excluded in 
@@ -133,792 +131,34 @@ Contact: <a class="reference external" href="mailto:smorley&#37;&#52;&#48;lanl&#
 Los Alamos National Laboratory</p>
 <p>Copyright (c) 2017, Los Alamos National Security, LLC
 All rights reserved.</p>
-<dl class="class">
-<dt id="verify.Contingency2x2">
-<em class="property">class </em><code class="descclassname">verify.</code><code class="descname">Contingency2x2</code><a class="headerlink" href="#verify.Contingency2x2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to work with 2x2 contingency tables for forecast verification</p>
-<p>The table is defined following the standard presentation in works such 
-as Wilks [2006], where the columns are observations and the rows are 
-predictions. For a binary forecast, this gives a table</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="21%" />
-<col width="7%" />
-<col width="36%" />
-<col width="36%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td colspan="2" rowspan="2">&nbsp;</td>
-<td colspan="2">Observed</td>
-</tr>
-<tr class="row-even"><td>Y</td>
-<td>N</td>
-</tr>
-<tr class="row-odd"><td rowspan="2">Predicted</td>
-<td>Y</td>
-<td>True Positive</td>
-<td>False Positive</td>
-</tr>
-<tr class="row-even"><td>N</td>
-<td>False Negative</td>
-<td>True Negative</td>
-</tr>
-</tbody>
-</table>
-<p>Note that in many machine learning applications this table is called a
-<a href="#id1"><span class="problematic" id="id2">``</span></a>confusion matrix&#8217;&#8217; and the columns and rows are often transposed.</p>
-<p>Wilks, D.S. (2006), Statistical Methods in the Atmospheric Sciences, 2nd Ed.
-Academic Press, Elsevier, Burlington, MA.</p>
-<p>Duplicating the Finley[1884] tornado forecasts [Wilks, 2006, pp267-268]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span> <span class="o">=</span> <span class="n">verify</span><span class="o">.</span><span class="n">Contingency2x2</span><span class="p">([[</span><span class="mi">28</span><span class="p">,</span><span class="mi">72</span><span class="p">],[</span><span class="mi">23</span><span class="p">,</span><span class="mi">2680</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="go">2803</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">threat</span><span class="p">()</span>
-<span class="go">0.22764227642276422</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">heidke</span><span class="p">()</span>
-<span class="go">0.35532486145845693</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">peirce</span><span class="p">()</span>
-<span class="go">0.52285681714546284</span>
-</pre></div>
-</div>
-<dl class="method">
-<dt id="verify.Contingency2x2.FAR">
-<code class="descname">FAR</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.FAR" title="Permalink to this definition">¶</a></dt>
-<dd><p>False Alarm Ratio, the fraction of incorrect &#8220;yes&#8221; forecasts</p>
-<dl class="docutils">
-<dt>far <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The false alarm ratio of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.MatthewsCC">
-<code class="descname">MatthewsCC</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.MatthewsCC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Matthews Correlation Coefficient</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">event_series</span> <span class="o">=</span> <span class="p">[</span> <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pred_series</span>  <span class="o">=</span> <span class="p">[</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="bp">True</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ct</span> <span class="o">=</span> <span class="n">verify</span><span class="o">.</span><span class="n">Contingency2x2</span><span class="o">.</span><span class="n">fromBoolean</span><span class="p">(</span><span class="n">pred_series</span><span class="p">,</span> <span class="n">event_series</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ct</span><span class="o">.</span><span class="n">MatthewsCC</span><span class="p">()</span>
-<span class="go">-0.333...</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.PC">
-<code class="descname">PC</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.PC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the Proportion Correct (PC) for the 2x2 contingency table</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.POD">
-<code class="descname">POD</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.POD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Probability of Detection, a.k.a. hit rate (ratio of correct forecasts to number of event occurrences)</p>
-<dl class="docutils">
-<dt>hitrate <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The hit rate of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.POFD">
-<code class="descname">POFD</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.POFD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Probability of False Detection (POFD), a.k.a. False Alarm Rate</p>
-<dl class="docutils">
-<dt>pofd <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The probability of false detection of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.bias">
-<code class="descname">bias</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.bias" title="Permalink to this definition">¶</a></dt>
-<dd><p>The frequency bias of the forecast calculated as the ratio of yes forecasts to number of yes events</p>
-<p>An unbiased forecast will have bias=1, showing that the number of forecasts is the same
-as the number of events. Bias&gt;1 means that more events were forecast than observed (overforecast).</p>
-<dl class="docutils">
-<dt>bias <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The bias of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.equitableThreat">
-<code class="descname">equitableThreat</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.equitableThreat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Equitable Threat Score (a.k.a. Gilbert Skill Score)</p>
-<p>This is a ratio of verification, i.e., the proportion of correct forecasts
-after removing correct &#8220;no&#8221; forecasts (or &#8216;true negatives&#8217;).</p>
-<dl class="docutils">
-<dt>thr <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The threat score of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="classmethod">
-<dt id="verify.Contingency2x2.fromBoolean">
-<em class="property">classmethod </em><code class="descname">fromBoolean</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.fromBoolean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a 2x2 contingency table from two boolean input arrays</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.heidke">
-<code class="descname">heidke</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.heidke" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Heidke Skill Score for the 2x2 contingency table</p>
-<p>This is a skill score based on the proportion of correct forecasts referred to
-the proportion expected correct by chance.</p>
-<dl class="docutils">
-<dt>hss <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The Heidke skill score of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.majorityClassFraction">
-<code class="descname">majorityClassFraction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.majorityClassFraction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Proportion Correct (a.k.a. &#8220;accuracy&#8221; in machine learning) for majority classifier</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.oddsRatio">
-<code class="descname">oddsRatio</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.oddsRatio" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the odds ratio for the 2x2 contingency table</p>
-<dl class="docutils">
-<dt>odds <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The odds ratio for the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.peirce">
-<code class="descname">peirce</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.peirce" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Peirce Skill Score for the 2x2 contingency table</p>
-<dl class="docutils">
-<dt>pss <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The Peirce skill score of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.threat">
-<code class="descname">threat</code><span class="sig-paren">(</span><em>ci=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.threat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the Threat Score (a.k.a. critical success index)</p>
-<p>This is a ratio of verification, i.e., the proportion of correct forecasts
-after removing correct &#8220;no&#8221; forecasts (or &#8216;true negatives&#8217;).</p>
-<dl class="docutils">
-<dt>thr <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The threat score of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.Contingency2x2.yuleQ">
-<code class="descname">yuleQ</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#verify.Contingency2x2.yuleQ" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate Yule&#8217;s Q (odds ratio skill score) for the 2x2 contingency table</p>
-<dl class="docutils">
-<dt>yule <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Yule&#8217;s Q for the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="verify.ContingencyNxN">
-<em class="property">class </em><code class="descclassname">verify.</code><code class="descname">ContingencyNxN</code><a class="headerlink" href="#verify.ContingencyNxN" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to work with NxN contingency tables for forecast verification</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span> <span class="o">=</span> <span class="n">verify</span><span class="o">.</span><span class="n">ContingencyNxN</span><span class="p">([[</span><span class="mi">28</span><span class="p">,</span><span class="mi">72</span><span class="p">],[</span><span class="mi">23</span><span class="p">,</span><span class="mi">2680</span><span class="p">]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="go">2803</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">threat</span><span class="p">()</span>
-<span class="go">0.22764227642276422</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">heidke</span><span class="p">()</span>
-<span class="go">0.35532486145845693</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">peirce</span><span class="p">()</span>
-<span class="go">0.52285681714546284</span>
-</pre></div>
-</div>
-<dl class="method">
-<dt id="verify.ContingencyNxN.PC">
-<code class="descname">PC</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#verify.ContingencyNxN.PC" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the Proportion Correct (PC) for the NxN contingency table</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.ContingencyNxN.get2x2">
-<code class="descname">get2x2</code><span class="sig-paren">(</span><em>category</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.ContingencyNxN.get2x2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get 2x2 sub-table from multicategory contingency table</p>
-<p>Goldsmith&#8217;s non-probabilistic forecasts for freezing rain (cat 0), snow (cat 1)
-and rain (cat 2). [see Wilks, 1995, p273]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span> <span class="o">=</span> <span class="n">verify</span><span class="o">.</span><span class="n">ContingencyNxN</span><span class="p">([[</span><span class="mi">50</span><span class="p">,</span><span class="mi">91</span><span class="p">,</span><span class="mi">71</span><span class="p">],[</span><span class="mi">47</span><span class="p">,</span><span class="mi">2364</span><span class="p">,</span><span class="mi">170</span><span class="p">],[</span><span class="mi">54</span><span class="p">,</span><span class="mi">205</span><span class="p">,</span><span class="mi">3288</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt2</span> <span class="o">=</span> <span class="n">tt</span><span class="o">.</span><span class="n">get2x2</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">tt2</span><span class="p">)</span>
-<span class="go">[[  50  162]</span>
-<span class="go"> [ 101 6027]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt2</span><span class="o">.</span><span class="n">bias</span><span class="p">()</span>
-<span class="go">1.4039735099337749</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt2</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt2</span><span class="o">.</span><span class="n">attrs</span><span class="p">()</span>
-<span class="go">{&#39;Bias&#39;: 1.4039735099337749,</span>
-<span class="go"> &#39;FAR&#39;: 0.76415094339622647,</span>
-<span class="go"> &#39;HeidkeScore&#39;: 0.25474971797571822,</span>
-<span class="go"> &#39;POD&#39;: 0.33112582781456956,</span>
-<span class="go"> &#39;POFD&#39;: 0.026175472612699952,</span>
-<span class="go"> &#39;PeirceScore&#39;: 0.30495035520187008,</span>
-<span class="go"> &#39;ThreatScore&#39;: 0.15974440894568689}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.ContingencyNxN.heidke">
-<code class="descname">heidke</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#verify.ContingencyNxN.heidke" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the generalized Heidke Skill Score for the NxN contingency table</p>
-<dl class="docutils">
-<dt>hss <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The Heidke skill score of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-<p>Goldsmith&#8217;s non-probabilistic forecasts for freezing rain (cat 0), snow (cat 1)
-and rain (cat 2). [see Wilks, 1995, p273-274]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span> <span class="o">=</span> <span class="n">verify</span><span class="o">.</span><span class="n">ContingencyNxN</span><span class="p">([[</span><span class="mi">50</span><span class="p">,</span><span class="mi">91</span><span class="p">,</span><span class="mi">71</span><span class="p">],[</span><span class="mi">47</span><span class="p">,</span><span class="mi">2364</span><span class="p">,</span><span class="mi">170</span><span class="p">],[</span><span class="mi">54</span><span class="p">,</span><span class="mi">205</span><span class="p">,</span><span class="mi">3288</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">heidke</span><span class="p">()</span>
-<span class="go">0.80535269033647217</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="method">
-<dt id="verify.ContingencyNxN.peirce">
-<code class="descname">peirce</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#verify.ContingencyNxN.peirce" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the generalized Peirce Skill Score for the NxN contingency table</p>
-<dl class="docutils">
-<dt>pss <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The Peirce skill score of the contingency table data
-This is also added to the attrs attribute of the table object</dd>
-</dl>
-<p>Goldsmith&#8217;s non-probabilistic forecasts for freezing rain (cat 0), snow (cat 1)
-and rain (cat 2). [see Wilks, 1995, p273-274]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span> <span class="o">=</span> <span class="n">verify</span><span class="o">.</span><span class="n">ContingencyNxN</span><span class="p">([[</span><span class="mi">50</span><span class="p">,</span><span class="mi">91</span><span class="p">,</span><span class="mi">71</span><span class="p">],[</span><span class="mi">47</span><span class="p">,</span><span class="mi">2364</span><span class="p">,</span><span class="mi">170</span><span class="p">],[</span><span class="mi">54</span><span class="p">,</span><span class="mi">205</span><span class="p">,</span><span class="mi">3288</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tt</span><span class="o">.</span><span class="n">peirce</span><span class="p">()</span>
-<span class="go">0.81071330546125309</span>
-</pre></div>
-</div>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.MASE">
-<code class="descclassname">verify.</code><code class="descname">MASE</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.MASE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mean Absolute Scaled Error</p>
-<p>References:
-R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
-accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.</p>
-<dl class="docutils">
-<dt>predicted: array-like</dt>
-<dd>predicted data for which to calculate MASE</dd>
-<dt>observed: float</dt>
-<dd>observation vector (or climatological value (scalar) to use as reference value)</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the mean absolute scaled error of the data set</dd>
-</dl>
-<p>scaledError</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.RMSE">
-<code class="descclassname">verify.</code><code class="descname">RMSE</code><span class="sig-paren">(</span><em>data</em>, <em>climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.RMSE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the root mean squared error of a data set relative to some reference value</p>
-<p>The chosen reference can be persistence (climate=None), a provided climatological 
-mean (scalar) or a provided climatology (observation vector).</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>data to calculate mean squared error, default reference is persistence</dd>
-<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
-<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
-If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the root-mean-squared error of the data set relative to the chosen reference</dd>
-</dl>
-<p>meanSquaredError, meanAbsError</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.Sn">
-<code class="descclassname">verify.</code><code class="descname">Sn</code><span class="sig-paren">(</span><em>data</em>, <em>scale=True</em>, <em>correct=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.Sn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the Sn statistic, which is a robust measure of scale.</p>
-<p>Sn is more efficient than the median absolute deviation, and is not constructed with the 
-assumption of a symmetric distribution, because it does not measure distance from an assumed
-central location. To quote RC1993, &#8221;...Sn looks at a typical distance between observations, 
-which is still valid at asymmetric distributions.&#8221;</p>
-<p>[RC1993] P.J.Rouseeuw and C.Croux, &#8220;Alternatives to the Median Absolute Deviation&#8221;, J. Amer. Stat. Assoc.,
-88 (424), pp.1273-1283. Equation 2.1, but note that they use &#8220;low&#8221; and &#8220;high&#8221; medians:
-Sn = c * 1.1926 * LOMED_{i} ( HIMED_{j} (<a href="#id3"><span class="problematic" id="id4">|x_i - x_j|</span></a>) )</p>
-<p>Note that the implementation of the original formulation is slow for large n. As the original formulation
-is identical to using a true median for odd-length series, we do so here automatically to gain a significant
-speedup.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>data to calculate Sn statistic for</dd>
-</dl>
-<dl class="docutils">
-<dt>Sn <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the Sn statistic</dd>
-</dl>
-<p>medAbsDev</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.absPercError">
-<code class="descclassname">verify.</code><code class="descname">absPercError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.absPercError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Absolute percentage error</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>perc <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
-<dd>Array of absolute percentage errors, a measure of accuracy</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.accuracy">
-<code class="descclassname">verify.</code><code class="descname">accuracy</code><span class="sig-paren">(</span><em>data</em>, <em>climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.accuracy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function to calculate a selection of unscaled accuracy measures</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
-<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
-If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd>Dictionary containing unscaled accuracy measures</dd>
-</dl>
-<p>meanSquaredError, RMSE, meanAbsError, medAbsError</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.bias">
-<code class="descclassname">verify.</code><code class="descname">bias</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.bias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Scale-dependent bias as measured by the mean error</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>bias <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Mean error of prediction</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.forecastError">
-<code class="descclassname">verify.</code><code class="descname">forecastError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>full=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.forecastError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Error, defined using the sign convention of Jolliffe and Stephenson (Ch. 5)</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>full <span class="classifier-delimiter">:</span> <span class="classifier">boolean, optional</span></dt>
-<dd>Switch determining nature of return value. When it is True (the
-default) the function returns the errors as well as the predicted
-and observed values as numpy arrays of floats, when False only the
-array of forecast errors is returned.</dd>
-</dl>
-<dl class="docutils">
-<dt>err <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
-<dd>Array of forecast errors</dd>
-<dt>pred <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
-<dd>Present only if <cite>full</cite> = True. Array of predicted values as floats</dd>
-<dt>obse <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
-<dd>Present only if <cite>full</cite> = True. Array of observed values as floats</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.logAccuracy">
-<code class="descclassname">verify.</code><code class="descname">logAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>base=10</em>, <em>mask=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.logAccuracy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Log Accuracy Ratio, defined as log(predicted/observed) or log(predicted)-log(observed)</p>
-<p>Using base 2 is computationally much faster, so unless the base is important to interpretation
-we recommend using that.</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>base <span class="classifier-delimiter">:</span> <span class="classifier">number, optional</span></dt>
-<dd>Base to use for logarithmic transform (default: 10)</dd>
-<dt>mask <span class="classifier-delimiter">:</span> <span class="classifier">boolean, optional</span></dt>
-<dd>Switch to set masking behaviour. If True (default) the function will mask out NaN and negative values,
-and will return a masked array. If False, the presence of negative numbers will raise a ValueError and
-NaN will propagate through the calculation.</dd>
-</dl>
-<dl class="docutils">
-<dt>logacc <span class="classifier-delimiter">:</span> <span class="classifier">array or masked array</span></dt>
-<dd>Array of absolute percentage errors, a measure of accuracy.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.meanAbsError">
-<code class="descclassname">verify.</code><code class="descname">meanAbsError</code><span class="sig-paren">(</span><em>data</em>, <em>climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.meanAbsError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the mean absolute error of a data set relative to some reference value</p>
-<p>The chosen reference can be persistence, a provided climatological mean (scalar)
-or a provided climatology (observation vector).</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>data to calculate mean squared error, default reference is persistence</dd>
-<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
-<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
-If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the mean absolute error of the data set relative to the chosen reference</dd>
-</dl>
-<p>medAbsError, meanSquaredError, RMSE</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.meanPercentageError">
-<code class="descclassname">verify.</code><code class="descname">meanPercentageError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.meanPercentageError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Order-dependent bias as measured by the mean percentage error</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>mpe <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Mean percentage error of prediction</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.meanSquaredError">
-<code class="descclassname">verify.</code><code class="descname">meanSquaredError</code><span class="sig-paren">(</span><em>data</em>, <em>climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.meanSquaredError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the mean squared error of a data set relative to some reference value</p>
-<p>The chosen reference can be persistence, a provided climatological mean (scalar)
-or a provided climatology (observation vector).</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>data to calculate mean squared error, default reference is persistence</dd>
-<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
-<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
-If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the mean-squared-error of the data set relative to the chosen reference</dd>
-</dl>
-<p>RMSE, meanAbsError</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.medAbsDev">
-<code class="descclassname">verify.</code><code class="descname">medAbsDev</code><span class="sig-paren">(</span><em>series</em>, <em>scale=False</em>, <em>median=False</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.medAbsDev" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the median absolute deviation from the median</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.medAbsError">
-<code class="descclassname">verify.</code><code class="descname">medAbsError</code><span class="sig-paren">(</span><em>data</em>, <em>climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.medAbsError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the median absolute error of a data set relative to some reference value</p>
-<p>The chosen reference can be persistence, a provided climatological mean (scalar)
-or a provided climatology (observation vector).</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>data to calculate median absolute error, default reference is persistence</dd>
-<dt>climate <span class="classifier-delimiter">:</span> <span class="classifier">array-like or float, optional</span></dt>
-<dd>Array-like (list, numpy array, etc.) or float of observed values of scalar quantity.
-If climate is None (default) then the accuracy is assessed relative to persistence.</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the median absolute error of the data set relative to the chosen reference</dd>
-</dl>
-<p>meanAbsError, meanSquaredError, RMSE</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.medSymAccuracy">
-<code class="descclassname">verify.</code><code class="descname">medSymAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>mfunc=&lt;function median&gt;</em>, <em>method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.medSymAccuracy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Median Symmetric Accuracy: Scaled measure of accuracy that is not biased to over- or under-predictions.</p>
-<p>The accuracy ratio is given by (prediction/observation), to avoid the bias inherent in mean/median percentage error
-metrics we use the log of the accuracy ratio (which is symmetric about 0 for changes of the same factor). Specifically,
-the Median Symmetric Accuracy is found by calculating the median of the absolute log accuracy, and re-exponentiating
-g = exp( median( <a href="#id5"><span class="problematic" id="id6">|ln(pred) - ln(obs)|</span></a> ) )</p>
-<p>This can be expressed as a symmetric percentage error by shifting by one unit and multiplying by 100
-MSA = 100*(g-1)</p>
-<p>It can also be shown that this is identically equivalent to the median unsigned percentage error, where
-the unsigned relative error is given by
-(y&#8217; - x&#8217;)/x&#8217;
-where y&#8217; is always the larger of the (observation, prediction) pair, and x&#8217; is always the smaller.</p>
-<p>Reference:
-Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on percentage errors for radiation belt
-modeling applications, Los Alamos National Laboratory Report, LA-UR-15-24592.</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string, optional</span></dt>
-<dd>Method to use for calculating the median symmetric accuracy (MSA). Options are &#8216;log&#8217; which uses the median of
-the re-exponentiated absolute log accuracy, &#8216;UPE&#8217; which calculates MSA using the unsigned percentage error, and
-None (default), in which case the method is implemented as described above. The UPE method has reduced accuracy
-compared to the other methods and is included primarily for testing purposes.</dd>
-</dl>
-<dl class="docutils">
-<dt>msa <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
-<dd>Array of median symmetric accuracy</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.medianLogAccuracy">
-<code class="descclassname">verify.</code><code class="descname">medianLogAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em>, <em>mfunc=&lt;function median&gt;</em>, <em>base=10</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.medianLogAccuracy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Order-dependent bias as measured by the median of the log accuracy ratio</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>mfunc <span class="classifier-delimiter">:</span> <span class="classifier">function, optional</span></dt>
-<dd>Function to use for central tendency (default: numpy.median)</dd>
-<dt>base <span class="classifier-delimiter">:</span> <span class="classifier">number, optional</span></dt>
-<dd>Base to use for logarithmic transform (default: 10)</dd>
-</dl>
-<dl class="docutils">
-<dt>mla <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Median log accuracy of prediction</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.nRMSE">
-<code class="descclassname">verify.</code><code class="descname">nRMSE</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.nRMSE" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the normalized root mean squared error of a data set relative to some reference value</p>
-<p>The chosen reference can be an observation vector or, a provided climatological mean (scalar). This 
-definition is due to Yu and Ridley (2002).</p>
-<p>References:
-Yu, Y., and A. J. Ridley (2008), Validation of the space weather modeling 
-framework using ground-based magnetometers, Space Weather, 6, S05002, 
-doi:10.1029/2007SW000345.</p>
-<dl class="docutils">
-<dt>predicted: array-like</dt>
-<dd>predicted data for which to calculate mean squared error</dd>
-<dt>observed: float</dt>
-<dd>observation vector (or climatological value (scalar) to use as reference value)</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the normalized root-mean-squared-error of the data set relative to the observations</dd>
-</dl>
-<p>RMSE</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.normSn">
-<code class="descclassname">verify.</code><code class="descname">normSn</code><span class="sig-paren">(</span><em>data</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.normSn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the normalized Sn statistic, a scaled measure of spread.</p>
-<p>We here scale the Sn estimator by the median, giving a non-symmetric alternative
-to the robust coefficient of variation (rCV).</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>data to calculate normSn statistic for</dd>
-</dl>
-<dl class="docutils">
-<dt>normSn <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the normalized Sn statistic</dd>
-</dl>
-<p>rCV</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.percBetter">
-<code class="descclassname">verify.</code><code class="descname">percBetter</code><span class="sig-paren">(</span><em>predict1</em>, <em>predict2</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.percBetter" title="Permalink to this definition">¶</a></dt>
-<dd><p>The percentage of cases when method A was closer to actual than method B</p>
-<p>For example, if we want to know whether a new forecast performs better than a reference
-forecast...</p>
-<dl class="docutils">
-<dt>predict1 <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions from model A</dd>
-<dt>predict2 <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions from model B</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>percBetter <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>The percentage of observations where method A was closer to observation than method B</dd>
-</dl>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p_ref</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.5</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span> <span class="c1">#mean prediction</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p_good</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span> <span class="c1">#&quot;good&quot; model prediction</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">verify</span><span class="o">.</span><span class="n">percBetter</span><span class="p">(</span><span class="n">p_good</span><span class="p">,</span> <span class="n">p_ref</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-<span class="go">66.66666666666666</span>
-</pre></div>
-</div>
-<p>That is, two-thirds (66.67%) of the predictions have a lower absolute error in p_good than in
-p_ref.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.percError">
-<code class="descclassname">verify.</code><code class="descname">percError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.percError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Percentage Error</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>perc <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
-<dd>Array of forecast errors expressed as a percentage</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.rCV">
-<code class="descclassname">verify.</code><code class="descname">rCV</code><span class="sig-paren">(</span><em>predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.rCV" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the &#8220;robust coefficient of variation&#8221;, i.e. median absolute deviation divided by the median</p>
-<p>By analogy with the coefficient of variation, which is the standard deviation divided by the mean, rCV
-gives the median absolute deviation (aka rSD) divided by the median, thereby providing a scaled measure
-of precision/spread.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.rSD">
-<code class="descclassname">verify.</code><code class="descname">rSD</code><span class="sig-paren">(</span><em>predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.rSD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the &#8220;robust standard deviation&#8221;, i.e. the median absolute deviation times a correction factor</p>
-<p>The median absolute deviation (medAbsDev) scaled by a factor of 1.4826 recovers the standard deviation when
-applied to a normal distribution. However, unlike the standard deviation the medAbsDev has a high breakdown 
-point and is therefore considered a robust estimator.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.scaledAccuracy">
-<code class="descclassname">verify.</code><code class="descname">scaledAccuracy</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.scaledAccuracy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function to calculate a selection of relative, or scaled, accuracy measures</p>
-<dl class="docutils">
-<dt>predicted <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of predictions</dd>
-<dt>observed <span class="classifier-delimiter">:</span> <span class="classifier">array-like</span></dt>
-<dd>Array-like (list, numpy array, etc.) of observed values of scalar quantity</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd>Dictionary containing scaled or relative accuracy measures</dd>
-</dl>
-<p>medSymAccuracy, meanAPE, MASE, nRMSE</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.scaledError">
-<code class="descclassname">verify.</code><code class="descname">scaledError</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.scaledError" title="Permalink to this definition">¶</a></dt>
-<dd><p>Scaled errors, see Hyndman and Koehler (2006)</p>
-<p>References:
-R.J. Hyndman and A.B. Koehler, Another look at measures of forecast 
-accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.</p>
-<dl class="docutils">
-<dt>predicted: array-like</dt>
-<dd>predicted data for which to calculate scaled error</dd>
-<dt>observed: float</dt>
-<dd>observation vector (or climatological value (scalar) to use as reference value)</dd>
-</dl>
-<dl class="docutils">
-<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>the scaled error of the data set</dd>
-</dl>
-<p>MASE</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.skill">
-<code class="descclassname">verify.</code><code class="descname">skill</code><span class="sig-paren">(</span><em>A_data</em>, <em>A_ref</em>, <em>A_perf=0</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.skill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generic forecast skill score formulation for quantification of forecast improvement</p>
-<p>See section 7.1.4 of Wilks [2006] (Statistical methods in the atmospheric sciences) for
-details.</p>
-<dl class="docutils">
-<dt>A_data <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Accuracy measure of data set</dd>
-<dt>A_ref <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Accuracy measure for reference forecast</dd>
-<dt>A_perf <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
-<dd>Accuracy measure for &#8220;perfect forecast&#8221; (Default = 0)</dd>
-</dl>
-<dl class="docutils">
-<dt>ss_ref <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Forecast skill for the given forecast, relative to the reference, using the chosen accuracy measure</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="verify.symmetricSignedBias">
-<code class="descclassname">verify.</code><code class="descname">symmetricSignedBias</code><span class="sig-paren">(</span><em>predicted</em>, <em>observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.symmetricSignedBias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Symmetric signed bias, expressed as a percentage</p>
-</dd></dl>
-
 </div>
 </div>
 </div>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">PyForecastTools - Model Validation and Forecast Verification</a><ul>
-<li><a class="reference internal" href="#verify-core-metrics-and-classes">Verify - Core metrics and classes</a><ul>
-<li><a class="reference internal" href="#metrics">Metrics</a></li>
-<li><a class="reference internal" href="#contingency-tables">Contingency Tables</a></li>
-<li><a class="reference internal" href="#module-verify">Function/Class Documentation</a></li>
+<h1 class="logo"><a href="index.html">PyForecastTools</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PyForecastTools - Model Validation and Forecast Verification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#verify-core-metrics-and-classes">Verify - Core metrics and classes</a></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
+
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
@@ -927,26 +167,24 @@ details.</p>
   </ul></li>
 </ul>
 </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/verify.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -955,11 +193,11 @@ details.</p>
       &copy;2018, Los Alamos National Security, LLC.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="_sources/verify.txt"
+      <a href="_sources/verify.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
