@@ -302,7 +302,7 @@ class Contingency2x2(ContingencyNxN):
         self.attrs['MajorityClassFraction'] = dum.PC()
         return self.attrs['MajorityClassFraction']
 
-    def MatthewsCC(self):
+    def MatthewsCC(self, ci=None):
         """Matthews Correlation Coefficient
 
         Examples
@@ -323,6 +323,11 @@ class Contingency2x2(ContingencyNxN):
         else:
             denom = np.sqrt(np.float64(sum_ac*sum_ab*sum_cd*sum_bd))
         self.attrs['MatthewsCC'] = numer/denom
+        if ci is not None and ci == 'bootstrap':
+            self.attrs['MatthewsCCCI95'] = \
+                self._bootstrapCI(func='MatthewsCC')
+            return (self.attrs['MatthewsCC'],
+                    self.attrs['MatthewsCCCI95'])
         return self.attrs['MatthewsCC']
 
     def summary(self, verbose=False, ci=None):
@@ -348,7 +353,7 @@ class Contingency2x2(ContingencyNxN):
         dum = self.peirce(ci=ci)
         dum = self.bias(ci=ci)
         dum = self.majorityClassFraction()
-        dum = self.MatthewsCC()
+        dum = self.MatthewsCC(ci=ci)
         dum = self.oddsRatio()
         dum = self.yuleQ()
         a, b, c, d = self._abcd()
@@ -394,7 +399,17 @@ class Contingency2x2(ContingencyNxN):
             print("\nClassification Quality Metrics")
             print("==============================")
             for key in qual:
-                print("{0}: {1:0.4f}".format(key, self.attrs[key]))
+                if key+'CI95' in self.attrs:
+                    if self.attrs[key+'CI95'].shape:
+                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, \
+                                                    self.attrs[key], \
+                                                    self.attrs[key+'CI95'][0], \
+                                                    self.attrs[key+'CI95'][1]))
+                    else:
+                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, \
+                                    self.attrs[key], self.attrs[key+'CI95']))
+                else:
+                    print("{0}: {1:0.4f}".format(key, self.attrs[key]))
 
     def _bootstrapCI(self, interval=0.95, nsamp=2000, func=None, seed=1406):
         """ bootstrap confidence interval
