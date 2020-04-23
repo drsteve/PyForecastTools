@@ -1,3 +1,7 @@
+Changes in Version 1.1.1 (2020-04-23)
+=====================================
+- Updated version number in package metadata
+
 Changes in Version 1.1.0 (2020-04-23)
 =====================================
 - Restructure package with modules
