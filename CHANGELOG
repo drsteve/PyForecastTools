@@ -1,0 +1,26 @@
+Changes in Version 1.1.0 (2020-04-23)
+=====================================
+- Restructure package with modules
+- Code tidying for PEP8
+- Updated license and copyright
+- Documentation at drsteve.github.io/PyForecastTools
+categorical
+- Added bootstrapped CI for Matthews correlation
+metrics
+- Updated docstrings
+- Compatibility with xarray input
+plot
+- Added plot module
+  - QQ plots
+  - Taylor diagrams
+  - ROC curves
+  - Reliability diagrams
+
+Changes in Version 1.0.1 (2018-06-27)
+=====================================
+- Repackaged for pip install
+- Expanded test coverage
+
+Changes in Version 1.0.0 (2018-05-31)
+=====================================
+- Initial release
