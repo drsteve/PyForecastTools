@@ -179,6 +179,13 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
     mla : float
         Median log accuracy of prediction
 
+    Notes
+    =====
+    Reference:
+    Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on
+    percentage errors for radiation belt modeling applications, Los Alamos
+    National Laboratory Report, LA-UR-15-24592.
+
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
@@ -202,6 +209,14 @@ def symmetricSignedBias(predicted, observed):
     =======
     bias : float
         symmetric signed bias, as a precentage
+
+    Notes
+    =====
+    Reference:
+    Morley, S.K., Brito, T.V., and Welling, D.T. (2018), Measures of Model
+    Performance Based on the Log Accuracy Ratio, Space Weather, 16(1),
+    pp. 69-88, doi: 10.102/2017SW001669.
+
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
@@ -745,9 +760,9 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
     is always the smaller.
 
     Reference:
-    Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on
-    percentage errors for radiation belt modeling applications, Los Alamos
-    National Laboratory Report, LA-UR-15-24592.
+    Morley, S.K., Brito, T.V., and Welling, D.T. (2018), Measures of Model
+    Performance Based on the Log Accuracy Ratio, Space Weather, 16(1),
+    pp. 69-88, doi: 10.102/2017SW001669.
 
     """
     pred = _maskSeries(predicted)
