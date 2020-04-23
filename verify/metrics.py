@@ -23,7 +23,8 @@ from __future__ import division
 import functools
 import numpy as np
 
-#======= Performance metrics =======#
+# ======= Performance metrics ======= #
+
 
 def skill(A_data, A_ref, A_perf=0):
     """Generic forecast skill score for quantifying forecast improvement
@@ -94,22 +95,23 @@ def percBetter(predict1, predict2, observed):
     in p_good than in p_ref.
 
     """
-    #set up inputs
+    # set up inputs
     methA = _maskSeries(predict1)
     methB = _maskSeries(predict2)
     data = _maskSeries(observed)
-    #get forecast errors
+    # get forecast errors
     errA = forecastError(methA, data, full=False)
     errB = forecastError(methB, data, full=False)
-    #exclude ties & count cases where A beats B (smaller error)
+    # exclude ties & count cases where A beats B (smaller error)
     countBetter = (np.abs(errA) < np.abs(errB)).sum()
     numCases = len(methA)
     fracBetter = countBetter/numCases
 
     return 100*fracBetter
 
+# ======= Bias measures ======= #
 
-#======= Bias measures =======#
+
 def bias(predicted, observed):
     """ Scale-dependent bias as measured by the mean error
 
@@ -129,8 +131,9 @@ def bias(predicted, observed):
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
-    
+
     return pred.mean()-obse.mean()
+
 
 def meanPercentageError(predicted, observed):
     """Order-dependent bias as measured by the mean percentage error
@@ -147,13 +150,14 @@ def meanPercentageError(predicted, observed):
     =======
     mpe : float
         Mean percentage error of prediction
-    
+
     """
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
     pe = percError(pred, obse)
     mpe = pe.mean()
     return mpe
+
 
 def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
     """Order-dependent bias as measured by the median of the log accuracy ratio
@@ -183,6 +187,7 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
 
     return mla
 
+
 def symmetricSignedBias(predicted, observed):
     """Symmetric signed bias, expressed as a percentage
 
@@ -201,14 +206,13 @@ def symmetricSignedBias(predicted, observed):
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
     mla = medianLogAccuracy(pred, obse, base='e')
-    sign = np.sign(mla)
     biasmag = np.exp(np.abs(mla))-1
     # apply sign of mla to symmetric bias magnitude
     ssb = np.copysign(biasmag, mla)
     return 100*ssb
 
+# ======= Accuracy measures ======= #
 
-#======= Accuracy measures =======#
 
 def accuracy(data, climate=None):
     """Convenience function to calculate a selection of unscaled accuracy
@@ -240,14 +244,15 @@ def accuracy(data, climate=None):
 
     data = _maskSeries(data)
     if climate is not None:
-        clim = _maskSeries(climate)
+        climate = _maskSeries(climate)
     metrics = {'MSE': meanSquaredError, 'RMSE': RMSE,
-               'MAE':meanAbsError, 'MdAE': medAbsError}
+               'MAE': meanAbsError, 'MdAE': medAbsError}
     out = dict()
     for met in metrics:
         out[met] = metrics[met](data, climate)
 
     return out
+
 
 def meanSquaredError(data, climate=None):
     """Mean squared error of a data set relative to a reference value
@@ -277,7 +282,6 @@ def meanSquaredError(data, climate=None):
 
     """
     dat = _maskSeries(data)
-    n_pts = len(dat)
     dif = _diff(dat, climate=climate)
 
     dif2 = dif**2.0
@@ -314,7 +318,7 @@ def RMSE(data, climate=None):
     (scalar) or a provided climatology (observation vector).
 
     """
-    dat = _maskSeries(data)
+    data = _maskSeries(data)
     msqerr = meanSquaredError(data, climate=climate)
 
     return np.sqrt(msqerr)
@@ -348,7 +352,6 @@ def meanAbsError(data, climate=None):
 
     """
     data = _maskSeries(data)
-    n_pts = len(data)
     adif = np.abs(_diff(data, climate=climate))
 
     return adif.mean()
@@ -384,14 +387,13 @@ def medAbsError(data, climate=None):
 
     """
     dat = _maskSeries(data)
-    n_pts = len(dat)
     dif = _diff(dat, climate=climate)
     MdAE = np.median(np.abs(dif))
 
     return MdAE
 
 
-#======= Scaled/Relative Accuracy measures =======#
+# ======= Scaled/Relative Accuracy measures ======= #
 def scaledAccuracy(predicted, observed):
     """ Calculate scaled and relative accuracy measures
 
@@ -681,21 +683,18 @@ def logAccuracy(predicted, observed, base=10, mask=True):
     else:
         pred = np.asanyarray(predicted)
         obse = np.asanyarray(observed)
-    #check for positivity
+    # check for positivity
     if (pred <= 0).any() or (obse <= 0).any():
         raise ValueError('logAccuracy: input data are required to be positive')
     logfuncs = {10: np.log10, 2: np.log2, 'e': np.log}
     if base not in logfuncs:
-        supportedbases = '['+ ', '.join([str(key) for key in logfuncs]) + ']'
+        supportedbases = '[' + ', '.join([str(key) for key in logfuncs]) + ']'
         raise NotImplementedError('logAccuracy: Selected base ' +
                                   '({0}) for logarithms not'.format(base) +
                                   ' supported. Supported values are ' +
                                   '{0}'.format(supportedbases))
     logacc = logfuncs[base](pred/obse)
-    if mask:
-        return logfuncs[base](pred/obse)
-    else:
-        return logfuncs[base](pred/obse)
+    return logacc
 
 
 def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
@@ -759,12 +758,12 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
         symAcc = np.exp2(mfunc(absLogAcc.compressed()))
         msa = 100*(symAcc-1)
     elif method == 'log':
-        ##median(log(Q)) method
+        # median(log(Q)) method
         absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
         symAcc = mfunc(np.exp2(absLogAcc.compressed()))
         msa = 100*(symAcc-1)
     elif method == 'UPE':
-        ##unsigned percentage error method
+        # unsigned percentage error method
         PleO = pred >= obse
         OltP = np.logical_not(PleO)
         unsRelErr = pred.copy()
@@ -809,7 +808,7 @@ def meanAPE(predicted, observed, mfunc=np.mean):
 #     pass
 
 
-#======= Precision (scale) Measures =======#
+# ======= Precision (scale) Measures ======= #
 def medAbsDev(series, scale=False, median=False):
     """ Computes the median absolute deviation from the median
 
@@ -833,11 +832,11 @@ def medAbsDev(series, scale=False, median=False):
 
     """
     series = _maskSeries(series)
-    #get median absolute deviation of unmasked elements
+    # get median absolute deviation of unmasked elements
     perc50 = np.median(series.compressed())
     mad = np.median(abs(series.compressed()-perc50))
     if scale:
-        mad *= 1.4826 #scale so that MAD is same as SD for normal distr.
+        mad *= 1.4826  # scale so that MAD is same as SD for normal distr.
     if median:
         return mad, perc50
     else:
@@ -953,7 +952,7 @@ def Sn(data, scale=True, correct=True):
 
     def lowmed(vec):
         lenvec = len(vec)
-        if len(vec)%2: #odd
+        if len(vec) % 2:  # odd
             ind = int(lenvec//2)
         else:
             ind = int(lenvec/2.0)-1
@@ -961,7 +960,7 @@ def Sn(data, scale=True, correct=True):
         return q[ind]
 
     def highmed(vec):
-        if len(vec)%2:
+        if len(vec) % 2:
             ind = int(len(vec)//2)
         else:
             ind = int(np.ceil(len(vec)/2))
@@ -972,36 +971,36 @@ def Sn(data, scale=True, correct=True):
     series = series.compressed()
     series.sort()
     n_pts = len(series)
-    seriesodd = True if (n_pts%2 == 1) else False
-    #odd number of points, so use true median (shouldn't make a difference...
+    seriesodd = True if (n_pts % 2 == 1) else False
+    # odd number of points, so use true median (shouldn't make a difference...
     # but seems to)
     truemedian = seriesodd
-    #truemedian = False
+    # truemedian = False
     imd = np.empty(n_pts)
-    #for each i, find median of absolute differences
+    # for each i, find median of absolute differences
     for i in range(n_pts):
         if truemedian:
             imd[i] = np.median(np.abs(series[i]-series))
         else:
-            #tmp_series = np.asarray(dropPoint(series, i))
-            #imd[i] = lowmed(np.abs(series[i]-tmp_series))
+            # tmp_series = np.asarray(dropPoint(series, i))
+            # imd[i] = lowmed(np.abs(series[i]-tmp_series))
             imd[i] = highmed(np.abs(series[i]-series))
-    #find median of result, then scale to std. normal
+    # find median of result, then scale to std. normal
     if truemedian:
         Sn_imd = np.median(imd)
     else:
-        Sn_imd = lowmed(imd) #"low median"
+        Sn_imd = lowmed(imd)  # "low median"
     sfac = 1.1926 if scale else 1.0
     Sn_imd *= sfac
-    #now set correction factor
+    # now set correction factor
     cn = 1.0
     cfac = [1.0, 0.743, 1.851, 0.954, 1.351, 0.993, 1.198, 1.005, 1.131]
     if correct:
         if n_pts <= 9:
             cn = cfac[n_pts-1]
-        elif seriesodd: #n odd, >= 11
+        elif seriesodd:  # n odd, >= 11
             cn = n_pts/(n_pts - 0.9)
-    #else n=1, or n>=10 and even
+    # else n=1, or n>=10 and even
     return Sn_imd * cn
 
 
@@ -1034,7 +1033,8 @@ def normSn(data, **kwargs):
     p50 = np.median(series.compressed())
     return Sn(data, **kwargs)/p50
 
-#======= Other useful functions =======#
+# ======= Other useful functions ======= #
+
 
 def _diff(data, climate=None):
     """ difference utility function
@@ -1067,7 +1067,7 @@ def _diff(data, climate=None):
         if clim.ndim == 0:
             clim = clim.tolist()
         elif len(clim) == 1:
-            #climate is a scalar
+            # climate is a scalar
             climate = climate[0]
         else:
             try:
@@ -1076,11 +1076,12 @@ def _diff(data, climate=None):
                 AssertionError('If climate is not scalar, it must have the ' +
                                'same shape as data')
 
-        dif = fc - clim #climate - data
+        dif = fc - clim  # climate - data
     else:
         dif = np.diff(fc)
 
     return dif
+
 
 def _maskSeries(series):
     """ Mask the NaN in array-like input
@@ -1096,8 +1097,8 @@ def _maskSeries(series):
         Numpy array with NaN values masked
 
     """
-    #ensure input is numpy array (and make 1-D)
+    # ensure input is numpy array (and make 1-D)
     ser = np.asarray(series, dtype=float).ravel()
-    #mask for NaNs
+    # mask for NaNs
     ser = np.ma.masked_where(np.isnan(ser), ser)
     return ser
