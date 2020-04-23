@@ -355,6 +355,20 @@ class badInputs(unittest.TestCase):
         ctab = verify.Contingency2x2(self.Finley)
         self.assertRaises(AttributeError, ctab.POD, ci='bootstrap')
 
+    def test_maskSeries_nomodify1(self):
+        '''Test that _maskSeries doesn't modify inputs in place'''
+        predvec = np.array([4,5,np.nan,7,8,9,10])
+        predtype = type(predvec)
+        prednew = verify.metrics._maskSeries(predvec)
+        self.assertTrue(type(predvec) == predtype)
+
+    def test_maskSeries_nomodify2(self):
+        '''Test that _maskSeries doesn't modify inputs in place'''
+        predvec = np.ma.masked_invalid([4,5,np.nan,7,8,9,10])
+        predtype = type(predvec)
+        prednew = verify.metrics._maskSeries(predvec)
+        self.assertTrue(type(predvec) == predtype)
+
 class individualContinuous(unittest.TestCase):
     '''Tests for continuous metrics using single element prediction/observation vectors'''
     def test_forecastError_spanzero_list(self):
