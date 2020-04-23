@@ -179,7 +179,7 @@ def medianLogAccuracy(predicted, observed, mfunc=np.median, base=10):
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
     la = logAccuracy(pred, obse, base=base)
-    mla = mfunc(la)
+    mla = mfunc(la.compressed())
 
     return mla
 
@@ -756,12 +756,12 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
     if method is None:
         # is this different from the method above for large series??
         absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
-        symAcc = np.exp2(mfunc(absLogAcc))
+        symAcc = np.exp2(mfunc(absLogAcc.compressed()))
         msa = 100*(symAcc-1)
     elif method == 'log':
         ##median(log(Q)) method
         absLogAcc = np.abs(logAccuracy(pred, obse, base=2))
-        symAcc = mfunc(np.exp2(absLogAcc))
+        symAcc = mfunc(np.exp2(absLogAcc.compressed()))
         msa = 100*(symAcc-1)
     elif method == 'UPE':
         ##unsigned percentage error method
@@ -969,7 +969,8 @@ def Sn(data, scale=True, correct=True):
         return q[ind]
 
     series = _maskSeries(data)
-    series.compressed().sort()
+    series = series.compressed()
+    series.sort()
     n_pts = len(series)
     seriesodd = True if (n_pts%2 == 1) else False
     #odd number of points, so use true median (shouldn't make a difference...

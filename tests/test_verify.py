@@ -389,6 +389,16 @@ class precisionMeasures(unittest.TestCase):
         sns = [verify.Sn(np.random.randn(n_elements)) for i in range(n_repeats)]
         npt.assert_almost_equal(np.mean(sns), 1, decimal=2)
 
+    def test_Sn_masked_value(self):
+        '''Test that Sn estimator doesn't hit errors or warnings with badvals on input'''
+        v1 = np.arange(1,20).astype(float)
+        v2 = v1.copy()
+        v2[3] = np.nan
+        with warnings.catch_warnings():
+            warnings.simplefilter('error')
+            sn1 = verify.Sn(v1)
+            sn2 = verify.Sn(v2)
+
 if __name__ == '__main__':
     unittest.main()
 
