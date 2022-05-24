@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  schedule:
+    - cron: '0 22 * * *'
+  pull_request:
+    branches: [ master ]
+    types: [ opened, synchronize, reopened, ready_for_review ]
+  # Required for manual triggering
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python-version: "3.8"
+            os: ubuntu-20.04
+            piplist: "numpy matplotlib"
+          - python-version: "3.9"
+            os: ubuntu-20.04
+            piplist: "numpy matplotlib"
+            dep-strategy: "oldest"
+          - python-version: "3.10"
+            os: ubuntu-20.04
+            piplist: "numpy matplotlib"
+          - python-version: "3.10"
+            os: ubuntu-20.04
+            piplist: "numpy matplotlib spacepy"
+    steps:
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      env:
+        PIPLIST: ${{ matrix.piplist }}
+      run: |
+        sudo apt-get update -qq
+        python -m pip install --upgrade pip
+        pip freeze
+# Per https://github.com/actions/checkout/issues/15, this gets the MERGE
+# commit of the PR, not just the tip of the PR.
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: Install and run tests
+      working-directory: ${{ github.workspace }}
+      run: |
+        python setup.py build
+        cd tests; xvfb-run python test_all.py -v
+# See https://github.community/t/status-check-for-a-matrix-jobs/127354/7
+  all-tests:
+    name: All tests
+    if: ${{ always() }}
+    runs-on: ubuntu-20.04
+    needs: test
+    steps:
+      - name: Check test matrix status
+        if: ${{ needs.test.result != 'success' }}
+        run: exit 1
