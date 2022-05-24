@@ -1050,6 +1050,28 @@ def normSn(data, **kwargs):
 
 # ======= Other useful functions ======= #
 
+def median(data, ws=None):
+    """ Weighted median
+
+    Parameters
+    ==========
+    data : array
+        Array of data values
+    ws : None or array
+        None, which implies equal weighting, or an array of weights.
+
+    Returns
+    =======
+    wmedian : float
+        (Weighted) median of input series
+    """
+    if ws is None:
+        return np.median(data)
+    wprobs = ws.cumsum() - 0.5*ws
+    targ = np.median(wprobs)
+    wmedian = np.interp(targ, wprobs, data)
+    return wmedian
+
 
 def _diff(data, climate=None):
     """ difference utility function
