@@ -40,6 +40,7 @@ jobs:
       run: |
         sudo apt-get update -qq
         python -m pip install --upgrade pip
+        pip install ${PIPLIST}
         pip freeze
 # Per https://github.com/actions/checkout/issues/15, this gets the MERGE
 # commit of the PR, not just the tip of the PR.
@@ -48,8 +49,8 @@ jobs:
     - name: Install and run tests
       working-directory: ${{ github.workspace }}
       run: |
-        python setup.py build
-        cd tests; xvfb-run python test_all.py -v
+        python setup.py install
+        cd tests; xvfb-run python test_verify.py -v
 # See https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   all-tests:
     name: All tests
