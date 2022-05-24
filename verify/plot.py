@@ -458,7 +458,7 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     histkwargs['bins'] = bins
     if 'histtype' not in histkwargs: histkwargs['histtype'] = 'step'
     if 'lw' not in histkwargs: histkwargs['lw'] = 2
-    if 'normed' not in histkwargs: histkwargs['normed'] = True
+    if 'density' not in histkwargs: histkwargs['density'] = True
     ax_hist.hist(pred, range=(rmin, rmax), **histkwargs)
     ax_hist.set_xlabel('Predicted Probability')
     ax_hist.set_ylabel('Density')
@@ -594,7 +594,7 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     #axes object
     if addTo is None:
         fig = plt.figure()
-        ax = floating_axes.FloatingSubplot(fig, '111',
+        ax = floating_axes.FloatingSubplot(fig, 111,
                                            grid_helper=gh_curvegrid)
         fig.add_subplot(ax)
 
