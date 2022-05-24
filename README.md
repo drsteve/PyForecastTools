@@ -1,7 +1,7 @@
 # PyForecastTools
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1256921.svg)](https://doi.org/10.5281/zenodo.1256921)
-[![Build Status](https://travis-ci.org/drsteve/PyForecastTools.svg?branch=master)](https://travis-ci.org/drsteve/PyForecastTools)
+[![Build Status](https://github.com/drsteve/PyForecastTools/workflows/CI/badge.svg?branch=master)](https://github.com/drsteve/PyForecastTools/actions?query=workflow%3ACI)
 
 A Python module to provide model validation and forecast verification tools,
 including a set of convenient plot functions. A selection of capabilites
