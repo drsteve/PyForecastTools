@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from .metrics import _maskSeries, bias
 from .categorical import Contingency2x2
 
+
 def setTarget(target, figsize=None, loc=111, polar=False):
     """
     Given a *target* on which to plot a figure, determine if that *target*
@@ -134,13 +135,13 @@ def qqPlot(predicted, observed, xyline=True, addTo=None, modelName='',
     interpolated to those quantiles. See, e.g., NIST's Engineering Statistics
     Handbook.
     """
-    #pre-process and sort observed and predicted data
+    # pre-process and sort observed and predicted data
     q_pred = _maskSeries(predicted).compressed()
     q_pred.sort()
     q_obse = _maskSeries(observed).compressed()
     q_obse.sort()
 
-    #are predicted and observed same length?
+    # are predicted and observed same length?
     q_len = len(q_pred)
     o_len = len(q_obse)
 
@@ -152,7 +153,7 @@ def qqPlot(predicted, observed, xyline=True, addTo=None, modelName='',
         quants = ranks/numElem
         return quants
 
-    #get target and plot
+    # get target and plot
     fig, ax = setTarget(target=addTo)
     if q_len > o_len:
         plot_obse = q_obse
@@ -163,7 +164,8 @@ def qqPlot(predicted, observed, xyline=True, addTo=None, modelName='',
     else:
         plot_pred = q_pred
         plot_obse = q_obse
-    if plot_kwargs is None: plot_kwargs = dict()
+    if plot_kwargs is None:
+        plot_kwargs = dict()
     ax.scatter(plot_pred, plot_obse, label=modelName, **plot_kwargs)
     ax.set_ylabel('Observed')
     ax.set_xlabel('Predicted')
@@ -172,7 +174,7 @@ def qqPlot(predicted, observed, xyline=True, addTo=None, modelName='',
         ax.legend(loc=0)
 
     if xyline:
-        #add y=x line, force axes to be equal
+        # add y=x line, force axes to be equal
         ax.plot([0, 1], [0, 1], transform=ax.transAxes, linestyle='--',
                 linewidth=1.0, color='black')
         ylims = ax.get_ylim()
@@ -276,12 +278,12 @@ def rocCurve(predicted, observed, low=None, high=None, nthresh=100,
     pods[-1] = 0
     pofds[-1] = 0
 
-    #get target and plot
+    # get target and plot
     fig, ax = setTarget(target=addTo)
 
     ax.plot(pofds, pods, drawstyle='steps-post', label=modelName)
     if xyline:
-        #add y=x line
+        # add y=x line
         ax.plot([0, 1], [0, 1], transform=ax.transAxes, linestyle='--',
                 linewidth=1.0, color='black')
 
@@ -299,6 +301,7 @@ def rocCurve(predicted, observed, low=None, high=None, nthresh=100,
     out['Axes'] = ax
 
     return out
+
 
 def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
                        modelName='', bins=None, xyline=True, legend=False,
@@ -326,7 +329,7 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     bins : nonetype, int, sequence of scalars, or str
         Provides bin information as required by numpy.histogram. An integer
         sets the number of equally-sized bins used for the calibration function
-        and refinement distribution. A sequence of scalars will be used to 
+        and refinement distribution. A sequence of scalars will be used to
         define the bin edges, and a string must be a valid binning method per
         numpy.histogram. The default is to use numpy's 'auto' method, limited
         to a maximum of 100 bins.
@@ -388,7 +391,7 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
 
     out = dict()
 
-    if norm:  #Normalize scores into range [0, 1]
+    if norm:  # Normalize scores into range [0, 1]
         pred = (pred-pred.min())/(pred.max()-pred.min())
         rmin = 0
         rmax = 1
@@ -397,13 +400,13 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         rmax = pred.max()
 
     if bins is None:
-        bins='auto'
+        bins = 'auto'
         limit = True
     else:
-        limit = False # if user supplied bins, dispense with the limit...
+        limit = False  # if user supplied bins, dispense with the limit...
     bin_edges = numpy.histogram_bin_edges(pred, bins=bins, range=(rmin, rmax))
     nbins = len(bin_edges)-1
-    if (limit) and (nbins > 100): #too busy for plot
+    if (limit) and (nbins > 100):  # too busy for plot
         bins = numpy.histogram_bin_edges(pred, bins=100, range=(rmin, rmax))
         nbins = len(bins)-1
 
@@ -413,8 +416,8 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
     obse_binProb.fill(numpy.nan)
 
     inds = numpy.digitize(pred, bin_edges)
-    #digitize is left-inclusive, so put the observations
-    #at p=1 into the top bin
+    # digitize is left-inclusive, so put the observations
+    # at p=1 into the top bin
     inds[inds == nbins+1] = nbins
 
     filledBins = list(set(inds))
@@ -432,12 +435,12 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         axes = fig.axes
         if len(axes) != 2:
             if len(axes) == 1 and len(axes[0].get_children()) == 10:
-                #probably an empty figure, so let's nuke it
+                # probably an empty figure, so let's nuke it
                 ax_rel = plt.subplot2grid((3, 1), (0, 0), rowspan=2, fig=fig)
                 ax_hist = plt.subplot2grid((3, 1), (2, 0), fig=fig)
             else:
-                raise ValueError('reliabilityDiagram: supplied Figure for'+\
-                                 'plotting appears to have been used for a'+\
+                raise ValueError('reliabilityDiagram: supplied Figure for' +
+                                 'plotting appears to have been used for a' +
                                  'different purpose.')
         else:
             ax_rel = axes[0]
@@ -456,9 +459,12 @@ def reliabilityDiagram(predicted, observed, norm=False, addTo=None,
         ax_rel.legend(loc=0)
 
     histkwargs['bins'] = bins
-    if 'histtype' not in histkwargs: histkwargs['histtype'] = 'step'
-    if 'lw' not in histkwargs: histkwargs['lw'] = 2
-    if 'density' not in histkwargs: histkwargs['density'] = True
+    if 'histtype' not in histkwargs:
+        histkwargs['histtype'] = 'step'
+    if 'lw' not in histkwargs:
+        histkwargs['lw'] = 2
+    if 'density' not in histkwargs:
+        histkwargs['density'] = True
     ax_hist.hist(pred, range=(rmin, rmax), **histkwargs)
     ax_hist.set_xlabel('Predicted Probability')
     ax_hist.set_ylabel('Density')
@@ -534,16 +540,16 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     With some implementation aspects inspired by the public domain code of
     github user ycopin at https://gist.github.com/ycopin/3342888
     """
-    #fancy plotting imports
+    # fancy plotting imports
     from mpl_toolkits.axisartist import floating_axes, angle_helper, grid_finder
     from matplotlib.projections import PolarAxes
 
     pred = _maskSeries(predicted)
     obse = _maskSeries(observed)
-    pstd = pred.std(ddof=1) #unbiased sample std.dev. model
-    ostd = obse.std(ddof=1) #unbiased sample std.dev. observed
-    pcorr = numpy.corrcoef(obse, pred)[0, 1] # Pearson's r
-    pbias = bias(pred, obse) #mean error
+    pstd = pred.std(ddof=1)  # unbiased sample std.dev. model
+    ostd = obse.std(ddof=1)  # unbiased sample std.dev. observed
+    pcorr = numpy.corrcoef(obse, pred)[0, 1]  # Pearson's r
+    pbias = bias(pred, obse)  # mean error
 
     # Normalize on request
     if norm:
@@ -582,24 +588,25 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
     stdticks = grid_finder.DictFormatter(dict(valsAndLabs))
 
     gh_curvegrid = floating_axes.GridHelperCurveLinear(tr,
-                                                       extremes=(0, numpy.pi/2, smin, smax),
+                                                       extremes=(0, numpy.pi/2,
+                                                                 smin, smax),
                                                        grid_locator1=corrgrid,
                                                        grid_locator2=stdgrid,
                                                        tick_formatter1=corrticks,
                                                        tick_formatter2=stdticks
-                                                      )
+                                                       )
 
     artists = []
-    #if addTo isn't None then assume we've been given a previously returned
-    #axes object
+    # if addTo isn't None then assume we've been given a previously returned
+    # axes object
     if addTo is None:
         fig = plt.figure()
         ax = floating_axes.FloatingSubplot(fig, 111,
                                            grid_helper=gh_curvegrid)
         fig.add_subplot(ax)
 
-        #Adjust axes following matplotlib gallery example
-        #Correlation is angular coord
+        # Adjust axes following matplotlib gallery example
+        # Correlation is angular coord
         ax.axis['top'].set_axis_direction('bottom')
         ax.axis['top'].toggle(ticklabels=True, label=True)
         ax.axis['top'].major_ticklabels.set_axis_direction('top')
@@ -607,10 +614,10 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
         ax.axis['top'].label.set_axis_direction('top')
         ax.axis['top'].label.set_color('royalblue')
         ax.axis['top'].label.set_text("Pearson's r")
-        #X-axis
+        # X-axis
         ax.axis['left'].set_axis_direction('bottom')
         ax.axis['left'].toggle(ticklabels=True)
-        #Y-axis
+        # Y-axis
         ax.axis['right'].set_axis_direction('top')
         ax.axis['right'].toggle(ticklabels=True, label=True)
         ax.axis['right'].major_ticklabels.set_axis_direction('left')
@@ -623,9 +630,9 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
         ax.axis['bottom'].set_visible(False)
         _ax = ax                   # Display axes
 
-        #Figure set up, done we work with the transformed axes
+        # Figure set up, done we work with the transformed axes
         ax = ax.get_aux_axes(tr)   # Axes referenced in polar coords
-        #Add reference point, ref stddev contour and other stddev contours
+        # Add reference point, ref stddev contour and other stddev contours
         artists.append(ax.scatter(0, ostd, marker='o', linewidths=2,
                                   edgecolors='black', facecolors='None',
                                   label='Observation', zorder=99))
@@ -639,12 +646,12 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
                 ax.plot(azim, rad, linestyle=':', color='dimgrey', alpha=0.75,
                         zorder=3)
 
-        #Add radial markers at correlation ticks
+        # Add radial markers at correlation ticks
         for i in corrtickvals[1:]:
             ax.plot([numpy.arccos(i), numpy.arccos(i)], [0, smax],
                     c='royalblue', alpha=0.5, zorder=40)
 
-        #Add contours of centered RMS error
+        # Add contours of centered RMS error
         rs, ts = numpy.meshgrid(numpy.linspace(smin, smax),
                                 numpy.linspace(0, numpy.pi/2))
         rms = numpy.sqrt(ostd**2 + rs**2 - 2*ostd*rs*numpy.cos(ts))
@@ -652,11 +659,11 @@ def taylorDiagram(predicted, observed, norm=False, addTo=None, modelName='',
                               colors='dimgray')
         plt.clabel(contours, inline=True, fontsize='smaller', fmt='%1.2f')
     else:
-        #TODO: add some testing/error handling here
+        # TODO: add some testing/error handling here
         ax = addTo
         fig = ax.figure
 
-    #add present model
+    # add present model
     stdextent = smax-smin
     twopercent = stdextent/50.0
     artists.append(ax.scatter(numpy.arccos(pcorr), pstd, marker='o',
