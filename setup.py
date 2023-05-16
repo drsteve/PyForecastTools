@@ -29,5 +29,5 @@ setup(name='PyForecastTools',
                    'Programming Language :: Python :: 3',
                    'Programming Language :: Python :: 3.6',
                    ],
-     test_suite='test_verify.py'
-     )
+      test_suite='test_verify.py'
+      )
