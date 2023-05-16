@@ -787,9 +787,9 @@ def medSymAccuracy(predicted, observed, mfunc=np.median, method=None):
         unsPercErr = unsRelErr*100
         msa = mfunc(unsPercErr.compressed())
     else:
-        raise NotImplementedError('medSymAccuracy: invalid method {0}. Valid ' +
-                                  'options are None, "log" or ' +
-                                  '"UPE".'.format(method))
+        errp1 = 'medSymAccuracy: invalid method {0}.'.format(method)
+        errp2 = 'Valid options are None, "log" or "UPE".'
+        raise NotImplementedError(errp1 + errp2)
 
     return msa
 
@@ -958,8 +958,10 @@ def Sn(data, scale=True, correct=True):
     """
     # Define local utility functions
     def dropPoint(vec, i):
-        if i == 0: return vec[1:]
-        elif i == len(vec): return vec[:-1]
+        if i == 0:
+            return vec[1:]
+        elif i == len(vec):
+            return vec[:-1]
         else:
             vec1 = vec.tolist()
             vec1[:i].extend(vec1[i+1:])
@@ -1050,6 +1052,7 @@ def normSn(data, **kwargs):
 
 # ======= Other useful functions ======= #
 
+
 def median(data, ws=None):
     """ Weighted median
 
@@ -1095,7 +1098,7 @@ def _diff(data, climate=None):
 
     try:
         assert fc.ndim <= 2
-    except:
+    except AssertionError:
         raise ValueError('Input data set must be of rank 2 or less')
     else:
         n_pts = len(fc)
@@ -1109,9 +1112,9 @@ def _diff(data, climate=None):
         else:
             try:
                 assert clim.shape == fc.shape
-            except:
-                AssertionError('If climate is not scalar, it must have the ' +
-                               'same shape as data')
+            except AssertionError:
+                ValueError('If climate is not scalar, it must have the ' +
+                           'same shape as data')
 
         dif = fc - clim  # climate - data
     else:

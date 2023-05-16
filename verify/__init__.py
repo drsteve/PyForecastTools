@@ -7,7 +7,7 @@ metric calculations.
 
 With the exception of the ContingencyNxN and Contingency2x2 classes,
 the inputs for all metrics are assumed to be array-like and 1D. Bad
-values are assumed to be stored as NaN and these are excluded in 
+values are assumed to be stored as NaN and these are excluded in
 metric calculations.
 
 Author: Steve Morley

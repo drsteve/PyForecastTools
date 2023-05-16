@@ -25,11 +25,12 @@ import numpy as np
 
 try:
     from spacepy import datamodel as dm
-except:
+except (ModuleNotFoundError, ImportError):
     from . import datamodel as dm
 
-#======= Contingency tables =======#
-#import xarray ##TODO: do I want to port this to use xarray instead of dmarray??
+# ======= Contingency tables =======#
+# import xarray ##TODO: do I want to port this to use xarray instead of dmarray??
+
 
 class ContingencyNxN(dm.dmarray):
     """Class to work with NxN contingency tables for forecast verification
@@ -58,7 +59,7 @@ class ContingencyNxN(dm.dmarray):
             raise ValueError('NxN contingency tables must be 2-dimensional')
         if obj.shape[0] != obj.shape[1]:
             raise ValueError('NxN contingency tables must be square')
-        if attrs != None:
+        if attrs is not None:
             obj.attrs = attrs
         else:
             obj.attrs = {}
@@ -260,7 +261,7 @@ class Contingency2x2(ContingencyNxN):
             raise ValueError('2x2 contingency tables must be 2-dimensional')
         if obj.shape != (2, 2):
             raise ValueError('2x2 contingency tables must be have shape (2,2)')
-        if attrs != None:
+        if attrs is not None:
             obj.attrs = attrs
         else:
             obj.attrs = {}
@@ -287,7 +288,8 @@ class Contingency2x2(ContingencyNxN):
         fToF = np.logical_and(pred, np.logical_and(pred, ~obse)).sum()
         fFoT = np.logical_and(~pred, np.logical_and(~pred, obse)).sum()
         fFoF = np.logical_and(~pred, np.logical_and(~pred, ~obse)).sum()
-        return cls([[fToT, fToF], [fFoT, fFoF]], attrs={'pred': pred, 'obs': obse})
+        return cls([[fToT, fToF], [fFoT, fFoF]], attrs={'pred': pred,
+                                                        'obs': obse})
 
     def majorityClassFraction(self):
         """Proportion Correct (a.k.a. "accuracy" in machine learning) for
@@ -357,6 +359,8 @@ class Contingency2x2(ContingencyNxN):
         dum = self.oddsRatio()
         dum = self.yuleQ()
         a, b, c, d = self._abcd()
+        cistr = "{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]"
+        pmstr = "{0}: {1:0.4f} +/- {2:0.4f}"
         if verbose:
             print('Contingency2x2([\n  ' +
                   '[{:6g},{:6g}],\n  [{:6g},{:6g}])\n'.format(a, b, c, d))
@@ -372,12 +376,12 @@ class Contingency2x2(ContingencyNxN):
                     if self.attrs[key+'CI95'].shape:
                         # bootstrapped confidence intervals, which may be
                         # asymmetric
-                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, \
-                                self.attrs[key], self.attrs[key+'CI95'][0], \
-                                self.attrs[key+'CI95'][1]))
+                        print(cistr.format(key,
+                              self.attrs[key], self.attrs[key+'CI95'][0],
+                              self.attrs[key+'CI95'][1]))
                     else:
-                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, \
-                                    self.attrs[key], self.attrs[key+'CI95']))
+                        print(pmstr.format(key, self.attrs[key],
+                                           self.attrs[key+'CI95']))
                 else:
                     print("{0}: {1:0.4f}".format(key, self.attrs[key]))
             print("\nSkill Scores")
@@ -387,13 +391,12 @@ class Contingency2x2(ContingencyNxN):
                     if self.attrs[key+'CI95'].shape:
                         # bootstrapped confidence intervals, which may be
                         # asymmetric
-                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, \
-                                                    self.attrs[key], \
-                                                    self.attrs[key+'CI95'][0], \
-                                                    self.attrs[key+'CI95'][1]))
+                        print(cistr.format(key, self.attrs[key],
+                                           self.attrs[key+'CI95'][0],
+                                           self.attrs[key+'CI95'][1]))
                     else:
-                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, \
-                                    self.attrs[key], self.attrs[key+'CI95']))
+                        print(pmstr.format(key, self.attrs[key],
+                                           self.attrs[key+'CI95']))
                 else:
                     print("{0}: {1:0.4f}".format(key, self.attrs[key]))
             print("\nClassification Quality Metrics")
@@ -401,13 +404,12 @@ class Contingency2x2(ContingencyNxN):
             for key in qual:
                 if key+'CI95' in self.attrs:
                     if self.attrs[key+'CI95'].shape:
-                        print("{0}: {1:0.4f} [{2:0.4f}, {3:0.4f}]".format(key, \
-                                                    self.attrs[key], \
-                                                    self.attrs[key+'CI95'][0], \
-                                                    self.attrs[key+'CI95'][1]))
+                        print(cistr.format(key, self.attrs[key],
+                                           self.attrs[key+'CI95'][0],
+                                           self.attrs[key+'CI95'][1]))
                     else:
-                        print("{0}: {1:0.4f} +/- {2:0.4f}".format(key, \
-                                    self.attrs[key], self.attrs[key+'CI95']))
+                        print(pmstr.format(key, self.attrs[key],
+                                           self.attrs[key+'CI95']))
                 else:
                     print("{0}: {1:0.4f}".format(key, self.attrs[key]))
 
@@ -473,7 +475,7 @@ class Contingency2x2(ContingencyNxN):
             confidence interval
 
         """
-        stdErr = np.sqrt((prob*(1-prob))/nSamp) #std. error of binomial
+        stdErr = np.sqrt((prob*(1-prob))/nSamp)  # std. error of binomial
         ci95 = mult*stdErr
         return ci95
 
@@ -525,16 +527,16 @@ class Contingency2x2(ContingencyNxN):
         n = b+d
         self.attrs['POFD'] = b/n
         if ci is not None:
-            citype = 'Wald' if ci is True else ci #default to Wald CI
+            citype = 'Wald' if ci is True else ci  # default to Wald CI
             if citype == 'AC':
-                # note that the Agresti-Coull method also modifies the estimated
-                # param
+                # note that the Agresti-Coull method also modifies the
+                # estimated param
                 #
                 # method 2 - Agresti-Coull
                 (self.attrs['POFD'],
                  self.attrs['POFDCI95']) = self._AgrestiCI(self.attrs['POFD'], n)
             elif citype == 'Wald':
-                #default method - Wald interval
+                # default method - Wald interval
                 self.attrs['POFDCI95'] = self._WaldCI(self.attrs['POFD'], n)
             elif citype == 'bootstrap':
                 self.attrs['POFDCI95'] = self._bootstrapCI(func='POFD')
@@ -786,7 +788,6 @@ class Contingency2x2(ContingencyNxN):
 
         self.attrs['YuleQ'] = yule
         return self.attrs['YuleQ']
-
 
     def bias(self, ci=None):
         """The frequency bias of the forecast calculated as the ratio of yes
