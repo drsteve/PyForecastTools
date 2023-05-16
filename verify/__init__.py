@@ -12,10 +12,8 @@ metric calculations.
 
 Author: Steve Morley
 Institution: Los Alamos National Laboratory
-Contact: smorley@lanl.gov
-Los Alamos National Laboratory
 
-Copyright (c) 2017, Los Alamos National Security, LLC
+Copyright (c) 2017, Triad National Security, LLC
 All rights reserved.
 """
 from .metrics import *
