@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyForecastTools'
-copyright = u'2018, Los Alamos National Security, LLC'
+copyright = u'2018, Triad National Security, LLC'
 author = u'Steven K. Morley'
 
 # The version info for the project you're documenting, acts as replacement for
