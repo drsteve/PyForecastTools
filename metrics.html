@@ -1,17 +1,16 @@
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Metrics - Core metrics and classes &#8212; PyForecastTools 1.0.1 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Metrics - Core metrics and classes &#8212; PyForecastTools 1.1.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contingency Tables" href="categorical.html" />
@@ -32,10 +31,10 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="metrics-core-metrics-and-classes">
-<h1>Metrics - Core metrics and classes<a class="headerlink" href="#metrics-core-metrics-and-classes" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-verify.metrics">
-<span id="function-class-documentation"></span><h2>Function/Class Documentation<a class="headerlink" href="#module-verify.metrics" title="Permalink to this headline">¶</a></h2>
+  <section id="metrics-core-metrics-and-classes">
+<h1>Metrics - Core metrics and classes<a class="headerlink" href="#metrics-core-metrics-and-classes" title="Permalink to this heading">¶</a></h1>
+<section id="module-verify.metrics">
+<span id="function-class-documentation"></span><h2>Function/Class Documentation<a class="headerlink" href="#module-verify.metrics" title="Permalink to this heading">¶</a></h2>
 <p>Module containing verification and performance metrics</p>
 <p>With the exception of the ContingencyNxN and Contingency2x2 classes,
 the inputs for all metrics are assumed to be array-like and 1D. Bad
@@ -46,33 +45,31 @@ the inputs for all metrics are assumed to be array-like and 1D. Bad
 values are assumed to be stored as NaN and these are excluded in
 metric calculations.</p>
 <p>Author: Steve Morley
-Institution: Los Alamos National Laboratory
-Contact: <a class="reference external" href="mailto:smorley&#37;&#52;&#48;lanl&#46;gov">smorley<span>&#64;</span>lanl<span>&#46;</span>gov</a>
-Los Alamos National Laboratory</p>
-<p>Copyright (c) 2017, Los Alamos National Security, LLC
+Institution: Los Alamos National Laboratory</p>
+<p>Copyright (c) 2017, Triad National Security, LLC
 All rights reserved.</p>
-<dl class="function">
-<dt id="verify.metrics.MASE">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">MASE</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.MASE" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.MASE">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">MASE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.MASE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mean Absolute Scaled Error</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data for which to calculate MASE</p></li>
 <li><p><strong>observed</strong> (<em>float</em>) – observation vector (or climatological value (scalar)) to use as
 reference value</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – the mean absolute scaled error of the data set</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.scaledError" title="verify.metrics.scaledError"><code class="xref py py-func docutils literal notranslate"><span class="pre">scaledError()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.scaledError" title="verify.metrics.scaledError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scaledError</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>References:
@@ -80,13 +77,13 @@ R.J. Hyndman and A.B. Koehler, Another look at measures of forecast
 accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.RMSE">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">RMSE</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.RMSE" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.RMSE">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">RMSE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">climate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.RMSE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcualte the root mean squared error of a data set relative to a
 reference value</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>array-like</em>) – data to calculate mean squared error, default reference is persistence</p></li>
 <li><p><strong>climate</strong> (<em>array-like</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Array-like (list, numpy array, etc.) or float of observed values of
@@ -94,29 +91,29 @@ scalar quantity. If climate is None (default) then the accuracy is
 assessed relative to persistence.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – the root-mean-squared error of the data set relative to the chosen
 reference</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanSquaredError()</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanAbsError()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanSquaredError</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAbsError</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The chosen reference can be persistence, a provided climatological mean
 (scalar) or a provided climatology (observation vector).</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.Sn">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">Sn</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">scale=True</em>, <em class="sig-param">correct=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.Sn" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.Sn">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">Sn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">correct</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.Sn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sn statistic, a robust measure of scale</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>array-like</em>) – data to calculate Sn statistic for</p></li>
 <li><p><strong>scale</strong> (<em>boolean</em>) – Scale so that output is the same as the standard deviation for if the
@@ -125,16 +122,16 @@ distribution is normal (default=True)
 <li><p><strong>correct</strong> (<em>boolean</em>) – Set a correction factor (default=True)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>Sn</strong> – the Sn statistic</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.medAbsDev" title="verify.metrics.medAbsDev"><code class="xref py py-func docutils literal notranslate"><span class="pre">medAbsDev()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.medAbsDev" title="verify.metrics.medAbsDev"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medAbsDev</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>Sn is more efficient than the median absolute deviation, and is not
@@ -152,34 +149,34 @@ odd-length series, we do so here automatically to gain a significant
 speedup.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.absPercError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">absPercError</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.absPercError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.absPercError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">absPercError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.absPercError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Absolute percentage error</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
 quantity</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>perc</strong> – Array of absolute percentage errors</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>array</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.accuracy">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">accuracy</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.accuracy" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.accuracy">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">accuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">climate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.accuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience function to calculate a selection of unscaled accuracy
 measures</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>climate</strong> (<em>array-like</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Array-like (list, numpy array, etc.) or float of observed values of
@@ -187,50 +184,50 @@ scalar quantity. If climate is None (default) then the accuracy is
 assessed relative to persistence.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – Dictionary containing unscaled accuracy measures
 MSE - mean squared error
 RMSE - root mean squared error
 MAE - mean absolute error
 MdAE - median absolute error</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanSquaredError()</span></code></a>, <a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-func docutils literal notranslate"><span class="pre">RMSE()</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanAbsError()</span></code></a>, <a class="reference internal" href="#verify.metrics.medAbsError" title="verify.metrics.medAbsError"><code class="xref py py-func docutils literal notranslate"><span class="pre">medAbsError()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanSquaredError</span></code></a>, <a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSE</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAbsError</span></code></a>, <a class="reference internal" href="#verify.metrics.medAbsError" title="verify.metrics.medAbsError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medAbsError</span></code></a></p>
 </div>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.bias">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">bias</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.bias" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.bias">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.bias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scale-dependent bias as measured by the mean error</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
 quantity</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>bias</strong> – Mean error of prediction</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.forecastError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">forecastError</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">full=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.forecastError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.forecastError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">forecastError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.forecastError" title="Permalink to this definition">¶</a></dt>
 <dd><p>forecast error, defined using the sign convention of J&amp;S ch. 5</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
@@ -241,7 +238,7 @@ and observed values as numpy arrays of floats, when False only the
 array of forecast errors is returned.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>err</strong> (<em>array</em>) – the forecast error</p></li>
 <li><p><strong>pred</strong> (<em>array</em>) – Optional return array of predicted values as floats, included if full
@@ -256,13 +253,13 @@ is True</p></li>
 <p>J&amp;S: Jolliffe and Stephenson (Ch. 5)</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.logAccuracy">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">logAccuracy</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">base=10</em>, <em class="sig-param">mask=True</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.logAccuracy" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.logAccuracy">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">logAccuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.logAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Log Accuracy Ratio, defined as log(predicted/observed) or
 log(predicted)-log(observed)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
@@ -275,10 +272,10 @@ False, the presence of negative numbers will raise a ValueError and
 NaN will propagate through the calculation.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>logacc</strong> – Array of absolute percentage errors</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>array or masked array</p>
 </dd>
 </dl>
@@ -287,12 +284,12 @@ NaN will propagate through the calculation.</p></li>
 important to interpretation we recommend using that.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.meanAPE">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">meanAPE</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">mfunc=&lt;function mean&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanAPE" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.meanAPE">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">meanAPE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfunc=&lt;function</span> <span class="pre">mean&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanAPE" title="Permalink to this definition">¶</a></dt>
 <dd><p>mean absolute percentage error</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data for which to calculate mean squared error</p></li>
 <li><p><strong>observed</strong> (<em>float</em>) – observation vector (or climatological value (scalar)) to use as
@@ -300,21 +297,21 @@ reference value</p></li>
 <li><p><strong>mfunc</strong> (<em>function</em>) – function to calculate mean (default=np.mean)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>mape</strong> – the mean absolute percentage error</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.meanAbsError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">meanAbsError</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanAbsError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.meanAbsError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">meanAbsError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">climate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanAbsError" title="Permalink to this definition">¶</a></dt>
 <dd><p>mean absolute error of a data set relative to some reference value</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>array-like</em>) – data to calculate mean squared error, default reference is persistence</p></li>
 <li><p><strong>climate</strong> (<em>array-like</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Array-like (list, numpy array, etc.) or float of observed values of
@@ -322,49 +319,49 @@ scalar quantity.  If climate is None (default) then the accuracy is
 assessed relative to persistence.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – the mean absolute error of the data set relative to the chosen reference</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.medAbsError" title="verify.metrics.medAbsError"><code class="xref py py-func docutils literal notranslate"><span class="pre">medAbsError()</span></code></a>, <a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanSquaredError()</span></code></a>, <a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-func docutils literal notranslate"><span class="pre">RMSE()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.medAbsError" title="verify.metrics.medAbsError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medAbsError</span></code></a>, <a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanSquaredError</span></code></a>, <a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSE</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The chosen reference can be persistence, a provided climatological mean
 (scalar) or a provided climatology (observation vector).</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.meanPercentageError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">meanPercentageError</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanPercentageError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.meanPercentageError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">meanPercentageError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanPercentageError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Order-dependent bias as measured by the mean percentage error</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
 quantity</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>mpe</strong> – Mean percentage error of prediction</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.meanSquaredError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">meanSquaredError</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanSquaredError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.meanSquaredError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">meanSquaredError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">climate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.meanSquaredError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mean squared error of a data set relative to a reference value</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>array-like</em>) – data to calculate mean squared error, default reference is persistence</p></li>
 <li><p><strong>climate</strong> (<em>array-like</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Array-like (list, numpy array, etc.) or float of observed values of
@@ -372,28 +369,28 @@ scalar quantity.  If climate is None (default) then the accuracy is
 assessed relative to persistence.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – the mean-squared-error of the data set relative to the chosen reference</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-func docutils literal notranslate"><span class="pre">RMSE()</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanAbsError()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSE</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAbsError</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The chosen reference can be persistence, a provided climatological mean
 (scalar), or a provided climatology (observation vector).</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.medAbsDev">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">medAbsDev</code><span class="sig-paren">(</span><em class="sig-param">series</em>, <em class="sig-param">scale=False</em>, <em class="sig-param">median=False</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medAbsDev" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.medAbsDev">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">medAbsDev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">median</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medAbsDev" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the median absolute deviation from the median</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>series</strong> (<em>array-like</em>) – Input data</p></li>
 <li><p><strong>scale</strong> (<em>boolean</em>) – Scale so that median absolute deviation is the same as the standard
@@ -402,7 +399,7 @@ deviation for normal distributions (default=False)</p></li>
 (default=False)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>mad</strong> (<em>float</em>) – median absolute deviation</p></li>
 <li><p><strong>perc50</strong> (<em>float</em>) – median of series, optional output</p></li>
@@ -412,12 +409,12 @@ deviation for normal distributions (default=False)</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.medAbsError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">medAbsError</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">climate=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medAbsError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.medAbsError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">medAbsError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">climate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medAbsError" title="Permalink to this definition">¶</a></dt>
 <dd><p>median absolute error of a data set relative to some reference value</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>array-like</em>) – data to calculate median absolute error, default reference is
 persistence</p></li>
@@ -426,30 +423,30 @@ scalar quantity.  If climate is None (default) then the accuracy is
 assessed relative to persistence.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – the median absolute error of the data set relative to the chosen
 reference</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanAbsError()</span></code></a>, <a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanSquaredError()</span></code></a>, <a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-func docutils literal notranslate"><span class="pre">RMSE()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.meanAbsError" title="verify.metrics.meanAbsError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAbsError</span></code></a>, <a class="reference internal" href="#verify.metrics.meanSquaredError" title="verify.metrics.meanSquaredError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanSquaredError</span></code></a>, <a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSE</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The chosen reference can be persistence, a provided climatological mean
 (scalar) or a provided climatology (observation vector).</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.medSymAccuracy">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">medSymAccuracy</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">mfunc=&lt;function median&gt;</em>, <em class="sig-param">method=None</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medSymAccuracy" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.medSymAccuracy">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">medSymAccuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfunc=&lt;function</span> <span class="pre">median&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medSymAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scaled measure of accuracy that is not biased to over- or
 under-predictions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data for which to calculate mean squared error</p></li>
 <li><p><strong>observed</strong> (<em>float</em>) – observation vector (or climatological value (scalar)) to use as
@@ -464,10 +461,10 @@ compared to the other methods and is included primarily for testing
 purposes.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>msa</strong> – Array of median symmetric accuracy</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -487,17 +484,37 @@ unsigned percentage error, where the unsigned relative error is given by:
 <p>where y’ is always the larger of the (observation, prediction) pair, and x’
 is always the smaller.</p>
 <p>Reference:
-Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on
-percentage errors for radiation belt modeling applications, Los Alamos
-National Laboratory Report, LA-UR-15-24592.</p>
+Morley, S.K., Brito, T.V., and Welling, D.T. (2018), Measures of Model
+Performance Based on the Log Accuracy Ratio, Space Weather, 16(1),
+pp. 69-88, doi: 10.102/2017SW001669.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.medianLogAccuracy">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">medianLogAccuracy</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em>, <em class="sig-param">mfunc=&lt;function median&gt;</em>, <em class="sig-param">base=10</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medianLogAccuracy" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.median">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">median</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.median" title="Permalink to this definition">¶</a></dt>
+<dd><p>Weighted median</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>array</em>) – Array of data values</p></li>
+<li><p><strong>ws</strong> (<em>None</em><em> or </em><em>array</em>) – None, which implies equal weighting, or an array of weights.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>wmedian</strong> – (Weighted) median of input series</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.medianLogAccuracy">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">medianLogAccuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mfunc=&lt;function</span> <span class="pre">median&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base=10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.medianLogAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Order-dependent bias as measured by the median of the log accuracy ratio</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
@@ -506,39 +523,44 @@ quantity</p></li>
 <li><p><strong>base</strong> (<em>number</em><em>, </em><em>optional</em>) – Base to use for logarithmic transform (default: 10)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>mla</strong> – Median log accuracy of prediction</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>Reference:
+Morley, S.K. (2016), Alternatives to accuracy and bias metrics based on
+percentage errors for radiation belt modeling applications, Los Alamos
+National Laboratory Report, LA-UR-15-24592.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.nRMSE">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">nRMSE</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.nRMSE" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.nRMSE">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">nRMSE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.nRMSE" title="Permalink to this definition">¶</a></dt>
 <dd><p>normalized root mean squared error of a data set relative to a reference
 value</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data for which to calculate mean squared error</p></li>
 <li><p><strong>observed</strong> (<em>float</em>) – observation vector (or climatological value (scalar)) to use as
 reference value</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – the normalized root-mean-squared-error of the data set relative to the
 observations</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-func docutils literal notranslate"><span class="pre">RMSE()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.RMSE" title="verify.metrics.RMSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RMSE</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The chosen reference can be an observation vector or, a provided
@@ -549,39 +571,39 @@ framework using ground-based magnetometers, Space Weather, 6, S05002,
 doi:10.1029/2007SW000345.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.normSn">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">normSn</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.normSn" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.normSn">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">normSn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.normSn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the normalized Sn statistic, a scaled measure of spread.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>array-like</em>) – data to calculate normSn statistic for</p></li>
 <li><p><strong>**kwards</strong> (<em>dict</em>) – Optional keyword arguements (see Sn)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>normSn</strong> – the normalized Sn statistic</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.rCV" title="verify.metrics.rCV"><code class="xref py py-func docutils literal notranslate"><span class="pre">rCV()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.rCV" title="verify.metrics.rCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rCV</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>We here scale the Sn estimator by the median, giving a non-symmetric
 alternative to the robust coefficient of variation (rCV).</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.percBetter">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">percBetter</code><span class="sig-paren">(</span><em class="sig-param">predict1</em>, <em class="sig-param">predict2</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.percBetter" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.percBetter">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">percBetter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predict1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.percBetter" title="Permalink to this definition">¶</a></dt>
 <dd><p>The percentage of cases when method A was closer to actual than method B</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predict1</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions from model A</p></li>
 <li><p><strong>predict2</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions from model B</p></li>
@@ -589,11 +611,11 @@ alternative to the robust coefficient of variation (rCV).</p>
 quantity</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>percBetter</strong> – The percentage of observations where method A was closer to observation
 than method B</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -601,7 +623,7 @@ than method B</p>
 <p>For example, if we want to know whether a new forecast performs better than
 a reference forecast…</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">verify</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p_ref</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.5</span><span class="p">]</span><span class="o">*</span><span class="mi">6</span> <span class="c1">#mean prediction</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p_good</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span> <span class="c1">#&quot;good&quot; model prediction</span>
@@ -613,39 +635,39 @@ a reference forecast…</p>
 in p_good than in p_ref.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.percError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">percError</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.percError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.percError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">percError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.percError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Percentage Error</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
 quantity</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>perc</strong> – Array of forecast errors expressed as a percentage</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.rCV">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">rCV</code><span class="sig-paren">(</span><em class="sig-param">predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.rCV" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.rCV">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">rCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.rCV" title="Permalink to this definition">¶</a></dt>
 <dd><p>robust coefficient of variation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>predicted</strong> (<em>array-like</em>) – Predicted input</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>rcv</strong> – robust coefficient of variation (see notes)</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -658,18 +680,18 @@ deviation divided by the mean, rCV gives the median absolute deviation
 of precision/spread.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.rSD">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">rSD</code><span class="sig-paren">(</span><em class="sig-param">predicted</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.rSD" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.rSD">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">rSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.rSD" title="Permalink to this definition">¶</a></dt>
 <dd><p>robust standard deviation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>predicted</strong> (<em>array-like</em>) – Predicted input</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>rsd</strong> – robust standard deviation, the scaled med abs dev</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -682,19 +704,19 @@ However, unlike the standard deviation the medAbsDev has a high breakdown
 point and is therefore considered a robust estimator.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.scaledAccuracy">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">scaledAccuracy</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.scaledAccuracy" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.scaledAccuracy">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">scaledAccuracy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.scaledAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate scaled and relative accuracy measures</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of predictions</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – Array-like (list, numpy array, etc.) of observed values of scalar
 quantity</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>out</strong> – Dictionary containing scaled or relative accuracy measures
 nRMSE - normalized root mean squared error
 MASE - mean absolute scaled error
@@ -702,32 +724,32 @@ MAPE - mean absolute percentage error
 MdAPE - median absolute percentage error
 MdSymAcc - median symmetric accuracy</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.medSymAccuracy" title="verify.metrics.medSymAccuracy"><code class="xref py py-func docutils literal notranslate"><span class="pre">medSymAccuracy()</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAPE" title="verify.metrics.meanAPE"><code class="xref py py-func docutils literal notranslate"><span class="pre">meanAPE()</span></code></a>, <a class="reference internal" href="#verify.metrics.MASE" title="verify.metrics.MASE"><code class="xref py py-func docutils literal notranslate"><span class="pre">MASE()</span></code></a>, <a class="reference internal" href="#verify.metrics.nRMSE" title="verify.metrics.nRMSE"><code class="xref py py-func docutils literal notranslate"><span class="pre">nRMSE()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.medSymAccuracy" title="verify.metrics.medSymAccuracy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">medSymAccuracy</span></code></a>, <a class="reference internal" href="#verify.metrics.meanAPE" title="verify.metrics.meanAPE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">meanAPE</span></code></a>, <a class="reference internal" href="#verify.metrics.MASE" title="verify.metrics.MASE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MASE</span></code></a>, <a class="reference internal" href="#verify.metrics.nRMSE" title="verify.metrics.nRMSE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nRMSE</span></code></a></p>
 </div>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.scaledError">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">scaledError</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.scaledError" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.scaledError">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">scaledError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.scaledError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scaled errors, see Hyndman and Koehler (2006)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – predicted data for which to calculate scaled error</p></li>
 <li><p><strong>observed</strong> (<em>float</em>) – observation vector (or climatological value (scalar)) to use as
 reference value</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>q</strong> – the scaled error</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -737,27 +759,27 @@ R.J. Hyndman and A.B. Koehler, Another look at measures of forecast
 accuracy, Intl. J. Forecasting, 22, pp. 679-688, 2006.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#verify.metrics.MASE" title="verify.metrics.MASE"><code class="xref py py-func docutils literal notranslate"><span class="pre">MASE()</span></code></a></p>
+<p><a class="reference internal" href="#verify.metrics.MASE" title="verify.metrics.MASE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MASE</span></code></a></p>
 </div>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.skill">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">skill</code><span class="sig-paren">(</span><em class="sig-param">A_data</em>, <em class="sig-param">A_ref</em>, <em class="sig-param">A_perf=0</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.skill" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.skill">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">skill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A_ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">A_perf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.skill" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generic forecast skill score for quantifying forecast improvement</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>A_data</strong> (<em>float</em>) – Accuracy measure of data set</p></li>
 <li><p><strong>A_ref</strong> (<em>float</em>) – Accuracy measure for reference forecast</p></li>
 <li><p><strong>A_perf</strong> (<em>float</em><em>, </em><em>optional</em>) – Accuracy measure for “perfect forecast” (Default = 0)</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ss_ref</strong> – Forecast skill for the given forecast, relative to the reference, using
 the chosen accuracy measure</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -766,28 +788,33 @@ the chosen accuracy measure</p>
 sciences) for details.</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="verify.metrics.symmetricSignedBias">
-<code class="sig-prename descclassname">verify.metrics.</code><code class="sig-name descname">symmetricSignedBias</code><span class="sig-paren">(</span><em class="sig-param">predicted</em>, <em class="sig-param">observed</em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.symmetricSignedBias" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="verify.metrics.symmetricSignedBias">
+<span class="sig-prename descclassname"><span class="pre">verify.metrics.</span></span><span class="sig-name descname"><span class="pre">symmetricSignedBias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observed</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#verify.metrics.symmetricSignedBias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Symmetric signed bias, expressed as a percentage</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>predicted</strong> (<em>array-like</em>) – List of predicted values</p></li>
 <li><p><strong>observed</strong> (<em>array-like</em>) – List of observed values</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>bias</strong> – symmetric signed bias, as a precentage</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>Reference:
+Morley, S.K., Brito, T.V., and Welling, D.T. (2018), Measures of Model
+Performance Based on the Log Accuracy Ratio, Space Weather, 16(1),
+pp. 69-88, doi: 10.102/2017SW001669.</p>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -832,12 +859,12 @@ sciences) for details.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -851,11 +878,11 @@ sciences) for details.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018, Los Alamos National Security, LLC.
+      &copy;2018, Triad National Security, LLC.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.2.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |
       <a href="_sources/metrics.rst.txt"
