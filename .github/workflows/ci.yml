@@ -25,16 +25,16 @@ jobs:
             dep-strategy: "oldest"
           - python-version: "3.12"
             os: ubuntu-24.04
-            piplist: "numpy matplotlib"
+            piplist: "setuptools numpy matplotlib"
           - python-version: "3.13"
             os: ubuntu-24.04
-            piplist: "numpy matplotlib spacepy"
+            piplist: "setuptools numpy matplotlib spacepy"
           - python-version: "3.14"
             os: ubuntu-24.04
-            piplist: "numpy matplotlib"
+            piplist: "setuptools numpy matplotlib"
           - python-version: "3.14"
             os: ubuntu-24.04
-            piplist: "numpy matplotlib spacepy"
+            piplist: "setuptools numpy matplotlib spacepy"
     steps:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
