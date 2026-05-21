@@ -19,3 +19,5 @@ All rights reserved.
 from .metrics import *
 from .categorical import *
 from . import plot
+
+__version__ = "1.1.1"
