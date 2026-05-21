@@ -55,7 +55,7 @@ jobs:
     - name: Install and run tests
       working-directory: ${{ github.workspace }}
       run: |
-        python setup.py install
+        pip install .
         cd tests; xvfb-run python test_verify.py -v
 # See https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   all-tests:
