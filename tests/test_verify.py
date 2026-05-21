@@ -42,8 +42,8 @@ class contingency2x2_construction(unittest.TestCase):
 
     def test_direct_array_floats(self):
         '''check construction direct from rates as array, force floats'''
-        ctab = verify.Contingency2x2(np.asarray(self.res), dtype=np.float)
-        npt.assert_array_equal(np.asarray(self.res, dtype=np.float), ctab)
+        ctab = verify.Contingency2x2(np.asarray(self.res), dtype=float)
+        npt.assert_array_equal(np.asarray(self.res, dtype=float), ctab)
 
     def test_direct_array3D_raises(self):
         '''check construction raises when given rates from non-2D array'''
